@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/Store"; // Adjust the path based on your project structure.
-
+import Heading from "@/Components/Logo/Heading";
 const Landing: React.FC = () => {
   // Type the state as RootState for better type safety.
   const mode = useSelector((state: RootState) => state.theme.mode);
 
   return (
-    <>
+    <div className="h-screen w-screen">
       {mode === "light" ? (
         <div className="bg-white h-screen relative dark:text-white overflow-hidden">
           {/* 8x large blurry circular gradient 1 */}
@@ -25,9 +25,14 @@ const Landing: React.FC = () => {
             {/* Content 3 */}
           </div>
 
-          <p className="absolute bottom-5 left-5 text-white">
-            Footer or additional content here.
-          </p>
+          <div className="relative top-32 w-full">
+            <div className="relative top-32 w-full flex justify-center">
+              <Heading label={"UniBLOGic"} />
+            </div>
+            <div className="relative z-50 top-50 dark:text-white h-10">
+              hi
+            </div>
+          </div>
         </div>
       ) : (
         <div className="bg-black h-screen relative text-white overflow-hidden">
@@ -46,12 +51,17 @@ const Landing: React.FC = () => {
             {/* Content 3 */}
           </div>
 
-          <p className="absolute bottom-5 left-5 text-white">
-            Footer or additional content here.
-          </p>
+          <div className="relative top-32 w-full">
+            <div className="relative top-32 w-full flex justify-center">
+              <Heading label={"UniBLOGic"} />
+            </div>
+            <div className="relative z-50 top-50 dark:text-white h-10">
+              hi
+            </div>
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
