@@ -17,7 +17,11 @@ const themeModeSlice = createSlice({
             state.theme = action.payload;
         },
         setMode:(state,action)=>{
-            state.mode = action.payload;
+            if(state.mode === 'dark'){
+                state.mode = 'light';
+            } else {
+                state.mode = 'dark';
+            }
         }
     }
 })

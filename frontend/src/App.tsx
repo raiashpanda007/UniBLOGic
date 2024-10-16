@@ -6,7 +6,7 @@ function App() {
   const mode = useSelector((state: RootState) => state.theme.mode)
   
   return (
-    <div className={mode === 'light' ? `relative`:`dark relative`}>
+    <div className={mode === 'light' ? `relative `:`dark relative ` }>
    
       <Header/>
       <Outlet />

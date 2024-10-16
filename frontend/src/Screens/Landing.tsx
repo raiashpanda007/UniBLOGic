@@ -2,12 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/Store"; // Adjust the path based on your project structure.
 import Heading from "@/Components/Logo/Heading";
+import { Outline_Button } from "@/Components/Button/Outline_Button";
 const Landing: React.FC = () => {
   // Type the state as RootState for better type safety.
   const mode = useSelector((state: RootState) => state.theme.mode);
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen  dark:bg-black">
       {mode === "light" ? (
         <div className="bg-white h-screen relative dark:text-white overflow-hidden">
           {/* 8x large blurry circular gradient 1 */}
@@ -30,7 +31,16 @@ const Landing: React.FC = () => {
               <Heading label={"UniBLOGic"} />
             </div>
             <div className="relative z-50 top-50 dark:text-white h-10">
-              hi
+            <div className="relative z-50 top-50 dark:text-white h-10 w-full flex flex-col items-center">
+              <p className=" w-1/3 relative top-64 font-poppins text-lg">
+              A vibrant <strong>platform</strong> where students <strong>connect</strong>, <strong>collaborate</strong>, and <strong>engage</strong> through communities. Discover posts, join discussions, and participate in chatrooms tailored to your interests, all in one place.
+              </p>
+
+              <div className="relative top-72 w-1/3 flex justify-between">
+                <Outline_Button label="Join Now" classname="dark text-white" />
+                <Outline_Button label="Login" classname="" />
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -56,7 +66,16 @@ const Landing: React.FC = () => {
               <Heading label={"UniBLOGic"} />
             </div>
             <div className="relative z-50 top-50 dark:text-white h-10">
-              hi
+            <div className="relative z-50 top-50 dark:text-white h-10 w-full flex flex-col items-center">
+              <p className=" w-1/3 relative top-64 font-poppins text-lg">
+              A vibrant <strong>platform</strong> where students <strong>connect</strong>, <strong>collaborate</strong>, and <strong>engage</strong> through communities. Discover posts, join discussions, and participate in chatrooms tailored to your interests, all in one place.
+              </p>
+
+              <div className="relative top-72 w-1/3 flex justify-between">
+                <Outline_Button label="Join Now" classname="" />
+                <Outline_Button label="Login" classname="" />
+              </div>
+            </div>
             </div>
           </div>
         </div>
