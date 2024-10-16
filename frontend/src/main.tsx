@@ -10,9 +10,12 @@ import App from "./App.tsx";
 import "./index.css";
 import { store } from "./Store/Store";
 import { Provider } from "react-redux";
+import {Landing} from "./Screens/Screens.ts";
 
 const routes = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<App />}></Route>)
+  createRoutesFromElements(<Route path="/" element={<App />}>
+    <Route path="" element={<Landing />} />
+  </Route>)
 );
 
 

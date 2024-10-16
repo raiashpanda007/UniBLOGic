@@ -7,8 +7,8 @@ function App() {
   const mode = useSelector((state: RootState) => state.theme.mode)
   
   return (
-    <div className={mode === 'light' ? ``:`dark`}>
-      hi
+    <div className={mode === 'light ' ? ``:`dark`}>
+   
       <Header/>
       <Outlet/>
     </div>

@@ -2,7 +2,9 @@ import React from 'react'
 import Logo from '../Logo/Logo'
 function header() {
   return (
-    <Logo/>
+    <div className='bg-transparent '>
+      
+    </div>
   )
 }
 
