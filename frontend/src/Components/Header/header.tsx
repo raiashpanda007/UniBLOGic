@@ -20,15 +20,17 @@ function Header() {
       <Logo label={"uB"} />
 
       <TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger>
-      <DropDown_settings />
-    </TooltipTrigger>
-    <TooltipContent>
-      <p>Settings</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <DropDown_settings />
+        </TooltipTrigger>
+        <TooltipContent
+          className={`border border-gray-600 bg-gray-800 text-white dark:bg-white dark:text-black font-semibold rounded-md p-2 shadow-md ${mode}`} 
+        >
+          <p>Settings</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
     </div>
   );
 }

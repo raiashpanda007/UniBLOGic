@@ -15,7 +15,7 @@ import {Landing,Register} from "./Screens/Screens.ts";
 const routes = createBrowserRouter(
   createRoutesFromElements(<Route path="/" element={<App />}>
     <Route path="" element={<Landing />} />
-    <Route path="register" element={<Register />} />
+    <Route path="join_us" element={<Register />} />
   </Route>)
 );
 
