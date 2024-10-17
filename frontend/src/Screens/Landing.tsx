@@ -37,8 +37,8 @@ const Landing: React.FC = () => {
               </p>
 
               <div className="relative top-72 w-1/3 flex justify-between">
-                <Outline_Button label="Join Now" classname="dark text-white" />
-                <Outline_Button label="Login" classname="" />
+                <Outline_Button label="Join Now" classname="dark text-white  h-14 text-2xl font-poppins font-semibold" />
+               
               </div>
             </div>
             </div>
@@ -72,8 +72,8 @@ const Landing: React.FC = () => {
               </p>
 
               <div className="relative top-72 w-1/3 flex justify-between">
-                <Outline_Button label="Join Now" classname="" />
-                <Outline_Button label="Login" classname="" />
+                <Outline_Button label="Join Now" classname="h-14 dark text-white text-2xl font-poppins font-semibold" />
+                
               </div>
             </div>
             </div>
