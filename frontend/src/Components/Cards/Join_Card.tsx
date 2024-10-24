@@ -15,18 +15,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Join_Card() {
   return (
-    <Tabs defaultValue="register" className="w-[600px] h-1/2  font-poppins">
-      <TabsList className="grid w-full grid-cols-2 dark:bg-gray-800 h-16 bg-gray-100">
+    <Tabs defaultValue="register" className="w-[600px] h-1/2 font-poppins">
+      <TabsList className="grid w-full grid-cols-2 dark:bg-gray-800 h-14 bg-gray-100">
         <TabsTrigger value="register" className="text-2xl font-semibold h-full">
           Register
         </TabsTrigger>
         <TabsTrigger value="login" className="text-2xl font-semibold h-full">
-          {" "}
           Login
         </TabsTrigger>
       </TabsList>
 
-      {/* Ensure the value matches exactly with the trigger */}
       <TabsContent value="register">
         <Card>
           <CardHeader>
@@ -35,17 +33,21 @@ export default function Join_Card() {
             </CardTitle>
             <CardDescription>
               <p>
-                Please Enter your correct details <br />{" "}
-                <strong className="text-red-700">*</strong> (if you are a
+                Please Enter your correct details <br />
+                <strong className="text-red-700">*</strong> (If you are a
                 student of IIIT Bhagalpur, please use your IIIT Bhagalpur email)
               </p>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <ScrollArea className="h-[300px]">
+            <ScrollArea className="h-[300px] w-full">
               <div className="space-y-1">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Enter Your name ..." />
+                <Input
+                  id="name"
+                  placeholder="Enter your name ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
@@ -53,26 +55,52 @@ export default function Join_Card() {
                   id="email"
                   type="email"
                   placeholder="Enter your email ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
                 />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" placeholder="Enter your username ..." />
+                <Input
+                  id="username"
+                  placeholder="Enter your username ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
+                />
               </div>
+              
               <div className="space-y-1">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="Enter your password ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="confirm_password">Confirm password</Label>
+                <Label htmlFor="confirm_password">Confirm Password</Label>
                 <Input
                   id="confirm_password"
                   type="password"
                   placeholder="Enter your password ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="profile_photo">Profile Photo</Label>
+                <Input
+                  id="profile_photo"
+                  type="file"
+                  placeholder="Enter your username ..."
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="background_photo">Background Photo</Label>
+                <Input
+                  id="background_photo"
+                  type="file"
+                  placeholder=""
+                  className="placeholder:text-gray-500 placeholder:opacity-75"
                 />
               </div>
             </ScrollArea>
@@ -86,19 +114,30 @@ export default function Join_Card() {
       <TabsContent value="login">
         <Card>
           <CardHeader>
-            <CardTitle>Login to <Logo label="uB" /></CardTitle>
+            <CardTitle>
+              Login to <Logo label="uB" />
+            </CardTitle>
             <CardDescription>
-              Login start vibing with your community
+              Login and start vibing with your community.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" />
+              <Input
+                id="username"
+                placeholder="Enter your username ..."
+                className="placeholder:text-gray-500 placeholder:opacity-75"
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="login_password">Password</Label>
-              <Input id="login_password" type="password" />
+              <Input
+                id="login_password"
+                type="password"
+                placeholder="Enter your password ..."
+                className="placeholder:text-gray-500 placeholder:opacity-75"
+              />
             </div>
           </CardContent>
           <CardFooter>
