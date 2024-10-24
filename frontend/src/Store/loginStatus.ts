@@ -7,17 +7,19 @@ interface LoginStatusState {
         username:string;
         verified:boolean;
         email:string;
+        userprofile:string;
     }
     
     
 }
 
 const initialState: LoginStatusState = {
-    userStatus:false,
+    userStatus:true,
     user: {
         username:"",
         verified:false,
-        email:""
+        email:"",
+        userprofile:""
     }
 }
 const loginStatusSlice = createSlice({

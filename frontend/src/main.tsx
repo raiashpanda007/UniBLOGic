@@ -10,12 +10,13 @@ import App from "./App.tsx";
 import "./index.css";
 import { store } from "./Store/Store";
 import { Provider } from "react-redux";
-import {Landing,Register} from "./Screens/Screens.ts";
+import {Landing,Register,Home} from "./Screens/Screens.ts";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(<Route path="/" element={<App />}>
     <Route path="" element={<Landing />} />
     <Route path="join_us" element={<Register />} />
+    <Route path="home" element={<Home />} />
   </Route>)
 );
 

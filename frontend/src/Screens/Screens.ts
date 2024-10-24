@@ -1,3 +1,4 @@
 import Landing from "./Landing";
 import Register from "./Register";
-export { Landing ,Register };
+import Home from "./Home";
+export { Landing ,Register,Home };
