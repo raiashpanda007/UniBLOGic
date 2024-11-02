@@ -3,9 +3,10 @@ import type { RootState } from "../../Store/Store";
 
 interface LogoProps {
   label: string;
+  className?: string;
 }
 
-function Logo({ label }: LogoProps) {
+function Logo({ label,className }: LogoProps) {
   const mode = useSelector((state: RootState) => state.theme.mode);
   
   return (
