@@ -1,6 +1,9 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "@/Store/Store";
-import { Sidebar_Card as SideBar_Component } from "@/Components/Components";
+import {
+  Sidebar_Card as SideBar_Component,
+  Home_Card as Card,
+} from "@/Components/Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ResizableHandle,
@@ -23,7 +26,10 @@ function Home() {
               Communities
             </h1>
 
-            <div className="w-full py-3 relative top-10" style={{height: "calc(100% - 90px)"}}>
+            <div
+              className="w-full py-3 relative top-10"
+              style={{ height: "calc(100% - 90px)" }}
+            >
               <div className="relative h-full">
                 <ScrollArea className="h-full w-full overflow-y-auto pb-10">
                   <SideBar_Component
@@ -107,7 +113,11 @@ function Home() {
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel>
-            <p>Two</p>
+            <ScrollArea className="h-full w-full overflow-y-auto   ">
+              <div className="w-full flex items-center justify-center my-3">
+                <Card />
+              </div>
+            </ScrollArea>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
