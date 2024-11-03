@@ -11,23 +11,30 @@ interface Comment {
   created_at: string;
 }
 interface Home_CardProps {
-  Communitiy_Name : string;
-  Description : string;
-  Content:string
-  Image : string;
-  Likes_Count : number;
-  Comments_Count : number;
-  Comments:Comment[]
+  Communitiy_Name: string;
+  Description: string;
+  Content: string;
+  Image: string;
+  Likes_Count: number;
+  Comments_Count: number;
+  Comments: Comment[];
   Joined: boolean;
 }
 
-
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-import { Ghost_Button } from "../Components";
+import { Ghost_Button,Logo } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
-function Home_Card({Communitiy_Name="Community",Description="Description",Image='img',Likes_Count= 0,Comments_Count = 0, Comments=[],Joined = false }: Home_CardProps) {
+import { Upvote } from "@/assets/Icons/Icons";
+function Home_Card({
+  Communitiy_Name = "Community",
+  Description = "Description",
+  Image = "img",
+  Likes_Count = 0,
+  Comments_Count = 0,
+  Comments = [],
+  Joined = false,
+}: Home_CardProps) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -62,16 +69,30 @@ function Home_Card({Communitiy_Name="Community",Description="Description",Image=
           )}
         </div>
         <div className="w-1/3 flex justify-end items-center">
-            <Ghost_Button Joined={Joined} />
+          <Ghost_Button Joined={Joined} />
         </div>
-        
       </div>
-      <div className="min-h-12 border ">
-          <Descriptions_Component text="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium nemo non ipsa dolore corporis veniam fugiat nostrum alias reiciendis, voluptate voluptas deserunt eos minima harum repellendus expedita voluptatum modi sequi beatae architecto doloribus ipsum assumenda unde dicta? Facilis ratione asperiores quod! Placeat ab in molestiae odit aspernatur, corporis numquam nobis." />
+      <div className="space-y-3">
+        {loading ? (
+          <Skeleton className="min-h-12 rounded-md" />
+        ) : (
+          <div className="min-h-12 border ">
+            <Descriptions_Component text="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium nemo non ipsa dolore corporis veniam fugiat nostrum alias reiciendis, voluptate voluptas deserunt eos minima harum repellendus expedita voluptatum modi sequi beatae architecto doloribus ipsum assumenda unde dicta? Facilis ratione asperiores quod! Placeat ab in molestiae odit aspernatur, corporis numquam nobis." />
+          </div>
+        )}
+
+        {loading ? (
+          <Skeleton className="h-96 rounded-sm" />
+        ) : (
+          <div className="h-96 border">
+            <img src={Image} alt="" className="w-full h-full" />
+          </div>
+        )}
       </div>
-          
-      <div className="h-96 border">
-          <img src={Image} alt="" className="w-full h-full" />
+      <div className="h-10 border">
+        <div className="w-1/2">
+          <Logo label="HI" />
+        </div>
       </div>
     </div>
   );
