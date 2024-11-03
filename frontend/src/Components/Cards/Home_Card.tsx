@@ -15,7 +15,8 @@ interface Home_CardProps {
   Description: string;
   Content: string;
   Image: string;
-  Likes_Count: number;
+  Upvote_Counts: number;
+  isUpvoted: boolean;
   Comments_Count: number;
   Comments: Comment[];
   Joined: boolean;
@@ -23,17 +24,19 @@ interface Home_CardProps {
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-import { Ghost_Button,Logo } from "../Components";
+import { Ghost_Button,Upvote } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
-import { Upvote } from "@/assets/Icons/Icons";
+import { Comment  as CommentIcon } from "@/assets/Icons/Icons";
+
 function Home_Card({
   Communitiy_Name = "Community",
   Description = "Description",
   Image = "img",
-  Likes_Count = 0,
+  Upvote_Counts = 0,
   Comments_Count = 0,
   Comments = [],
   Joined = false,
+  isUpvoted = false,
 }: Home_CardProps) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -90,9 +93,14 @@ function Home_Card({
         )}
       </div>
       <div className="h-10 border">
-        <div className="w-1/2">
-          <Logo label="HI" />
+        <div className="h-full w-1/2 flex items-center">
+          <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} />
+          <CommentIcon style={{
+            fontSize: 26,
+            
+          }} />
         </div>
+        
       </div>
     </div>
   );
