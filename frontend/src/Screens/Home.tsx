@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "@/Store/Store";
-import { Sidebar_Card as SideBar_Components } from "@/Components/Components";
+import { Sidebar_Card as SideBar_Component } from "@/Components/Components";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -14,10 +15,95 @@ function Home() {
     <div className={`${mode} h-screen w-screen dark:bg-black overflow-hidden`}>
       <div className="relative top-32" style={{ height: "calc(100% - 36px)" }}>
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={0} style={{flexBasis:"20%", minWidth: "20%" ,maxWidth:"50%"}}>
-            <h1 className="fixed font-poppins font-bold text-2xl dark:text-white p-3">
+          <ResizablePanel
+            defaultSize={0}
+            style={{ flexBasis: "20%", minWidth: "20%", maxWidth: "50%" }}
+          >
+            <h1 className="fixed font-poppins px-3 font-bold text-2xl bg-white  dark:bg-black dark:text-white">
               Communities
             </h1>
+
+            <div className="w-full py-3 relative top-10" style={{height: "calc(100% - 90px)"}}>
+              <div className="relative h-full">
+                <ScrollArea className="h-full w-full overflow-y-auto pb-10">
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                  <SideBar_Component
+                    title="Title"
+                    description="Description"
+                    img="img"
+                  />
+                </ScrollArea>
+              </div>
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel>
