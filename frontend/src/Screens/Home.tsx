@@ -15,7 +15,9 @@ function Home() {
   const mode = useSelector((state: RootState) => state.theme.mode);
 
   return (
-    <div className={`${mode} h-screen w-screen dark:bg-black overflow-hidden`}>
+    <div
+      className={`${mode} h-screen w-screen dark:bg-black overflow-hidden z-0`}
+    >
       <div className="relative top-32" style={{ height: "calc(100% - 36px)" }}>
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
@@ -113,11 +115,52 @@ function Home() {
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel>
-            <ScrollArea className="h-full w-full overflow-y-auto   ">
-              <div className="w-full flex items-center justify-center my-3">
-                <Card />
-              </div>
-            </ScrollArea>
+            <div className="w-full " style={{ height: "calc(100% - 90px)" }}>
+              <ScrollArea className="h-full w-full overflow-y-auto   ">
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+                <div className="w-full flex items-center justify-center my-3">
+                  <Card />
+                </div>
+              </ScrollArea>
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

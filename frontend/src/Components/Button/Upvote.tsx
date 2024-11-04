@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { UpvoteIcon } from "@/assets/Icons/Icons";
 import type { RootState } from "../../Store/Store";
+import { Option_Logo } from "../Components"; 
+
 
 interface UpvoteProps {
   Upvoted: boolean;
@@ -18,7 +20,7 @@ function Upvote({ Upvoted, UpvoteCount }: UpvoteProps) {
   // Determine icon color based on theme and upvote state
   const iconColor = upvoted 
     ? (mode === 'light' ? '#1a75ff' : '#ff6bbd') // Light or dark theme upvoted color
-    : 'currentColor'; // Default color when not upvoted
+    : (mode === 'light' ?'#000000':"#ffffff"); // Default color when not upvoted
 
   return (
     <div className="h-full w-16 flex items-center justify-around">
@@ -41,7 +43,13 @@ function Upvote({ Upvoted, UpvoteCount }: UpvoteProps) {
           }}
         />
       </Button>
-      <span className="space-x-2 text-xs">{upvoteCount}</span>
+      {
+        upvoteCount > 0?(
+          <Option_Logo label={upvoteCount.toString()} />
+        ):(
+          <span className="space-x-2 text-xs ">{upvoteCount}</span>
+        )
+      }
     </div>
   );
 }

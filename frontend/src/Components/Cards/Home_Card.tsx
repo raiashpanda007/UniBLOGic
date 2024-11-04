@@ -32,7 +32,7 @@ import Descriptions_Component from "../Drop Down/Description_Component";
 function Home_Card({
   Communitiy_Name = "Community",
   Description = "Description",
-  Image = "img",
+  Image = "https://thumbs.dreamstime.com/z/yellow-hanging-handhold-standing-passengers-modern-bus-suburban-urban-transport-150239834.jpg",
   Upvote_Counts = 0,
   Comments_Count = 0,
   Comments = [],
@@ -47,7 +47,7 @@ function Home_Card({
     return () => clearTimeout(timeoutId);
   });
   return (
-    <div className="w-2/3 border rounded ">
+    <div className="w-2/3 border rounded p-2">
       <div className="w-full  flex justify-between items-center">
         <div className="w-2/3 h-16 flex items-center">
           {loading ? (
@@ -55,7 +55,7 @@ function Home_Card({
           ) : (
             <img
               src="img"
-              className="h-12 w-12 rounded-full border dark:border-gray-600"
+              className="h-12 w-12 rounded-full border "
             />
           )}
           {loading ? (
@@ -80,7 +80,7 @@ function Home_Card({
         {loading ? (
           <Skeleton className="min-h-12 rounded-md" />
         ) : (
-          <div className="min-h-12 border ">
+          <div className="min-h-12  ">
             <Descriptions_Component text="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium nemo non ipsa dolore corporis veniam fugiat nostrum alias reiciendis, voluptate voluptas deserunt eos minima harum repellendus expedita voluptatum modi sequi beatae architecto doloribus ipsum assumenda unde dicta? Facilis ratione asperiores quod! Placeat ab in molestiae odit aspernatur, corporis numquam nobis." />
           </div>
         )}
@@ -88,12 +88,12 @@ function Home_Card({
         {loading ? (
           <Skeleton className="h-96 rounded-sm" />
         ) : (
-          <div className="h-96 border">
-            <img src={Image} alt="" className="w-full h-full" />
+          <div className="h-96 ">
+            <img src={Image} alt="" className=" w-full h-full rounded-sm" />
           </div>
         )}
       </div>
-      <div className="h-10 border">
+      <div className="h-10 ">
         <div className="h-full w-1/2 flex items-center">
           <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} />
           <Comment_Button CommentCount={Comments_Count} />
