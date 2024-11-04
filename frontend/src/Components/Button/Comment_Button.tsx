@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Comment } from "@/assets/Icons/Icons";
 import type { RootState } from "../../Store/Store";
-
+import { useParams } from "react-router-dom";
+import { Option_Logo } from "../Components";
 interface CommentButtonProps {
   CommentCount: number;
 }
@@ -11,9 +12,15 @@ interface CommentButtonProps {
 function Comment_Button({ CommentCount }: CommentButtonProps) {
   const [commentCount, setCommentCount] = useState(CommentCount);
   const mode = useSelector((state: RootState) => state.theme.mode);
+  const { post_id } = useParams<{ post_id: string }>();
+  useEffect(() => {
+    console.log(post_id);
+  }, [post_id]);
 
   // Determine icon color based on theme
-  const iconColor = mode === 'light' ? '#000000' : '#ffffff'; // Example colors for light and dark themes
+  const iconColor = post_id 
+    ? (mode === 'light' ? '#1a75ff' : '#ff6bbd') // Light or dark theme upvoted color
+    : (mode === 'light' ?'#000000':"#ffffff"); 
 
   return (
     <div className="h-full w-16 flex items-center justify-around">
@@ -27,7 +34,7 @@ function Comment_Button({ CommentCount }: CommentButtonProps) {
         }}
         className="p-2 rounded-full"
         onClick={() => {
-          setCommentCount(commentCount + 1);
+            if(!post_id) setCommentCount(commentCount + 1);
         }}
       >
         <Comment
@@ -37,7 +44,13 @@ function Comment_Button({ CommentCount }: CommentButtonProps) {
           }}
         />
       </Button>
-      <span className="space-x-2 text-xs">{commentCount}</span>
+      {
+        post_id?(
+            <Option_Logo label={CommentCount.toString()}/>
+        ):(<span className="space-x-2 text-xs ">
+            {CommentCount}
+        </span>)
+      }
     </div>
   );
 }
