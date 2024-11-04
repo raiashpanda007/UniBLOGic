@@ -24,8 +24,9 @@ interface Home_CardProps {
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-import { Ghost_Button,Upvote,Comment_Button } from "../Components";
+import { Ghost_Button,Upvote,Comment_Button,Share } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
+
 
 
 function Home_Card({
@@ -96,7 +97,7 @@ function Home_Card({
         <div className="h-full w-1/2 flex items-center">
           <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} />
           <Comment_Button CommentCount={Comments_Count} />
-
+          <Share/>
         </div>
         
       </div>

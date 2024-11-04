@@ -15,7 +15,7 @@ function Comment_Button({ CommentCount }: CommentButtonProps) {
     return (
         <div className="h-full w-16 flex items-center justify-around">
             <Button
-                variant="outline"
+                variant="ghost"
                 style={{
                     width: 26,
                     height: 26,
