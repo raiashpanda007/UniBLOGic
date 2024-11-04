@@ -24,9 +24,9 @@ interface Home_CardProps {
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-import { Ghost_Button,Upvote } from "../Components";
+import { Ghost_Button,Upvote,Comment_Button } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
-import { Comment  as CommentIcon } from "@/assets/Icons/Icons";
+
 
 function Home_Card({
   Communitiy_Name = "Community",
@@ -95,10 +95,8 @@ function Home_Card({
       <div className="h-10 border">
         <div className="h-full w-1/2 flex items-center">
           <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} />
-          <CommentIcon style={{
-            fontSize: 26,
-            
-          }} />
+          <Comment_Button CommentCount={Comments_Count} />
+
         </div>
         
       </div>
