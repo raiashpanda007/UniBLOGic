@@ -5,4 +5,5 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import ShareIcon from '@mui/icons-material/Share';
-export { SettingsIcon as Settings , SearchIcon as Search,PersonIcon as User , AddIcon as Add,ArrowCircleUpIcon as UpvoteIcon, AddCommentIcon as Comment, ShareIcon as Share};
+import SendIcon from '@mui/icons-material/Send';
+export { SettingsIcon as Settings , SearchIcon as Search,PersonIcon as User , AddIcon as Add,ArrowCircleUpIcon as UpvoteIcon, AddCommentIcon as Comment, ShareIcon as Share, SendIcon};
