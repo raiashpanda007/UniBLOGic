@@ -4,7 +4,7 @@ import {
 } from "@/Components/Components";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useSelector } from "react-redux";
-
+import {Comment} from "@/Components/Components";
 import type { RootState } from "@/Store/Store";
 
 function Post() {
@@ -32,12 +32,12 @@ function Post() {
               Description="Description"
             />
           </div>
-          <div className="w-2/3 flex flex-col items-center">
-            {[...Array(18)].map((_, i) => (
-              <Inp key={i} />
-            ))}
+          <div className="w-2/3 flex flex-col items-center space-y-2">
+            <Inp />
+            
+            <Comment upvotes={32} isUpvoted={true} comment="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus numquam similique tenetur ratione maiores, id dicta officiis! Fugit natus, nulla enim labore quos doloremque quidem cupiditate quod recusandae necessitatibus fugiat quasi cum debitis voluptate veritatis accusantium, libero sequi eius soluta ullam culpa, consequatur odio! Fuga, nam corporis? Dolorum, ipsam atque. " date={Date.now().toString()} user="ashwin rai" />
           </div>
-          hi
+        
         </ScrollArea>
       </div>
     </div>
