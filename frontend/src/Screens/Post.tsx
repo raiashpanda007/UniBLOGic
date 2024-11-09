@@ -18,7 +18,7 @@ function Post() {
         className="relative top-32 flex flex-col items-center"
         style={{ height: "calc(100% - 36px)" }}
       >
-        <ScrollArea className="h-full w-full max-h-[80vh] overflow-auto flex flex-col items-center">
+        <ScrollArea className="h-full w-full max-h-[84vh] overflow-auto flex flex-col items-center">
           <div className="w-2/3 flex flex-col items-center">
             <Card
               Communitiy_Name="PyC"

@@ -6,4 +6,6 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import ShareIcon from '@mui/icons-material/Share';
 import SendIcon from '@mui/icons-material/Send';
-export { SettingsIcon as Settings , SearchIcon as Search,PersonIcon as User , AddIcon as Add,ArrowCircleUpIcon as UpvoteIcon, AddCommentIcon as Comment, ShareIcon as Share, SendIcon};
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import ClearIcon from '@mui/icons-material/Clear';
+export { SettingsIcon as Settings , SearchIcon as Search,PersonIcon as User , AddIcon as Add,ArrowCircleUpIcon as UpvoteIcon, AddCommentIcon as Comment, ShareIcon as Share, SendIcon,AttachFileIcon as AttachFile,ClearIcon as Clear };
