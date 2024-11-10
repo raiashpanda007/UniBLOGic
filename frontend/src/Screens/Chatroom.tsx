@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { Option_Logo } from "@/Components/Components";
+import { Option_Logo, CreatePost } from "@/Components/Components";
 import type { RootState } from "@/Store/Store";
 import {
   Sidebar_Card as SideBar_Component,
   Home_Card as Card,
   Message_Input,
   Message,
+  CreateCommunity
 } from "@/Components/Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -59,8 +60,7 @@ function Chatroom() {
     },
     {
       id: "2",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus cum maxime quia dicta, exercitationem ipsam non eum corporis tenetur dolorem quis dignissimos numquam, vero pariatur tempora neque quisquam illo commodi.",
+      content: "How's it going, everyone?",
       user: {
         id: "2",
         userName: "alex",
@@ -88,6 +88,166 @@ function Chatroom() {
       },
       img: "https://images.pexels.com/photos/17525263/pexels-photo-17525263/free-photo-of-peach-juice-in-glasses.jpeg",
     },
+    {
+      id: "3",
+      content: "What's the plan for the weekend?",
+      user: {
+        id: "3",
+        userName: "maria",
+        name: "Maria",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: null,
+      img: null,
+    },
+    {
+      id: "4",
+      content: "Here’s a quick photo I took.",
+      user: {
+        id: "4",
+        userName: "chris",
+        name: "Chris",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: null,
+      img: "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg",
+    },
+    {
+      id: "5",
+      content: "Did you check out the new restaurant?",
+      user: {
+        id: "5",
+        userName: "lucy",
+        name: "Lucy",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: null,
+      img: null,
+    },
+    {
+      id: "6",
+      content: "Here's a cool video I found!",
+      user: {
+        id: "6",
+        userName: "john",
+        name: "John",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: {
+        message: {
+          id: "2",
+          content: "How's it going, everyone?",
+          user: {
+            id: "2",
+            userName: "alex",
+            name: "Alex",
+            img: "",
+          },
+          date: Date.now().toString(),
+          time: Date.now().toString(),
+          reply: null,
+          img: null,
+        },
+        reply: "Sounds interesting!",
+      },
+      img: "https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg",
+    },
+    {
+      id: "7",
+      content: "Can someone help with my code?",
+      user: {
+        id: "7",
+        userName: "sam",
+        name: "Sam",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: {
+        message: {
+          id: "3",
+          content: "What's the plan for the weekend?",
+          user: {
+            id: "3",
+            userName: "maria",
+            name: "Maria",
+            img: "",
+          },
+          date: Date.now().toString(),
+          time: Date.now().toString(),
+          reply: null,
+          img: null,
+        },
+        reply: "I might be able to assist!",
+      },
+      img: null,
+    },
+    {
+      id: "8",
+      content: "I just finished a new project!",
+      user: {
+        id: "8",
+        userName: "emma",
+        name: "Emma",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: null,
+      img: "https://images.pexels.com/photos/7367/startup-photos.jpg",
+    },
+    {
+      id: "9",
+      content: "What are your thoughts on the latest tech news?",
+      user: {
+        id: "9",
+        userName: "liam",
+        name: "Liam",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: null,
+      img: null,
+    },
+    {
+      id: "10",
+      content: "Got a new book recommendation?",
+      user: {
+        id: "10",
+        userName: "olivia",
+        name: "Olivia",
+        img: "",
+      },
+      date: Date.now().toString(),
+      time: Date.now().toString(),
+      reply: {
+        message: {
+          id: "5",
+          content: "Did you check out the new restaurant?",
+          user: {
+            id: "5",
+            userName: "lucy",
+            name: "Lucy",
+            img: "",
+          },
+          date: Date.now().toString(),
+          time: Date.now().toString(),
+          reply: null,
+          img: null,
+        },
+        reply: "Yes! It's a must-read.",
+      },
+      img: null,
+    },
   ];
 
   return (
@@ -100,9 +260,12 @@ function Chatroom() {
             defaultSize={0}
             style={{ flexBasis: "20%", minWidth: "20%", maxWidth: "50%" }}
           >
-            <h1 className="fixed font-poppins px-3 font-bold text-2xl bg-white dark:bg-black dark:text-white">
-              Communities
-            </h1>
+            <div className="w-full flex justify-between">
+              <h1 className=" font-poppins px-3 font-bold text-2xl bg-white dark:bg-black dark:text-white">
+                Communities
+              </h1>
+              <CreateCommunity />
+            </div>
 
             <div
               className="w-full py-3 relative top-10"
@@ -126,26 +289,15 @@ function Chatroom() {
           <ResizablePanel>
             <div
               className="w-full relative"
-              style={{ height: "calc(100% - 80px)" }}
+              style={{ height: "calc(100% - 90px)" }}
             >
-              <div className="w-full h-5 flex justify-end">
-                  <Button variant={"outline"}>
-                    <Option_Logo label="Add a post" />
-                  </Button>
-              </div>
-              <ScrollArea className="h-full overflow-y-auto">
+              <CreatePost />
+
+              <ScrollArea
+                className="h-full overflow-y-auto"
+                style={{ height: "calc(100% - 100px)" }}
+              >
                 <div className="flex flex-col flex-wrap">
-                  {messages.map((msg) => (
-                    <div key={msg.id} className="flex min-w-[25%] w-1/2 p-2">
-                      <Message
-                        message={msg}
-                        onClick={() => {
-                          setReply(msg);
-                          setReplyVisiblity(true);
-                        }}
-                      />
-                    </div>
-                  ))}
                   {messages.map((msg) => (
                     <div key={msg.id} className="flex min-w-[25%] w-1/2 p-2">
                       <Message

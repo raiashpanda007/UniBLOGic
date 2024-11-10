@@ -61,7 +61,7 @@ function MessageInput({
   };
 
   return (
-    <div className="w-full min-h-16 border absolute bottom-5 bg-white dark:bg-black">
+    <div className="w-full min-h-16 border absolute bottom-3 bg-white dark:bg-black">
       <div className="max-h-36 w-full bg-white border">
         {img && (
           <div className="pl-16 max-h-20 w-full border relative">
