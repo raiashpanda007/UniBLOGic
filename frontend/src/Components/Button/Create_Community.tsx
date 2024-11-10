@@ -11,7 +11,8 @@ import {
   import { useForm, SubmitHandler } from "react-hook-form";
   import { useState } from "react";
   import { Button } from "@/components/ui/button";
-  import { Option_Logo } from "@/Components/Components";
+  import { Option_Logo,DropDownSearch } from "@/Components/Components";
+
   
   interface FormData {
     title: string;
@@ -91,6 +92,7 @@ import {
                       <img key={index} src={img} alt={`Upload Preview ${index + 1}`} className="w-20 h-20 object-cover m-1 rounded" />
                     ))}
                   </div>
+                    <DropDownSearch/>
   
                   {/* Submit button */}
                   <Button type="submit" variant={"ghost"} className="w-24 self-end mt-2">
