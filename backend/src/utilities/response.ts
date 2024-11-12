@@ -1,4 +1,4 @@
-class ApiResponse {
+class response {
     public statusCode: number;
     public message: string;
     public data: string | number | boolean | object | null;
@@ -12,5 +12,5 @@ class ApiResponse {
     }
   }
   
-  export default ApiResponse;
+  export default response;
   
