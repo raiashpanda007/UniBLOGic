@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
@@ -19,11 +20,13 @@
     "@aws-sdk/client-s3": "^3.689.0",
     "@aws-sdk/s3-request-presigner": "^3.689.0",
     "@prisma/client": "^5.22.0",
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "multer": "^1.4.5-lts.1",
-    "prisma": "^5.22.0"
+    "prisma": "^5.22.0",
+    "zod": "^3.23.8"
   }
 }
