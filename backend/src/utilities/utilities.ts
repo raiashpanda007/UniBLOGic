@@ -1,4 +1,4 @@
-import asyncHandler from './asyncHandler';
+import asyncHandler from './aysnchandler';
 import error from './error';
 import response from './response';
 
