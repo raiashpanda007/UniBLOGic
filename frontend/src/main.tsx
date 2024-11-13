@@ -10,7 +10,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { store } from "./Store/Store";
 import { Provider } from "react-redux";
-import {Landing,Register,Home, Post,User_Profile,Chat,Chatroom} from "./Screens/Screens.ts";
+import {Landing,Register,Home, Post,User_Profile,Chat,Chatroom, Verify_OTP} from "./Screens/Screens.ts";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(<Route path="/" element={<App />}>
@@ -20,6 +20,7 @@ const routes = createBrowserRouter(
     <Route path="post/:post_id" element={<Post />} />
     <Route path="user/:user_id" element = {<User_Profile />}/>
     <Route path="chatroom/:chat_id" element={<Chatroom />} />
+    <Route path="verify_otp" element={<Verify_OTP />} />
     <Route path="test" element={<Chat />} />
   </Route>)
 );
