@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { asyncHandler, response } from "../../utilities/utilities";
+import { asyncHandler, response } from "../../../utilities/utilities";
 import generateOTP from "./generateOTP";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from 'nodemailer';

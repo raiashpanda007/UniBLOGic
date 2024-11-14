@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { z as zod } from "zod";
-import { asyncHandler } from "../../utilities/utilities";
+import { asyncHandler,response } from "../../utilities/utilities";
 import bcrypt from "bcrypt";
 import userexist from "./user.exist";
-import error from "../../utilities/error"; // Import your custom error class
+import error from "../../utilities/error"; 
+import loginUser from "./login"
 
 const prisma = new PrismaClient();
 
@@ -63,12 +64,14 @@ const register = asyncHandler(async (req: Request, res: Response) => {
         });
     }
 
-    // Success response
-    return res.status(201).json({
-        message: "User created",
-        success: true,
-        data: storeUser,
-    });
+    const result = await loginUser({ username, password });
+    const options = {
+        httpOnly: true,
+        secure: false,
+    }
+
+    return res.status(200).cookie("refreshToken" ,result.refreshToken,options).json(new response(200, result.message,{}))
+
 });
 
 export default register;

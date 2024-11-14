@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
     }
 )
-import userRoute from './routes/user.routes'
-app.use('/api/user', userRoute)
+import authRoute from './routes/auth.routes'
+app.use('/api/auth', authRoute)
 
 app.listen(3000, () => {
     console.log('Server started on http://localhost:3000')

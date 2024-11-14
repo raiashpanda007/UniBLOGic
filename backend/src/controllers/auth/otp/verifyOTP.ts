@@ -1,4 +1,4 @@
-import { asyncHandler, response } from "../../utilities/utilities"
+import { asyncHandler, response } from "../../../utilities/utilities"
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
