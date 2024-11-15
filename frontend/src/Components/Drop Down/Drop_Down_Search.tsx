@@ -188,11 +188,11 @@ function Drop_Down_Search() {
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm placeholder:font-poppins "
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto font-poppins">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

@@ -56,7 +56,7 @@ import {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create Community </DialogTitle>
+              <DialogTitle className="font-poppins">Create Community </DialogTitle>
               <DialogDescription>
                 <form className="flex flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
                   {/* Title input */}
@@ -82,7 +82,7 @@ import {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange} // Single change handler
-                    className="h-12 border rounded-sm p-2 mt-2"
+                    className="h-12 border rounded-sm p-2 mt-2 font-poppins"
                   />
   
                   {/* Display uploaded images */}
