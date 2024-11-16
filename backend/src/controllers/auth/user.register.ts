@@ -42,6 +42,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
     }
 
     // Hash the password
+    
     const cryptedPassword = await bcrypt.hash(password, 10);
 
     // Store the user in the database

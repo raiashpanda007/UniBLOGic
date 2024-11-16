@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
     const prisma = new PrismaClient();
-    const { otp, email } = req.body;
+    const { otp, email,branch,batch } = req.body;
     if (!otp || !email) {
         return res.status(400).json({
             success: false,
@@ -34,6 +34,7 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
         }
     }
     if (savedOtp.otpCode === otp) {
+        
         const updateOTP = await prisma.otp.update({
             where: {
                 id: savedOtp.id
@@ -47,7 +48,9 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
                 email
             },
             data: {
-                role: "USER"
+                role: "USER",
+                branch,
+                batch
             }
         })
         if (updateOTP) {

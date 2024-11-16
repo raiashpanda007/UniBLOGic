@@ -3,10 +3,24 @@ import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Logo } from "../Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Define the types for the form
 interface UserRegisterData {
@@ -14,6 +28,8 @@ interface UserRegisterData {
   email: string;
   username: string;
   password: string;
+  branch?: string;
+  batch?: number;
   confirm_password: string;
   profile_photo?: FileList;
   background_photo?: FileList;
@@ -45,7 +61,7 @@ export default function Join_Card() {
     }
 
     if (data.email.split("@")[1] === "iiitbh.ac.in") {
-      // Send OTP
+      // Send OTP and branch and batch
       navigate("/verify_otp");
     }
   };
@@ -95,6 +111,30 @@ export default function Join_Card() {
                     placeholder="Enter your email ..."
                     className="placeholder:text-gray-500 placeholder:opacity-75"
                     {...register("email")}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="branch">Branch</Label>
+                  <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Branch" />
+                    </SelectTrigger>
+                    <SelectContent id="branch" {...register("branch")}>
+                      <SelectItem value="CSE">Computer Science</SelectItem>
+                      <SelectItem value="ECE">Electronic Communications</SelectItem>
+                      <SelectItem value="MNC">Mathematics and Computers</SelectItem>
+                      <SelectItem value="None">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="batch">Batch</Label>
+                  <Input
+                    id="batch"
+                    type="number"
+                    placeholder="Enter your batch ..."
+                    className="placeholder:text-gray-500 placeholder:opacity-75"
+                    {...register("batch")}
                   />
                 </div>
                 <div className="space-y-1">
