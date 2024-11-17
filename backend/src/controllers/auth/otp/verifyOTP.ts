@@ -1,63 +1,73 @@
-import { asyncHandler, response } from "../../../utilities/utilities"
+import { asyncHandler, response } from "../../../utilities/utilities";
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
-    const prisma = new PrismaClient();
-    const { otp, email,branch,batch } = req.body;
-    if (!otp || !email) {
-        return res.status(400).json({
-            success: false,
-            message: "OTP and email are required"
-        });
-    }
-    const savedOtp = await prisma.otp.findFirst({
-        where: {
-            email,
-            isUsed: false
-        }
-    });
-    if (!savedOtp) {
 
-        return res.status(404).json(new response(404, "OTP not found or Already used", false));
+const prisma = new PrismaClient();
+
+const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
+    const { otp, email, branch, batch } = req.body;
+
+    // Validate OTP and email presence
+    if (!otp || !email) {
+        return res.status(400).json(new response(400, "OTP and email are required", false));
     }
-    if (savedOtp.otpCode !== otp) {
-        return res.status(401).json(new response(401, "Invalid OTP", false));
+
+    // Parse and validate OTP format
+    const otpCode = parseInt(otp, 10);
+    if (isNaN(otpCode)) {
+        return res.status(400).json(new response(400, "Invalid OTP format", false));
     }
-    if (savedOtp.expiresAt < new Date()) {
-        const deleteOTP = await prisma.otp.delete({
-            where: {
-                id: savedOtp.id
-            }
+
+    // Parse batch if provided
+    const batchNumber = batch ? parseInt(batch, 10) : undefined;
+    if (batch && isNaN(batch)) {
+        return res.status(400).json(new response(400, "Invalid batch format", false));
+    }
+
+    try {
+        // Check for existing OTP
+        const savedOtp = await prisma.otp.findFirst({
+            where: { email, isUsed: false },
         });
-        if (deleteOTP) {
+
+        if (!savedOtp) {
+            return res.status(404).json(new response(404, "OTP not found or already used", false));
+        }
+
+        // Validate OTP code
+        if (savedOtp.otpCode !== otpCode) {
+            console.log("saved otp:", savedOtp.otpCode, "sent otp:", otpCode);
+            return res.status(401).json(new response(401, "Invalid OTP", false));
+        }
+
+        // Check for OTP expiration
+        if (savedOtp.expiresAt < new Date()) {
+            await prisma.otp.delete({ where: { id: savedOtp.id } });
             return res.status(401).json(new response(401, "OTP expired", false));
         }
-    }
-    if (savedOtp.otpCode === otp) {
-        
-        const updateOTP = await prisma.otp.update({
-            where: {
-                id: savedOtp.id
-            },
-            data: {
-                isUsed: true
-            }
-        });
-        await prisma.user.update({
-            where: {
-                email
-            },
-            data: {
-                role: "USER",
-                branch,
-                batch
-            }
-        })
-        if (updateOTP) {
-            return res.status(200).json(new response(200, "OTP verified successfully", true));
-        }
-    }
 
+        // Update OTP and User within a transaction
+        await prisma.$transaction([
+            prisma.otp.update({
+                where: { id: savedOtp.id },
+                data: { isUsed: true },
+            }),
+            prisma.user.update({
+                where: { email },
+                data: {
+                    role: "USER",
+                    ...(branch && { branch }),
+                    ...(batchNumber && { batch: batchNumber }),
+                },
+            }),
+        ]);
 
-})
+        // Success response
+        return res.status(200).json(new response(200, "OTP verified successfully", true));
+    } catch (error) {
+        console.error("Error during OTP verification:", error);
+        return res.status(500).json(new response(500, "Internal server error", false));
+    }
+});
+
 export default verifyOTP;
