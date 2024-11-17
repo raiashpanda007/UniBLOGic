@@ -21,6 +21,7 @@ const verify = asyncHandler(async (req: Request, res: Response, next: NextFuncti
             if(!decoded){
                 throw new error(401, "Invalid token");
             } else {
+                console.log(decoded);
                 req.user = decoded;
                 next();
             }

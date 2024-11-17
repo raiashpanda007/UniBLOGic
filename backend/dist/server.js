@@ -22,6 +22,8 @@ const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 app.use('/api/auth', auth_routes_1.default);
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 app.use('/api/user', user_routes_1.default);
+const community_routes_1 = __importDefault(require("./routes/community.routes"));
+app.use('/api/community', community_routes_1.default);
 app.listen(3000, () => {
     console.log('Server started on http://localhost:3000');
 });

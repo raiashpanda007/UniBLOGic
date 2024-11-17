@@ -6,7 +6,6 @@ interface LoginInput {
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import {error} from '../../utilities/utilities'
 import {generateRefreshToken} from './tokenGenerate'
 
 const loginUser = async ({username, password}: LoginInput) => {
@@ -36,7 +35,6 @@ const loginUser = async ({username, password}: LoginInput) => {
             success:true,
             message:"Login successful",
             refreshToken,
-            
         }
 
 

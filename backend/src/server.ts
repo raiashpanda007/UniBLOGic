@@ -23,6 +23,8 @@ app.use('/api/auth', authRoute)
 
 import userRoute from './routes/user.routes'
 app.use('/api/user', userRoute)
+import communityRoute from './routes/community.routes'
+app.use('/api/community', communityRoute)
 
 app.listen(3000, () => {
     console.log('Server started on http://localhost:3000')
