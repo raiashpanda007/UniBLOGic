@@ -1,3 +1,3 @@
 import createPost from "./create.post";
-
-export { createPost };
+import fetchAllPosts from "./fetchAll.post";
+export { createPost, fetchAllPosts };
