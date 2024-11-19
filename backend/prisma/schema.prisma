@@ -49,6 +49,8 @@ model Upvotes {
   postId      String
   user        User       @relation(fields: [userId], references: [id])
   userId      String
+
+  @@unique([postId, userId]) 
 }
 model Comments {
   id          String     @id @default(cuid())
