@@ -14,7 +14,7 @@ interface Home_CardProps {
   Communitiy_Name: string;
   Description: string;
   Content: string;
-  Image: string;
+  Image?: string;
   Upvote_Counts: number;
   isUpvoted: boolean;
   Comments_Count: number;
@@ -32,12 +32,13 @@ import Descriptions_Component from "../Drop Down/Description_Component";
 function Home_Card({
   Communitiy_Name = "Community",
   Description = "Description",
-  Image = "https://thumbs.dreamstime.com/z/yellow-hanging-handhold-standing-passengers-modern-bus-suburban-urban-transport-150239834.jpg",
+  Image ="" ,
   Upvote_Counts = 0,
   Comments_Count = 0,
   Comments = [],
   Joined = false,
   isUpvoted = false,
+  Content = "",
 }: Home_CardProps) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -54,7 +55,7 @@ function Home_Card({
             <Skeleton className="h-12 w-12 rounded-full" />
           ) : (
             <img
-              src="img"
+              src=""
               className="h-12 w-12 rounded-full border "
             />
           )}
@@ -81,16 +82,16 @@ function Home_Card({
           <Skeleton className="min-h-12 rounded-md" />
         ) : (
           <div className="min-h-12  ">
-            <Descriptions_Component text="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium nemo non ipsa dolore corporis veniam fugiat nostrum alias reiciendis, voluptate voluptas deserunt eos minima harum repellendus expedita voluptatum modi sequi beatae architecto doloribus ipsum assumenda unde dicta? Facilis ratione asperiores quod! Placeat ab in molestiae odit aspernatur, corporis numquam nobis." />
+            <Descriptions_Component text={Content} />
           </div>
         )}
 
         {loading ? (
           <Skeleton className="h-96 rounded-sm" />
         ) : (
-          <div className="h-96 ">
-            <img src={Image} alt="" className=" w-full h-full rounded-sm" />
-          </div>
+          Image!="" && <div className="h-96 ">
+          <img src={Image} alt="" className=" w-full h-full rounded-sm" />
+        </div>
         )}
       </div>
       <div className="h-10 ">

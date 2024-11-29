@@ -9,9 +9,9 @@ interface Sidebar_CardProps {
 }
 
 const Sidebar_Card = ({
-  title = "Title",
-  description = "Description",
-  img = "img",
+  title = "",
+  description = "",
+  img = "",
   className = "",
 }: Sidebar_CardProps) => {
   const [loading, setLoading] = useState(true);
@@ -24,9 +24,9 @@ const Sidebar_Card = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setData({
-        title: "Loaded Title",
-        description: "This is the loaded description.",
-        img: "loaded-img-url",
+        title: title,
+        description: description,
+        img: img,
       });
       setLoading(false);
     }, 3000);

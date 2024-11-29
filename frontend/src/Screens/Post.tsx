@@ -24,10 +24,12 @@ function Post() {
               Communitiy_Name="PyC"
               Comments={[]}
               Comments_Count={20}
-              Content=""
+              Content="Hello welcome to the community,we are thrilled to announce,that Ashwin rai got placed in Goldman Sachs.
+                  He is an alumni of our community.He has been many of his juniors and is a great asset to our community.
+                  We are proud of him and wish him all the best for his future endeavours."
               Upvote_Counts={300}
               isUpvoted={true}
-              Image="https://thumbs.dreamstime.com/z/yellow-hanging-handhold-standing-passengers-modern-bus-suburban-urban-transport-150239834.jpg"
+              Image="https://imgs.search.brave.com/cgzcDwIoya9c4h8L4ye2eP1A-zYMn6MEolxoFSfUcdc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQw/MTQwMTM1NS9waG90/by93ZWItMy0wLWNv/bmNlcHQtb2YtZGVj/ZW50cmFsaXplZC1p/bnRlcm5ldC0zZC1y/ZW5kZXIuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPXI4LVJS/OEhlVnZNcFVublph/NEQ5bnJwXy1WcVJw/dUEtMG9OdndRT2Zx/TTg9"
               Joined={false}
               Description="Description"
             />
@@ -35,7 +37,7 @@ function Post() {
           <div className="w-2/3 flex flex-col items-center space-y-2">
             <Inp />
             
-            <Comment upvotes={32} isUpvoted={true} comment="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus numquam similique tenetur ratione maiores, id dicta officiis! Fugit natus, nulla enim labore quos doloremque quidem cupiditate quod recusandae necessitatibus fugiat quasi cum debitis voluptate veritatis accusantium, libero sequi eius soluta ullam culpa, consequatur odio! Fuga, nam corporis? Dolorum, ipsam atque. " date={Date.now().toString()} user="ashwin rai" />
+            <Comment upvotes={32} isUpvoted={true} comment=" great news" date={Date.now().toString()} user="ashwin rai" />
           </div>
         
         </ScrollArea>

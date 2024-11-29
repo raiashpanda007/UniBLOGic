@@ -12,12 +12,13 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static('public'));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: '*',
-    credentials: true
+    origin: 'http://localhost:5173', // Your frontend URL
+    credentials: true, // Allow credentials (cookies, tokens, etc.)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'], // Allowed headers
 }));
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.static("public"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 app.use('/api/auth', auth_routes_1.default);
 const user_routes_1 = __importDefault(require("./routes/user.routes"));

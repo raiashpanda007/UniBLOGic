@@ -13,7 +13,10 @@ const loginUser = async ({username, password}: LoginInput) => {
         const user = await prisma.user.findFirst({
             where: {
                 username
+            },select:{
+                password:true,
             }
+
         });
         if(!user) {
             return {
@@ -28,13 +31,34 @@ const loginUser = async ({username, password}: LoginInput) => {
                 message:"Invalid password"
             }
         }
-        const refreshToken = await generateRefreshToken({id:user.id});
+        const loggedInUser = await prisma.user.findFirst({
+            where:{
+                username
+            },
+            select:{
+                id:true,
+                username:true,
+                email:true,
+                role:true,
+                batch:true,
+                branch:true,
+            }
+
+        })
+        if(!loggedInUser) {
+            return {
+                success:false,
+                message:"User doesn't exist"
+            }
+        }
+        const refreshToken = await generateRefreshToken({id:loggedInUser.id});
         
 
         return {
             success:true,
             message:"Login successful",
             refreshToken,
+            loggedInUser
         }
 
 
