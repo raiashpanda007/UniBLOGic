@@ -11,7 +11,7 @@ model User {
   id               String       @id @default(cuid())
   email            String       @unique
   name             String
-  username         String       @unique // Corrected typo from 'usename' to 'username'
+  username         String       @unique 
   password         String
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
@@ -22,8 +22,8 @@ model User {
   backgroundPicture String?
   upvotes          Upvotes[]
   comments         Comments[]
-  communities      Community[]  @relation("UserCommunities") // Communities the user belongs to
-  adminCommunities Community[]  @relation("CommunityAdmin") // Communities the user administers
+  communities      Community[]  @relation("UserCommunities") 
+  adminCommunities Community[]  @relation("CommunityAdmin")
   otp              Otp[]
 }
 

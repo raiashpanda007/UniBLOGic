@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Logo } from "../Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { setUser } from '../../Store/loginStatus'; 
-import { RootState } from '../../Store/Store';
-
+import { setUser,setUserStatus } from "../../Store/loginStatus";
+import { RootState } from "../../Store/Store";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Card,
   CardContent,
@@ -24,8 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import axios from "axios";
-import { useSelector,useDispatch } from "react-redux";
+
+
 // Define the types for the form
 interface UserRegisterData {
   name: string;
@@ -38,6 +39,7 @@ interface UserRegisterData {
   profile_photo?: FileList;
   background_photo?: FileList;
 }
+
 interface UserLoginData {
   username: string;
   password: string;
@@ -48,16 +50,19 @@ export default function Join_Card() {
   const userdetails = useSelector((state: RootState) => state.loginStatus.user);
   const dispatch = useDispatch();
 
-  const { register, handleSubmit } = useForm<UserRegisterData>(); // Set type for useForm
+  const { register, handleSubmit, setValue } = useForm<UserRegisterData>();
 
   const loginUser: SubmitHandler<UserLoginData> = async (data) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/auth/login",
         data,
-        {withCredentials:true}
+        { withCredentials: true }
       );
       console.log("Login successful:", response.data);
+      dispatch(setUserStatus(true));
+      dispatch(setUser(response.data.data));
+      console.log("User details:", userdetails);
       navigate("/home");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -68,6 +73,7 @@ export default function Join_Card() {
       }
     }
   };
+
   const registerUser: SubmitHandler<UserRegisterData> = async (data) => {
     if (data.password !== data.confirm_password) {
       alert("Passwords do not match");
@@ -75,6 +81,7 @@ export default function Join_Card() {
     }
 
     const formData = new FormData();
+    console.log("Registering user:", data);
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("username", data.username);
@@ -87,18 +94,17 @@ export default function Join_Card() {
     if (data.background_photo && data.background_photo[0]) {
       formData.append("background_photo", data.background_photo[0]);
     }
-    console.log(data);
+
     try {
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
         data,
-        {withCredentials:true}
+        { withCredentials: true }
       );
       console.log("Registration successful:", response.data);
-      if(response.data) {
+      if (response.data) {
         dispatch(setUser(response.data));
       }
-
 
       if (data.email.endsWith("@iiitbh.ac.in")) {
         navigate("/verify_otp");
@@ -112,11 +118,6 @@ export default function Join_Card() {
       } else {
         console.error("Unexpected error:", error);
       }
-    }
-
-    if (data.email.split("@")[1] === "iiitbh.ac.in") {
-      // Send OTP and branch and batch
-      navigate("/verify_otp");
     }
   };
 
@@ -169,18 +170,16 @@ export default function Join_Card() {
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="branch">Branch</Label>
-                  <Select>
+                  <Select
+                    onValueChange={(value) => setValue("branch", value)} 
+                  >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Branch" />
                     </SelectTrigger>
-                    <SelectContent id="branch" {...register("branch")}>
+                    <SelectContent id="branch">
                       <SelectItem value="CSE">Computer Science</SelectItem>
-                      <SelectItem value="ECE">
-                        Electronic Communications
-                      </SelectItem>
-                      <SelectItem value="MNC">
-                        Mathematics and Computers
-                      </SelectItem>
+                      <SelectItem value="ECE">Electronic Communications</SelectItem>
+                      <SelectItem value="MNC">Mathematics and Computers</SelectItem>
                       <SelectItem value="None">None</SelectItem>
                     </SelectContent>
                   </Select>
@@ -204,7 +203,6 @@ export default function Join_Card() {
                     {...register("username")}
                   />
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="password">Password</Label>
                   <Input
@@ -220,7 +218,7 @@ export default function Join_Card() {
                   <Input
                     id="confirm_password"
                     type="password"
-                    placeholder="Enter your password ..."
+                    placeholder="Confirm your password ..."
                     className="placeholder:text-gray-500 placeholder:opacity-75"
                     {...register("confirm_password")}
                   />
@@ -285,7 +283,7 @@ export default function Join_Card() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Login</Button>
+              <Button type="submit">Login</Button>
             </CardFooter>
           </form>
         </Card>

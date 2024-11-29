@@ -19,13 +19,13 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
 
     // Authenticate user
     const result = await loginUser({ username, password });
-    if (!result.success) {
+    if (!result.success || !result.loggedInUser) {
         return res.status(400).json(new error(400, result.message));
     }
 
     // Ensure refreshToken is defined
     const refreshToken = result.refreshToken ?? '';
-    if (!refreshToken) {
+    if (!refreshToken ||  refreshToken === '') {
         return res.status(400).json(new error(400, 'Failed to generate refresh token'));
     }
 
@@ -36,13 +36,11 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
       };
 
     // Set cookie and send response
+    
     return res
         .status(200)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .json(new response(200, result.message, {
-            
-
-        }));
+        .json(new response(200, result.message, {...result.loggedInUser}));
 });
 
 export default userLogin;
