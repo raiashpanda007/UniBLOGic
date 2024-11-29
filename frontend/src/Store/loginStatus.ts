@@ -7,7 +7,8 @@ interface LoginStatusState {
         username:string;
         verified:boolean;
         email:string;
-        userprofile:string;
+        branch:string;
+        batch:number;
     }
     
     
@@ -19,7 +20,8 @@ const initialState: LoginStatusState = {
         username:"",
         verified:false,
         email:"",
-        userprofile:""
+        branch:"",
+        batch:0
     }
 }
 const loginStatusSlice = createSlice({

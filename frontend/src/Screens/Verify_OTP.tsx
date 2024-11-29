@@ -4,8 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Logo } from "@/Components/Components"
-
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import axios from "axios"
 import { Button } from "@/components/ui/button"
+import { RootState } from '../Store/Store';
 import {
   Form,
   FormControl,
@@ -34,6 +38,37 @@ function Verify_OTP() {
       pin: "",
     },
   })
+  const navigate = useNavigate()
+  const userdetails = useSelector((state: RootState) => state.loginStatus.user);
+  const {email, username,branch,batch} = userdetails;
+  console.log("Email:", email);
+  useEffect(() => {
+    
+    const requestOTP = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/auth/requestotp",
+          {
+            email: email,
+            username: username,
+            branch: branch,
+            batch: batch,
+          } // This is the request body
+        );
+        console.log("Request OTP successful:", response.data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Error response:", error.response?.data);
+          alert(error.response?.data.message || "An error occurred");
+        } else {
+          console.error("Unexpected error:", error);
+        }
+      }
+    };
+    requestOTP();
+  }, [email, username, branch, batch]);
+  
+  
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("You submitted the following values:", data)

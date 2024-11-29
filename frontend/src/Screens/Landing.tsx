@@ -3,8 +3,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../Store/Store"; // Adjust the path based on your project structure.
 import Heading from "@/Components/Logo/Heading";
 import { Outline_Button } from "@/Components/Button/Outline_Button";
+import { useNavigate } from "react-router-dom"; 
+
 const Landing: React.FC = () => {
   // Type the state as RootState for better type safety.
+  const navigate = useNavigate();
   const mode = useSelector((state: RootState) => state.theme.mode);
 
   return (
@@ -37,7 +40,7 @@ const Landing: React.FC = () => {
               </p>
 
               <div className="relative top-72 w-1/3 flex justify-between">
-                <Outline_Button label="Join Now" classname="dark text-white  h-14 text-2xl font-poppins font-semibold" />
+                <Outline_Button label="Join Now" classname="dark text-white  h-14 text-2xl font-poppins font-semibold" onClick={()=>navigate("/join_us")}/>
                
               </div>
             </div>
@@ -72,7 +75,7 @@ const Landing: React.FC = () => {
               </p>
 
               <div className="relative top-72 w-1/3 flex justify-between">
-                <Outline_Button label="Join Now" classname="h-14 dark text-white text-2xl font-poppins font-semibold" />
+                <Outline_Button label="Join Now" classname="h-14 dark text-white text-2xl font-poppins font-semibold" onClick={()=>navigate("/join_us")}/>
                 
               </div>
             </div>

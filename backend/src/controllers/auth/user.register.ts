@@ -17,61 +17,77 @@ const register = asyncHandler(async (req: Request, res: Response) => {
         username: zod.string().min(3, "Please provide a username").max(255),
     });
 
-    // Validate the request body
-    const parsed = userschema.safeParse(req.body);
-    if (!parsed.success) {
-        // Directly send an error response
-        const validationError = new error(400, "Invalid data", parsed.error.errors);
-        return res.status(validationError.statusCode).json({
-            success: validationError.success,
-            message: validationError.message,
-            errors: validationError.errors,
+    try {
+        console.log("Registering user:", req.body);
+        // Validate the request body
+        const parsed = userschema.safeParse(req.body);
+        if (!parsed.success) {
+            console.error("Validation Error:", parsed.error.errors);
+            return res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                errors: parsed.error.errors,
+            });
+        }
+
+        const { name, email, password, username } = parsed.data;
+
+        // Check if user exists
+        if (await userexist(email, username)) {
+            console.error("User already exists:", { email, username });
+            return res.status(400).json({
+                success: false,
+                message: "User already exists",
+            });
+        }
+
+        // Hash the password
+        const cryptedPassword = await bcrypt.hash(password, 10);
+
+        // Store the user in the database
+        const storeUser = await prisma.user.create({
+            data: {
+                name,
+                email,
+                password: cryptedPassword,
+                username,
+                role: "EXTERNAL",
+            },
+        });
+
+        // Check if user creation failed
+        if (!storeUser) {
+            console.error("User creation failed:", { name, email, username });
+            return res.status(500).json({
+                success: false,
+                message: "User not created",
+            });
+        }
+
+        const result = await loginUser({ username, password });
+
+        const options = {
+            httpOnly: true,
+            sameSite: false,
+        };
+
+        return res
+            .status(200)
+            .cookie("refreshToken", result.refreshToken, options)
+            .json({
+                success: true,
+                message: result.message,
+            });
+    } catch (err) {
+        console.error("Unexpected Error:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
         });
     }
-
-    const { name, email, password, username } = parsed.data;
-
-    // Check if user exists
-    if (await userexist(email, username)) {
-        // Directly send an error response
-        const userExistsError = new error(400, "User already exists");
-        return res.status(userExistsError.statusCode).json({
-            success: userExistsError.success,
-            message: userExistsError.message,
-        });
-    }
-
-    // Hash the password
-    const cryptedPassword = await bcrypt.hash(password, 10);
-
-    // Store the user in the database
-    const storeUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password: cryptedPassword,
-            username,
-            role: "EXTERNAL",
-        },
-    });
-
-    // Check if user creation failed
-    if (!storeUser) {
-        const userCreationError = new error(400, "User not created");
-        return res.status(userCreationError.statusCode).json({
-            success: userCreationError.success,
-            message: userCreationError.message,
-        });
-    }
-
-    const result = await loginUser({ username, password });
-    const options = {
-        httpOnly: true,
-        secure: false,
-    }
-
-    return res.status(200).cookie("refreshToken" ,result.refreshToken,options).json(new response(200, result.message,{}))
-
 });
+
+
+
 
 export default register;
