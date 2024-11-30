@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String       @id @default(cuid())
+  email            String       @unique
+  name             String
+  username         String       @unique 
+  password         String
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  role             Role  
+  batch            Int?
+  branch           Branch?      
+  profilePicture   String?
+  backgroundPicture String?
+  upvotes          Upvotes[]
+  comments         Comments[]
+  communities      Community[]  @relation("UserCommunities") 
+  adminCommunities Community[]  @relation("CommunityAdmin")
+  otp              Otp[]
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  content     String
+  multimedia  String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  comments    Comments[]
+  upvotes     Upvotes[]
+  author      Community       @relation(fields: [authorId], references: [id])
+  authorId    String
+
+}
+
+model Upvotes {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  post        Post       @relation(fields: [postId], references: [id])
+  postId      String
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@unique([postId, userId]) 
+}
+model Comments {
+  id          String     @id @default(cuid())
+  content     String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  post        Post       @relation(fields: [postId], references: [id])
+  postId      String
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+}
+model Community {
+  id          String     @id @default(cuid())
+  admin       User       @relation("CommunityAdmin", fields: [adminId], references: [id])
+  adminId     String
+  description String
+  communityLogo String?
+  name        String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  users       User[]     @relation("UserCommunities") // Users in the community
+  posts       Post[]
+}
+model Otp {
+  id          String    @id @default(cuid())
+  otpCode     Int
+  user        User      @relation(fields: [email], references: [email])
+  email      String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  isUsed      Boolean   @default(false)
+}
+
+
+enum Role {
+  USER
+  ADMIN
+  EXTERNAL
+}
+enum Branch {
+  CSE
+  ECE
+  MEA
+  MNC
+  None
+
+}
