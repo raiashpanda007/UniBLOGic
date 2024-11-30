@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Logo } from "@/Components/Components";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -45,27 +45,33 @@ function Verify_OTP() {
   console.log("User Details:", userdetails);
 
   // Fetch OTP when component mounts
-  useEffect(() => {
-    const requestOTP = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/auth/requestotp",
-          { withCredentials: true }
-        );
-        console.log("Request OTP successful:", response.data);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error("Error response:", error.response?.data);
-          alert(error.response?.data.message || "Failed to request OTP.");
-        } else {
-          console.error("Unexpected error:", error);
-          alert("An unexpected error occurred.");
-        }
-      }
-    };
+  const hasFetched = useRef(false);
 
-    requestOTP();
-  }, []);
+useEffect(() => {
+  if (hasFetched.current) return;
+  hasFetched.current = true;
+
+  const requestOTP = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/auth/requestotp",
+        { withCredentials: true }
+      );
+      console.log("Request OTP successful:", response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error response:", error.response?.data);
+        alert(error.response?.data.message || "Failed to request OTP.");
+      } else {
+        console.error("Unexpected error:", error);
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+
+  requestOTP();
+}, []);
+
 
   // Handle OTP verification
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {

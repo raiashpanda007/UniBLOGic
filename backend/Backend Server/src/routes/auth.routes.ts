@@ -17,7 +17,7 @@ router.route("/requestotp",).get(
     verify,
     requestOTP
 )
-router.route("/verifyotp").get(
+router.route("/verifyotp").post(
     verify,
     verifyOTP
 )

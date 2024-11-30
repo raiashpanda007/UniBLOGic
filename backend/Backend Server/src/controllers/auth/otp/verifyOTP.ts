@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
     const { otp } = req.body;
-
+    console.log("OTP send by frontend",otp);
     const email = req.user?.email;
     const userInfo = await prisma.user.findUnique({ where: { email: email } ,select:{
         branch:true,
