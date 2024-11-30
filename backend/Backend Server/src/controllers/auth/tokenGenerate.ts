@@ -2,6 +2,12 @@ import jwt from 'jsonwebtoken';
 
 interface dataRefreshToken{ 
     id:string
+    username:string
+    role:string
+    email:string
+    branch?:string
+    batch?:number 
+
 }
 interface dataAccessToken{
     id:string

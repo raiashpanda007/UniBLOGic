@@ -6,8 +6,12 @@ import nodemailer from 'nodemailer';
 
 const requestOTP = asyncHandler(async (req: Request, res: Response) => {
     const prisma = new PrismaClient();
-    const { email } = req.body;
+    const userRequestDetails = req.user;
 
+    if(!userRequestDetails) {
+        return res.status(401).json(new response(401, "Unauthorized", false));
+    }
+    const email = userRequestDetails.email;
     if (!email) {
         return res.status(400).json(new response(401, "Email is required", false));
     }

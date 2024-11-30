@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Logo } from "../Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { setUser,setUserStatus } from "../../Store/loginStatus";
+import { setUser, setUserStatus } from "../../Store/loginStatus";
 import { RootState } from "../../Store/Store";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 
 // Define the types for the form
 interface UserRegisterData {
@@ -103,7 +102,10 @@ export default function Join_Card() {
       );
       console.log("Registration successful:", response.data);
       if (response.data) {
-        dispatch(setUser(response.data));
+        console.log("Login successful:", response.data);
+        dispatch(setUserStatus(true));
+        dispatch(setUser(response.data.data));
+        console.log("User details:", userdetails);
       }
 
       if (data.email.endsWith("@iiitbh.ac.in")) {
@@ -170,16 +172,18 @@ export default function Join_Card() {
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="branch">Branch</Label>
-                  <Select
-                    onValueChange={(value) => setValue("branch", value)} 
-                  >
+                  <Select onValueChange={(value) => setValue("branch", value)}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Branch" />
                     </SelectTrigger>
                     <SelectContent id="branch">
                       <SelectItem value="CSE">Computer Science</SelectItem>
-                      <SelectItem value="ECE">Electronic Communications</SelectItem>
-                      <SelectItem value="MNC">Mathematics and Computers</SelectItem>
+                      <SelectItem value="ECE">
+                        Electronic Communications
+                      </SelectItem>
+                      <SelectItem value="MNC">
+                        Mathematics and Computers
+                      </SelectItem>
                       <SelectItem value="None">None</SelectItem>
                     </SelectContent>
                   </Select>

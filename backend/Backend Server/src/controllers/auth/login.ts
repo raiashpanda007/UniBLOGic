@@ -51,7 +51,7 @@ const loginUser = async ({username, password}: LoginInput) => {
                 message:"User doesn't exist"
             }
         }
-        const refreshToken = await generateRefreshToken({id:loggedInUser.id});
+        const refreshToken = await generateRefreshToken({id:loggedInUser.id,email:loggedInUser.email,role:loggedInUser.role,username:loggedInUser.username});
         
 
         return {

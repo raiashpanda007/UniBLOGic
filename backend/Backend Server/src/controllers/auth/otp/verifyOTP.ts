@@ -5,7 +5,17 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
-    const { otp, email, branch, batch } = req.body;
+    const { otp } = req.body;
+
+    const email = req.user?.email;
+    const userInfo = await prisma.user.findUnique({ where: { email: email } ,select:{
+        branch:true,
+        batch:true
+    }});
+
+    const batch = userInfo?.batch;
+
+    const branch = userInfo?.branch;
 
     // Validate OTP and email presence
     if (!otp || !email) {
@@ -19,10 +29,7 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
     }
 
     // Parse batch if provided
-    const batchNumber = batch ? parseInt(batch, 10) : undefined;
-    if (batch && isNaN(batch)) {
-        return res.status(400).json(new response(400, "Invalid batch format", false));
-    }
+    
 
     try {
         // Check for existing OTP
@@ -57,7 +64,7 @@ const verifyOTP = asyncHandler(async (req: Request, res: Response) => {
                 data: {
                     role: "USER",
                     ...(branch && { branch }),
-                    ...(batchNumber && { batch: batchNumber }),
+                    ...(batch && { batch }),
                 },
             }),
         ]);
