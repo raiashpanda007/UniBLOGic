@@ -9,4 +9,10 @@ router.route("/all_users").get(
 
 )
 
+// TODO: 1. View profile
+// 2. Update Profile photo and user
+// 3. Delete Profile
+// 4.Upload profile photo and background photo
+
+
 export default router;
