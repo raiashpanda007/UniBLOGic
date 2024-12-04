@@ -1,5 +1,4 @@
 import {asyncHandler,response,error} from '../../../utilities/utilities';
-import { Request,Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
@@ -7,12 +6,10 @@ const verifyOTP_forgot = asyncHandler(async (req,res) =>{
     const {otp,password,email} = req.body;
     
 
-    if(!otp || !email){
-        return res.status(400).json(new response(400,"OTP and email are required",false));
+    if(!otp || !email  || !password){
+        return res.status(400).json(new response(400,"OTP and email and Password are required ",false));
     }
-    if(!isNaN(otp)){
-        return res.status(400).json(new error(400,"Invalid OTP format"));
-    }
+    
 
     try {
         const savedOTP = await prisma.otp.findFirst({
@@ -47,6 +44,10 @@ const verifyOTP_forgot = asyncHandler(async (req,res) =>{
                 })
             ])
         }
+
+        return res.status(200).json(new response(200,"OTP verifies password updated",{
+            message:"Password has been updated"
+        }))
         
 
     } catch (e) {

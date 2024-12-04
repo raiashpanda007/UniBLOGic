@@ -2,7 +2,7 @@ import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
 import {upload} from "../middleware/multer.middleware";
 import verifyOTP from "../controllers/auth/otp/verifyOTP";
-import {register,userLogin,logout} from "../controllers/auth/auth.controller";
+import {register,userLogin,logout,requestOTP_Forgot,verifyOTP_forgot} from "../controllers/auth/auth.controller";
 import requestOTP from "../controllers/auth/otp/requestOTP";
 import verify from "../middleware/verify.middleware";
 const router = Router();
@@ -24,6 +24,12 @@ router.route("/verifyotp").post(
 router.route("/logout").get(
     verify,
     logout
+)
+router.route("/forgotPassword/requestOTP").get(
+    requestOTP_Forgot
+)
+router.route("/forgotPassword/verifyOTP").post(
+    verifyOTP_forgot
 )
 //TODO: 1. Logout
 // 2. Forgot Password
