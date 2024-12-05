@@ -1,6 +1,5 @@
-import React, { forwardRef } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/Store/Store";
+import { forwardRef } from "react";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
@@ -14,8 +13,8 @@ interface Register_InputProps {
 const Register_Input = forwardRef<HTMLInputElement, Register_InputProps>(
   ({ forgotKey = false, label,type , ...props}, ref) => {
     return (
-      <div >
-        <div className="flex justify-between">
+      <div className="space-y-2 mt-2">
+        <div className="flex justify-between dark:text-white">
           <Label htmlFor={label}>{label}</Label>
           {forgotKey && (
             <Link

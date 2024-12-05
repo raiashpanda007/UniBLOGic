@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/Store/Store";
 import { setMode } from "@/Store/themeMode";
 import axios from "axios";
-import { log } from "console";
 function DropDown_settings() {
   const navigate = useNavigate();
   const mode = useSelector((state: RootState) => state.theme.mode);
