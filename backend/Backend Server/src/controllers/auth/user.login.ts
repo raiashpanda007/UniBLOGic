@@ -40,7 +40,7 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
     return res
         .status(200)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .json(new response(200, result.message, {...result.loggedInUser}));
+        .json(new response(200, result.message, result.loggedInUser));
 });
 
 export default userLogin;
