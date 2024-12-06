@@ -25,7 +25,7 @@ router.route("/logout").get(
     verify,
     logout
 )
-router.route("/forgotPassword/requestOTP").get(
+router.route("/forgotPassword/requestOTP").post(
     requestOTP_Forgot
 )
 router.route("/forgotPassword/verifyOTP").post(

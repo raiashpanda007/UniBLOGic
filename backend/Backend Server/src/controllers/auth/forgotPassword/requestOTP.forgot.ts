@@ -9,21 +9,19 @@ const requestOTP = asyncHandler(async (req: Request, res: Response) => {
     
 
     
-    const {email} = req.body;
-    if (!email) {
-        return res.status(400).json(new response(401, "Email is required", false));
+    const {email,username} = req.body;
+    if (!email || !username) {
+        return res.status(400).json(new response(401, "Email and username  is required", false));
     }
 
     // Check if the email exists in the User table
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email,username } });
     if (!user) {
         return res.status(404).json(new response(404, "User not found", false));
     }
 
-    const otp = generateOTP();  // Generates a numeric OTP
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Set OTP expiry time to 10 minutes from now
-
-    // Store OTP in the database with email reference
+    const otp = generateOTP();  
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); 
     await prisma.otp.create({
         data: {
             email,

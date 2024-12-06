@@ -7,4 +7,5 @@ import Chat from "./test";
 import Chatroom from "./Chatroom";
 import Verify_OTP from "./Verify_OTP";
 import ForgotPassword from "./ForgotPassword";
-export { Landing ,Register,Home, Post,User_Profile,Chat,Chatroom,Verify_OTP,ForgotPassword };
+import Verify_OTP_forgot from "./VerifyOTP.forgot";
+export { Landing ,Register,Home, Post,User_Profile,Chat,Chatroom,Verify_OTP,ForgotPassword,Verify_OTP_forgot };
