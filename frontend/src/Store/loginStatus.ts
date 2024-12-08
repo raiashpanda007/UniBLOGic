@@ -4,10 +4,7 @@ interface LoginStatusState {
   userStatus: boolean;
   user: {
     username: string;
-    verified: boolean;
     email: string;
-    branch: string;
-    batch: number;
   };
 }
 
@@ -25,15 +22,13 @@ const saveToLocalStorage = (state: LoginStatusState) => {
 const loadFromLocalStorage = (): LoginStatusState => {
   try {
     const serializedState = localStorage.getItem("loginStatus");
+    
     if (serializedState === null) {
       return {
-        userStatus: true,
+        userStatus: false,
         user: {
           username: "",
-          verified: false,
-          email: "",
-          branch: "",
-          batch: 0,
+          email: ""
         },
       };
     }
@@ -44,10 +39,8 @@ const loadFromLocalStorage = (): LoginStatusState => {
       userStatus: true,
       user: {
         username: "",
-        verified: false,
-        email: "",
-        branch: "",
-        batch: 0,
+        email: ""
+
       },
     };
   }

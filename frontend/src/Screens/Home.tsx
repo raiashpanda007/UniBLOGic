@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import type { RootState } from "@/Store/Store";
 import {
   Sidebar_Card as SideBar_Component,
@@ -10,14 +11,20 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 function Home() {
   const mode = useSelector((state: RootState) => state.theme.mode);
-  const Posts = [{}, {}, {}];
+  const userDetails = useSelector((state: RootState) => state.loginStatus.user);
+  const testItem = localStorage.getItem("testItem");
+  console.log(testItem);
+
   const navigate = useNavigate();
+  useEffect(()=>{
+    console.log(userDetails);
+  },[userDetails])
 
   return (
     <div

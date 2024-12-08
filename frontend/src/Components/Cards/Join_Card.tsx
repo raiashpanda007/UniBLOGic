@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Logo } from "../Components";
+import { Logo, Register_Input } from "../Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setUser, setUserStatus } from "../../Store/loginStatus";
 import { RootState } from "../../Store/Store";
@@ -15,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -35,8 +34,8 @@ interface UserRegisterData {
   branch?: string;
   batch?: number;
   confirm_password: string;
-  profile_photo?: FileList;
-  background_photo?: FileList;
+  profilePicture?: FileList;
+  coverImage?: FileList;
 }
 
 interface UserLoginData {
@@ -58,9 +57,12 @@ export default function Join_Card() {
         data,
         { withCredentials: true }
       );
+
       console.log("Login successful:", response.data);
       dispatch(setUserStatus(true));
-      dispatch(setUser(response.data.data));
+      const { email, username } = response.data.data;
+      console.log("email:", email);
+      dispatch(setUser({ email, username }));
       console.log("User details:", userdetails);
       navigate("/home");
     } catch (error) {
@@ -79,27 +81,46 @@ export default function Join_Card() {
       return;
     }
 
+    console.log("Profile Picture:", data.profilePicture);
+    console.log("Cover Image:", data.coverImage);
+
     const formData = new FormData();
     console.log("Registering user:", data);
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("username", data.username);
     formData.append("password", data.password);
+    formData.append("branch", data.branch || "");
+    formData.append("batch", data.batch?.toString() || "");
+    
 
-    if (data.profile_photo && data.profile_photo[0]) {
-      formData.append("profile_photo", data.profile_photo[0]);
+    if (data.profilePicture && data.profilePicture.length > 0) {
+      formData.append("profilePicture", data.profilePicture[0]);
     }
 
-    if (data.background_photo && data.background_photo[0]) {
-      formData.append("background_photo", data.background_photo[0]);
+    if (data.coverImage && data.coverImage.length > 0) {
+      formData.append("coverImage", data.coverImage[0]);
     }
+
+
+
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+
 
     try {
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
-        data,
-        { withCredentials: true }
+        formData,
+        { withCredentials: true,headers: { 'Content-Type': 'multipart/form-data' } }
       );
+      if (
+        response.status === 400 &&
+        response.data.message === "Please provide batch and branch"
+      ) {
+        alert("Please provide batch and branch");
+      }
       console.log("Registration successful:", response.data);
       if (response.data) {
         console.log("Login successful:", response.data);
@@ -151,25 +172,18 @@ export default function Join_Card() {
           <CardContent className="space-y-2">
             <form onSubmit={handleSubmit(registerUser)}>
               <ScrollArea className="h-[300px] w-full">
-                <div className="space-y-1">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Enter your name ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("name")}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("email")}
-                  />
-                </div>
+                <Register_Input
+                  label="Name"
+                  forgotKey={false}
+                  type="text"
+                  {...register("name")}
+                />
+                <Register_Input
+                  label="Email"
+                  forgotKey={false}
+                  type="email"
+                  {...register("email")}
+                />
                 <div className="space-y-1">
                   <Label htmlFor="branch">Branch</Label>
                   <Select onValueChange={(value) => setValue("branch", value)}>
@@ -189,62 +203,43 @@ export default function Join_Card() {
                   </Select>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="batch">Batch</Label>
-                  <Input
-                    id="batch"
+                  <Register_Input
+                    label="Batch"
                     type="number"
-                    placeholder="Enter your batch ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
+                    forgotKey={false}
                     {...register("batch")}
                   />
                 </div>
-                <div className="space-y-1">
-                  <Label htmlFor="username">Username</Label>
-                  <Input
-                    id="username"
-                    placeholder="Enter your username ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("username")}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("password")}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="confirm_password">Confirm Password</Label>
-                  <Input
-                    id="confirm_password"
-                    type="password"
-                    placeholder="Confirm your password ..."
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("confirm_password")}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="profile_photo">Profile Photo</Label>
-                  <Input
-                    id="profile_photo"
-                    type="file"
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("profile_photo")}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="background_photo">Background Photo</Label>
-                  <Input
-                    id="background_photo"
-                    type="file"
-                    className="placeholder:text-gray-500 placeholder:opacity-75"
-                    {...register("background_photo")}
-                  />
-                </div>
+                <Register_Input
+                  label="Username"
+                  type="text"
+                  forgotKey={false}
+                  {...register("username")}
+                />
+                <Register_Input
+                  label="Password"
+                  type="password"
+                  forgotKey={false}
+                  {...register("password")}
+                />
+                <Register_Input
+                  label="Confirm Password"
+                  type="password"
+                  forgotKey={false}
+                  {...register("confirm_password")}
+                />
+                <Register_Input
+                  label="Profile Photo"
+                  type="file"
+                  forgotKey={false}
+                  {...register("profilePicture")}
+                />
+                <Register_Input
+                  label="Background Photo"
+                  type="file"
+                  forgotKey={false}
+                  {...register("coverImage")}
+                />
               </ScrollArea>
               <CardFooter>
                 <Button type="submit">Register</Button>
@@ -266,25 +261,18 @@ export default function Join_Card() {
           </CardHeader>
           <form onSubmit={handleSubmit(loginUser)}>
             <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  placeholder="Enter your username ..."
-                  className="placeholder:text-gray-500 placeholder:opacity-75"
-                  {...register("username")}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="login_password">Password</Label>
-                <Input
-                  id="login_password"
-                  type="password"
-                  placeholder="Enter your password ..."
-                  className="placeholder:text-gray-500 placeholder:opacity-75"
-                  {...register("password")}
-                />
-              </div>
+              <Register_Input
+                label="Username"
+                type="text"
+                forgotKey={false}
+                {...register("username")}
+              />
+              <Register_Input
+                label="Password"
+                type="password"
+                forgotKey={true}
+                {...register("password")}
+              />
             </CardContent>
             <CardFooter>
               <Button type="submit">Login</Button>

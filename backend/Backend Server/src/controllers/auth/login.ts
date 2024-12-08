@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import {generateRefreshToken} from './tokenGenerate'
-
+import {response} from "../../utilities/utilities"
 const loginUser = async ({username, password}: LoginInput) => {
         //check user exist or not
         const user = await prisma.user.findFirst({
