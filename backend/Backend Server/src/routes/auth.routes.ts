@@ -8,6 +8,10 @@ import verify from "../middleware/verify.middleware";
 const router = Router();
 
 router.route("/register",).post(
+    upload.fields([
+        {name: "profilePicture", maxCount: 1},
+        {name: "coverImage", maxCount:1}
+    ]),
     register
 )
 router.route("/login").post(
