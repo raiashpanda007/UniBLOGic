@@ -31,8 +31,8 @@ const register = asyncHandler(async (req: Request, res: Response) => {
         }
         // Validate the request body
 
-        const profilePicture = (req.files as { [fieldname: string]: Express.Multer.File[] })['profilePicture']?.[0];
-        const coverImage = (req.files as { [fieldname: string]: Express.Multer.File[] })['coverImage']?.[0];
+        const profilePicture = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['profilePicture']?.[0];
+        const coverImage = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['coverImage']?.[0];
 
         // console.log("Cover Image:", coverImage?.path);
         const parsed = userschema.safeParse(req.body);
@@ -61,7 +61,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
                 email,
                 password: cryptedPassword,
                 username,
-                role: "EXTERNAL",
+                role: "USER",
                 branch: branch || null,
                 batch: batch || null,
                 profilePicture: profilePictureUrl?.secure_url || null,

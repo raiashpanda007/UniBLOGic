@@ -13,6 +13,9 @@ const showAllUsers = asyncHandler(async (req, res) => {
             email: true,
             username: true,
             role: true,
+            branch:true,
+            batch:true,
+            profilePicture:true
         }
         
     });

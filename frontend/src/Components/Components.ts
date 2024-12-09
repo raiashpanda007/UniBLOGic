@@ -15,4 +15,5 @@ import Create_Post_Button from "./Button/Create_Post_Button";
 import Create_Community from "./Button/Create_Community";
 import Drop_Down_Search from "./Drop Down/Drop_Down_Search";
 import Register_Input from "./Input/Register.Input";
-export  {header,Logo,Sidebar_Card,Home_Card,ButtonGhost as Ghost_Button,Option_Logo,Upvote ,Comment_Button,Share_Button as Share,Comment_Input,Comment,Message_Input,Message,Create_Post_Button as CreatePost, Create_Community as CreateCommunity , Drop_Down_Search as DropDownSearch,Register_Input} ;
+import Sidebar from "./Sidebar/Sidebar";
+export  {header,Logo,Sidebar_Card,Home_Card,ButtonGhost as Ghost_Button,Option_Logo,Upvote ,Comment_Button,Share_Button as Share,Comment_Input,Comment,Message_Input,Message,Create_Post_Button as CreatePost, Create_Community as CreateCommunity , Drop_Down_Search as DropDownSearch,Register_Input, Sidebar} ;

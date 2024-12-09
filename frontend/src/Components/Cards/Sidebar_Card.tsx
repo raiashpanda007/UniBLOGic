@@ -36,10 +36,10 @@ const Sidebar_Card = ({
 
   return (
     <div
-      className={`h-20 w-full my-2 rounded-md p-1 cursor-pointer transition duration-300 ease-in-out ${className}
+      className={`h-20 w-[calc(100%-10px)] my-2 rounded-md p-1 cursor-pointer transition duration-300 ease-in-out ${className}
       bg-white dark:bg-black text-black dark:text-white
       hover:shadow-md hover:shadow-gray-400/50 dark:hover:shadow-2xl dark:hover:shadow-gray-900/80
-      hover:scale-105`}
+      hover:scale-105 overflow-x-hidden`}
     >
       <div className="flex justify-evenly items-center space-x-4">
         {loading ? (

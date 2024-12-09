@@ -5,6 +5,7 @@ interface LoginStatusState {
   user: {
     username: string;
     email: string;
+    role: string;
   };
 }
 
@@ -28,7 +29,8 @@ const loadFromLocalStorage = (): LoginStatusState => {
         userStatus: false,
         user: {
           username: "",
-          email: ""
+          email: "",
+          role: ""
         },
       };
     }
@@ -39,7 +41,8 @@ const loadFromLocalStorage = (): LoginStatusState => {
       userStatus: true,
       user: {
         username: "",
-        email: ""
+        email: "",
+        role: ""
 
       },
     };
