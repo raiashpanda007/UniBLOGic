@@ -188,11 +188,11 @@ function Drop_Down_Search() {
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm placeholder:font-poppins "
+          className="max-w-sm placeholder:font-poppins dark:text-white dark:placeholder:text-white "
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto font-poppins">
+            <Button variant="outline" className="ml-auto font-poppins dark:text-white">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -219,7 +219,7 @@ function Drop_Down_Search() {
       </div>
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="dark:text-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -243,6 +243,7 @@ function Drop_Down_Search() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="dark:text-white"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -42,6 +42,7 @@ const loginUser = async ({username, password}: LoginInput) => {
                 role:true,
                 batch:true,
                 branch:true,
+                
             }
 
         })
