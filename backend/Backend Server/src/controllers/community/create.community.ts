@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { asyncHandler, error, response } from "../../utilities/utilities";
+import { asyncHandler, error, response, uploadCloudinary} from "../../utilities/utilities";
 import { PrismaClient } from "@prisma/client";
 import { z as zod } from "zod";
 
@@ -10,12 +10,14 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
     console.log("Unauthorized access attempt");
     return res.status(401).json(new error(401, "Unauthorized"));
   }
+  
 
   const communitySchema = zod.object({
     title: zod.string().min(3, "Please provide a title").max(255),
     description: zod.string().min(3, "Please provide a description").max(255),
     users: zod.array(zod.string()),
   });
+  req.body.users = JSON.parse(req.body.users);
 
   const parsed = communitySchema.safeParse(req.body);
   if (!parsed.success) {
@@ -24,7 +26,7 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
       new error(400, "Invalid data", parsed.error.errors)
     );
   }
-
+  
   const { title, description, users } = parsed.data;
   const { id} = req.user;
   const role = await prisma.user.findFirst({
@@ -55,7 +57,8 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
       .status(404)
       .json(new error(404, "One or more user IDs are invalid"));
   }
-
+  const communityLogo = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['communityLogo']?.[0];
+  const communityLogoUrl = communityLogo ? await uploadCloudinary(communityLogo.path) : null;
   try {
     const community = await prisma.community.create({
       data: {
@@ -65,6 +68,7 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
         users: {
           connect: users.map((userId) => ({ id: userId })),
         },
+        communityLogo: communityLogoUrl?.secure_url || null,
       },
       include: { users: true },
     });

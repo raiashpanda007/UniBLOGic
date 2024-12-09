@@ -61,7 +61,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
                 email,
                 password: cryptedPassword,
                 username,
-                role: "USER",
+                role: "EXTERNAL",
                 branch: branch || null,
                 batch: batch || null,
                 profilePicture: profilePictureUrl?.secure_url || null,
