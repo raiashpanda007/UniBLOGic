@@ -1,4 +1,6 @@
-import * as React from "react"
+import * as React from "react";
+import { useEffect } from "react";
+import axios from "axios";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,11 +12,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -23,8 +25,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -32,35 +34,33 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 // Define user data type
 export type User = {
-  id: string
-  profilePhoto: string // URL to profile photo
-  username: string
-  year: string
-  branch: string
-}
+  id: string;
+  profilePhoto: string; // URL to profile photo
+  username: string;
+  batch: number;
+  branch: string;
+};
 
 // Sample user data
-const data: User[] = [
-  {
-    id: "user1",
-    profilePhoto: "https://example.com/photo1.jpg",
-    username: "JohnDoe",
-    year: "2023",
-    branch: "Computer Science",
-  },
-  {
-    id: "user2",
-    profilePhoto: "https://example.com/photo2.jpg",
-    username: "JaneSmith",
-    year: "2022",
-    branch: "Mechanical Engineering",
-  },
-  // Add more sample data as needed
-]
+const getAllusers= async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/user/all_users",{
+      withCredentials:true
+    });
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+    return {data:[]};
+  }
+  
+};
+
+
+
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -111,9 +111,12 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div>{row.getValue("username")}</div>,
   },
   {
-    accessorKey: "year",
-    header: "Year",
-    cell: ({ row }) => <div>{row.getValue("year")}</div>,
+    accessorKey: "batch",
+    header: "Batch",
+    cell: ({ row }) => {
+      const year = row.getValue<number>("batch"); // Explicitly handle as number
+      return <div>{year ? year.toString() : "N/A"}</div>; // Convert number to string for rendering
+    }
   },
   {
     accessorKey: "branch",
@@ -124,7 +127,7 @@ export const columns: ColumnDef<User>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const user = row.original
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -146,19 +149,28 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuItem>Send message</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 function Drop_Down_Search() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
+  const [data, setData] = React.useState<User[]>([]);
+  useEffect(() => {
+    getAllusers().then((data) => {
+      console.log(data);
+      setData(data);
+    });
+  });
+  
+
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -177,14 +189,16 @@ function Drop_Down_Search() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by username, year, or branch..."
-          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("username")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
@@ -192,7 +206,10 @@ function Drop_Down_Search() {
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto font-poppins dark:text-white">
+            <Button
+              variant="outline"
+              className="ml-auto font-poppins dark:text-white"
+            >
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -212,7 +229,7 @@ function Drop_Down_Search() {
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -232,7 +249,7 @@ function Drop_Down_Search() {
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -293,7 +310,7 @@ function Drop_Down_Search() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Drop_Down_Search
+export default Drop_Down_Search;

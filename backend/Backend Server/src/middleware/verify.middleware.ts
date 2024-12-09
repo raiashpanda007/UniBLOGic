@@ -16,13 +16,13 @@ const verify = asyncHandler(async (req: Request, res: Response, next: NextFuncti
 
     }
     const secret = process.env.REFRESH_TOKEN_SECRET;
-    console.log(secret)
+    
     if(secret){
         
         try {
             const decoded =  jwt.verify(token, secret) as DecodedToken;
 
-            console.log("Decoded Token",decoded);
+            
             if(!decoded){
                 console.log("decoded is null");
                 throw new error(401, "Invalid token");
