@@ -22,6 +22,7 @@ interface FormData {
   img: string[];
 }
 
+
 // Define user type
 export type User = {
   id: string;
@@ -33,15 +34,23 @@ export type User = {
 
 function Create_Community() {
   const mode = useSelector((state: RootState) => state.theme.mode);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>();
   const [images, setImages] = useState<string[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [userDetails, setUserDetails] = useState<string[]>([]);
+  
 
   // Handle image selection
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      const newImages = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
       if (images.length + newImages.length <= 10) {
         const updatedImages = [...images, ...newImages];
         setImages(updatedImages);
@@ -53,19 +62,16 @@ function Create_Community() {
   };
 
   // Handle user selection from DropDownSearch
-  const handleSelectionChange = (users: User[]) => {
-    setSelectedUsers(users);
-  };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     // Combine form data with selected users
     const communityData = {
       ...data, // Title, description, and images
-      members: selectedUsers, // Selected users from DropDownSearch
+      members: userDetails, // Selected users from DropDownSearch
     };
-  
+
     console.log("Community Data:", communityData);
-  
+
     // Perform API call or further processing
   };
 
@@ -79,9 +85,14 @@ function Create_Community() {
         </DialogTrigger>
         <DialogContent className={`${mode} dark:bg-black dark:text-white`}>
           <DialogHeader>
-            <DialogTitle className="font-poppins dark:text-white">Create Community</DialogTitle>
+            <DialogTitle className="font-poppins dark:text-white">
+              Create Community
+            </DialogTitle>
             <DialogDescription>
-              <form className="flex flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
+              <form
+                className="flex flex-col w-full"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 {/* Title Input */}
                 <Input
                   type="text"
@@ -89,7 +100,9 @@ function Create_Community() {
                   {...register("title", { required: true })}
                   className="h-12 border rounded-sm p-2 placeholder:font-poppins dark:placeholder:text-white"
                 />
-                {errors.title && <p className="text-red-500">Title is required</p>}
+                {errors.title && (
+                  <p className="text-red-500">Title is required</p>
+                )}
 
                 {/* Description Input */}
                 <Textarea
@@ -97,7 +110,9 @@ function Create_Community() {
                   {...register("description", { required: true })}
                   className="h-32 border rounded-sm p-2 mt-2 placeholder:font-poppins dark:placeholder:text-white"
                 />
-                {errors.description && <p className="text-red-500">Description is required</p>}
+                {errors.description && (
+                  <p className="text-red-500">Description is required</p>
+                )}
 
                 {/* Community Logo Upload */}
                 <h1 className="font-poppins font-semibold">Community Logo</h1>
@@ -121,10 +136,14 @@ function Create_Community() {
                 </div>
 
                 {/* User Selection Dropdown */}
-                <DropDownSearch  />
+                <DropDownSearch sentSetUserDetails={setUserDetails} / >
 
                 {/* Submit Button */}
-                <Button type="submit" variant={"outline"} className="w-38 self-end mt-2">
+                <Button
+                  type="submit"
+                  variant={"outline"}
+                  className="w-38 self-end mt-2"
+                >
                   <Option_Logo label="Create Community" />
                 </Button>
               </form>
