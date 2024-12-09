@@ -128,7 +128,6 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const user = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -153,8 +152,10 @@ export const columns: ColumnDef<User>[] = [
     },
   },
 ];
-
-function Drop_Down_Search() {
+interface DropDowmProps{
+  sentSetUserDetails:React.Dispatch<React.SetStateAction<string[]>>
+}
+function Drop_Down_Search({sentSetUserDetails}:DropDowmProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -162,16 +163,25 @@ function Drop_Down_Search() {
   const [data, setData] = React.useState<User[]>([]);
   useEffect(() => {
     getAllusers().then((data) => {
-      console.log(data);
       setData(data);
     });
   });
+  const handleUserSelection = (rowSelection: Record<string, boolean>) =>{
+    const selectedRows = Object.keys(rowSelection).filter((key) => rowSelection[key]);
+    console.log(selectedRows);
+    sentSetUserDetails(selectedRows);
+  }
   
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
+  // const rowFunct = (row:any) =>{
+  //   console.log("Row:",row);
+  // }
+  useEffect(()=>{
+    handleUserSelection(rowSelection);
+  },[rowSelection])
   const table = useReactTable({
     data,
     columns,
@@ -181,6 +191,7 @@ function Drop_Down_Search() {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getRowId: (row) => row.id,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
