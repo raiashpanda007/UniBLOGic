@@ -21,8 +21,8 @@ interface FormData {
   description: string;
   img: string[];
 }
-
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 // Define user type
 export type User = {
   id: string;
@@ -34,6 +34,7 @@ export type User = {
 
 function Create_Community() {
   const mode = useSelector((state: RootState) => state.theme.mode);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -63,14 +64,32 @@ function Create_Community() {
 
   // Handle user selection from DropDownSearch
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    // Combine form data with selected users
-    const communityData = {
-      ...data, // Title, description, and images
-      members: userDetails, // Selected users from DropDownSearch
-    };
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    console.log(data);
+    console.log(userDetails)
+    const formdata = new FormData();
+    formdata.append("title", data.title);
+    formdata.append("description", data.description);
+    if(data.img && data.img.length == 1){
+      formdata.append("communityLogo", data.img[0]);
+    }
+    formdata.append("users", JSON.stringify(userDetails));
+    try {
+      const response = await axios.post("http://localhost:3000/api/community/create", formdata, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if(response){
+        console.log(response.data.data)
+        navigate(`/home`)
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
-    console.log("Community Data:", communityData);
+    
 
     // Perform API call or further processing
   };
@@ -98,7 +117,7 @@ function Create_Community() {
                   type="text"
                   placeholder="Title ..... "
                   {...register("title", { required: true })}
-                  className="h-12 border rounded-sm p-2 placeholder:font-poppins dark:placeholder:text-white"
+                  className="h-12 border rounded-sm p-2 placeholder:font-poppins dark:placeholder:text-white dark:text-white"
                 />
                 {errors.title && (
                   <p className="text-red-500">Title is required</p>
@@ -108,7 +127,7 @@ function Create_Community() {
                 <Textarea
                   placeholder="Description ...."
                   {...register("description", { required: true })}
-                  className="h-32 border rounded-sm p-2 mt-2 placeholder:font-poppins dark:placeholder:text-white"
+                  className="h-32 border rounded-sm p-2 mt-2 placeholder:font-poppins dark:placeholder:text-white dark:text-white"
                 />
                 {errors.description && (
                   <p className="text-red-500">Description is required</p>
