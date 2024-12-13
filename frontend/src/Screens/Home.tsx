@@ -22,10 +22,7 @@ function Home() {
   const testItem = localStorage.getItem("testItem");
   console.log(testItem);
 
-  const navigate = useNavigate();
-  useEffect(()=>{
-    console.log(userDetails);
-  },[userDetails])
+ 
 
   return (
     <div

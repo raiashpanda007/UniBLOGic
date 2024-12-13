@@ -10,7 +10,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { store } from "./Store/Store";
 import { Provider } from "react-redux";
-import {Landing,Register,Home, Post,User_Profile,Chat,Chatroom, Verify_OTP,ForgotPassword,Verify_OTP_forgot} from "./Screens/Screens.ts";
+import {Landing,Register,Home, Post,User_Profile,Demo,Chatroom, Verify_OTP,ForgotPassword,Verify_OTP_forgot,Community} from "./Screens/Screens.ts";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(<Route path="/" element={<App />}>
@@ -21,8 +21,9 @@ const routes = createBrowserRouter(
     <Route path="user/:user_id" element = {<User_Profile />}/>
     <Route path="chatroom/:chat_id" element={<Chatroom />} />
     <Route path="verify_otp" element={<Verify_OTP />} />
-    <Route path="test" element={<Chat />} />
+    <Route path="test" element={<Demo />} />
     <Route path="forgotpassword" element={<ForgotPassword />} />
+    <Route path="community/:community_id" element={<Community/>} />
     <Route path="forgotpassword/verifyOTP" element={<Verify_OTP_forgot/>} />
       
 
