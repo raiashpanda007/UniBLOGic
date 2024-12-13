@@ -23,7 +23,7 @@ function Comment_Button({ CommentCount }: CommentButtonProps) {
     : (mode === 'light' ?'#000000':"#ffffff"); 
 
   return (
-    <div className="h-full w-16 flex items-center justify-around">
+    <div className="h-full w-16 flex items-center justify-around dark:text-white ">
       <Button
         variant="ghost"
         style={{
