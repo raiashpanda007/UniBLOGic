@@ -35,19 +35,27 @@ interface CommunityProps {
   CommunityAdmin: User;
   CommunityUsers: User[];
 }
-interface UserSearch {
+interface Data {
   name: string;
   username: string;
   profilePicture: string;
 }
 
+interface SearchProps {
+  Data:Data;
+  type:string;
+
+}
 function Community() {
   // creating a temp user 
-  const Props:UserSearch = {
-    name: "John Doe",
-    username: "johndoe",
-    profilePicture: ""
-}
+  const Props = {
+    Data: {
+      name: "John Doe",
+      username: "johndoe",
+      profilePicture: ""
+    },
+    type: "user"
+  }
 
   const navigate = useNavigate();
   const mode = useSelector((state: RootState) => state.theme.mode);
@@ -275,7 +283,7 @@ Euismod cras litora tortor ac varius malesuada condimentum dui. Facilisi eu maec
                 <TabsContent value="users" className="h-5/6 w-full">
                       <ScrollArea className="h-full w-full  overflow-y-auto my-1 flex flex-col items-center" > 
                         <div className=" flex justify-center items-center border" >
-                          <SearchResult User={Props}  />
+                          <SearchResult Data={Props.Data} type={Props.type} />
                         </div>
                       </ScrollArea>
                 </TabsContent>
