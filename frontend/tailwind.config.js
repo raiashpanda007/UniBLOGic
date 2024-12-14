@@ -26,6 +26,8 @@ export default {
 		  sm: 'calc(var(--radius) - 4px)',
 		},
 		colors: {
+			'custom-gray-dialogbox': '#E7E8E9',
+			'custom-gray-dialogbox-dark':'#1D1D1F',
 		  background: 'hsl(var(--background))',
 		  foreground: 'hsl(var(--foreground))',
 		  card: {

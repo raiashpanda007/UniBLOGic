@@ -27,7 +27,7 @@ function Community_Post_Card({
   });
   return (
     <div className="w-2/3" >
-      <div className="space-y-3 cursor-pointer" onClick={onClick} >
+      <div className="space-y-3 cursor-pointer"  >
         {loading ? (
           <Skeleton className="min-h-12 rounded-md" />
         ) : (

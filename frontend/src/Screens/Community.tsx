@@ -9,7 +9,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Option_Logo } from "@/Components/Components";
 import { useEffect, useState } from "react";
-import { Sidebar, CommunityPostCard } from "@/Components/Components";
+import {
+  Sidebar,
+  CommunityPostCard,
+  EditButton,
+  SearchResult
+} from "@/Components/Components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import GroupPng from "@/assets/group.png";
@@ -30,7 +35,20 @@ interface CommunityProps {
   CommunityAdmin: User;
   CommunityUsers: User[];
 }
+interface UserSearch {
+  name: string;
+  username: string;
+  profilePicture: string;
+}
+
 function Community() {
+  // creating a temp user 
+  const Props:UserSearch = {
+    name: "John Doe",
+    username: "johndoe",
+    profilePicture: ""
+}
+
   const navigate = useNavigate();
   const mode = useSelector((state: RootState) => state.theme.mode);
   const [loading, setLoading] = useState(true);
@@ -116,11 +134,12 @@ function Community() {
                     </>
                   ) : (
                     <>
-                      <div className="h-1/5  flex items-center pl-2">
+                      <div className="h-1/5  flex items-center  pl-2">
                         <Option_Logo
                           label="Community Name"
                           className="text-4xl"
                         />
+                        <EditButton />
                       </div>
                       <ScrollArea className="h-2/5  w-full overflow-y-auto border rounded-md dark:text-white dark:bg-slate-900 bg-gray-200">
                         <p className="text-sm m-1 font-poppins">
@@ -191,6 +210,20 @@ function Community() {
                   <ScrollArea className="h-full w-full  overflow-y-auto  ">
                     <div className="w-full flex justify-center items-center">
                       <CommunityPostCard
+                        Content="This is our community we will grow and become better day by day Lorem ipsum odor amet, consectetuer adipiscing elit. Libero sollicitudin placerat ligula elementum, facilisi mauris tristique. Metus facilisi lacinia habitant metus ridiculus dictumst montes a elit. Placerat porttitor euismod varius urna curae vel scelerisque. Ultricies tellus efficitur tempor dictum integer ullamcorper pretium dignissim sit. Sollicitudin facilisi ac natoque dignissim tortor fames egestas tincidunt? Phasellus enim ligula eleifend est, taciti consectetur efficitur class.
+
+Euismod cras litora tortor ac varius malesuada condimentum dui. Facilisi eu maecenas diam curabitur cras fames lobortis. Varius per semper velit proin commodo lectus in ut. Conubia feugiat sagittis sodales inceptos, finibus scelerisque viverra ante. Mollis feugiat ex laoreet, enim magna non convallis. Diam iaculis phasellus ullamcorper ipsum ante. Tincidunt nunc leo pellentesque mattis libero ridiculus primis. Posuere habitant netus turpis sagittis, per nunc ultricies id maecenas. Elementum phasellus mattis class turpis tempor luctus molestie. Dapibus cubilia dolor elit curabitur nascetur porta sollicitudin"
+                        Upvote_Counts={1000}
+                        Comments_Count={239}
+                        isUpvoted={false}
+                        Image="https://img.freepik.com/free-vector/pair-programming-concept-illustration_114360-1652.jpg?t=st=1734115888~exp=1734119488~hmac=5ca5263e319679fb81a374d75794fffe68b45e18b4047ff560632e8f7415817a&w=2000"
+                        onClick={() => {
+                          navigate("/post/12");
+                        }}
+                      />
+                    </div>
+                    <div className="w-full flex justify-center items-center">
+                      <CommunityPostCard
                         Content="This is our community we will grow and become better day by day "
                         Upvote_Counts={1000}
                         Comments_Count={239}
@@ -212,7 +245,8 @@ function Community() {
                           navigate("/post/12");
                         }}
                       />
-                    </div><div className="w-full flex justify-center items-center">
+                    </div>
+                    <div className="w-full flex justify-center items-center">
                       <CommunityPostCard
                         Content="This is our community we will grow and become better day by day "
                         Upvote_Counts={1000}
@@ -223,18 +257,8 @@ function Community() {
                           navigate("/post/12");
                         }}
                       />
-                    </div><div className="w-full flex justify-center items-center">
-                      <CommunityPostCard
-                        Content="This is our community we will grow and become better day by day "
-                        Upvote_Counts={1000}
-                        Comments_Count={239}
-                        isUpvoted={false}
-                        Image="https://img.freepik.com/free-vector/pair-programming-concept-illustration_114360-1652.jpg?t=st=1734115888~exp=1734119488~hmac=5ca5263e319679fb81a374d75794fffe68b45e18b4047ff560632e8f7415817a&w=2000"
-                        onClick={() => {
-                          navigate("/post/12");
-                        }}
-                      />
-                    </div><div className="w-full flex justify-center items-center">
+                    </div>
+                    <div className="w-full flex justify-center items-center">
                       <CommunityPostCard
                         Content="This is our community we will grow and become better day by day "
                         Upvote_Counts={1000}
@@ -247,6 +271,13 @@ function Community() {
                       />
                     </div>
                   </ScrollArea>
+                </TabsContent>
+                <TabsContent value="users" className="h-5/6 w-full">
+                      <ScrollArea className="h-full w-full  overflow-y-auto my-1 flex flex-col items-center" > 
+                        <div className=" flex justify-center items-center border" >
+                          <SearchResult User={Props}  />
+                        </div>
+                      </ScrollArea>
                 </TabsContent>
               </Tabs>
             </div>
