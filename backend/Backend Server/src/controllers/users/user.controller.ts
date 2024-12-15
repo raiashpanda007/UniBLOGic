@@ -1,2 +1,3 @@
 import showAllUsers from "./allusers";
-export {showAllUsers}
+import user_details from "./details.user";
+export {showAllUsers,user_details}

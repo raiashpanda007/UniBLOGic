@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {showAllUsers} from "../controllers/users/user.controller";
+import {showAllUsers,user_details} from "../controllers/users/user.controller";
 import verify from "../middleware/verify.middleware";
 const router = Router();
 
@@ -7,6 +7,11 @@ router.route("/all_users").get(
     verify,
     showAllUsers
 
+)
+
+router.route("/user_details").get(
+    verify,
+    user_details
 )
 
 // TODO: 1. View profile

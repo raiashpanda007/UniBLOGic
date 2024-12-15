@@ -17,7 +17,9 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
     description: zod.string().min(3, "Please provide a description").max(255),
     users: zod.array(zod.string()),
   });
-  req.body.users = JSON.parse(req.body.users);
+  if (typeof req.body.users === "string") {
+    req.body.users = JSON.parse(req.body.users);
+  }
 
   const parsed = communitySchema.safeParse(req.body);
   if (!parsed.success) {
@@ -56,6 +58,10 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
     return res
       .status(404)
       .json(new error(404, "One or more user IDs are invalid"));
+  }
+  // Make sure that the admin is included in the list of users
+  if (!users.includes(id)) {
+    users.push(id);
   }
   const communityLogo = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['communityLogo']?.[0];
   const communityLogoUrl = communityLogo ? await uploadCloudinary(communityLogo.path) : null;
