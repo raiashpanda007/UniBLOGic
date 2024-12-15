@@ -35,17 +35,9 @@ interface CommunityProps {
   CommunityAdmin: User;
   CommunityUsers: User[];
 }
-interface Data {
-  name: string;
-  username: string;
-  profilePicture: string;
-}
 
-interface SearchProps {
-  Data:Data;
-  type:string;
 
-}
+
 function Community() {
   // creating a temp user 
   const Props = {

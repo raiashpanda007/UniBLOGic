@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Button } from "@/components/ui/button";
-import { Option_Logo, CreatePost, Sidebar } from "@/Components/Components";
+import {  CreatePost, Sidebar } from "@/Components/Components";
 import type { RootState } from "@/Store/Store";
 import {
-  Sidebar_Card as SideBar_Component,
-  Home_Card as Card,
   Message_Input,
   Message,
-  CreateCommunity
+
 } from "@/Components/Components";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -104,7 +101,7 @@ function Chatroom() {
     },
     {
       id: "4",
-      content: "Here’s a quick photo I took.",
+      content: "Here's a quick photo I took.",
       user: {
         id: "4",
         userName: "chris",
