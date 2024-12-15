@@ -147,10 +147,10 @@ export default function Join_Card() {
   return (
     <Tabs defaultValue="register" className="w-[600px] h-1/2 font-poppins">
       <TabsList className="grid w-full grid-cols-2 dark:bg-gray-800 h-14 bg-gray-100">
-        <TabsTrigger value="register" className="text-2xl font-semibold h-full">
+        <TabsTrigger value="register" className="text-2xl font-semibold font-montserrat h-full">
           Register
         </TabsTrigger>
-        <TabsTrigger value="login" className="text-2xl font-semibold h-full">
+        <TabsTrigger value="login" className="text-2xl font-semibold font-montserrat h-full">
           Login
         </TabsTrigger>
       </TabsList>

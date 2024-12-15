@@ -4,10 +4,19 @@ interface ThemeModeState {
     theme:string;
     mode:string;
 }
+const getMode = () => {
+    const mode = localStorage.getItem("mode");
+    if (mode) {
+        return mode;
+    }
+    
+    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return prefersDarkMode ? "dark" : "light";
+};
 
 const initialState:ThemeModeState = {
     theme:"default",
-    mode:"light"
+    mode:getMode()
 }
 const themeModeSlice = createSlice({
     name:"themeMode",
@@ -22,6 +31,7 @@ const themeModeSlice = createSlice({
             } else {
                 state.mode = 'dark';
             }
+            localStorage.setItem("mode",state.mode);
         }
     }
 })
