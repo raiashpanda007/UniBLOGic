@@ -13,7 +13,7 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
   
 
   const communitySchema = zod.object({
-    title: zod.string().min(3, "Please provide a title").max(255),
+    name: zod.string().min(3, "Please provide a name").max(255),
     description: zod.string().min(3, "Please provide a description").max(255),
     users: zod.array(zod.string()),
   });
@@ -29,7 +29,7 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
     );
   }
   
-  const { title, description, users } = parsed.data;
+  const { name, description, users } = parsed.data;
   const { id} = req.user;
   const role = await prisma.user.findFirst({
     where:{
@@ -68,7 +68,8 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
   try {
     const community = await prisma.community.create({
       data: {
-        name: title,
+
+        name: name,
         description,
         adminId:id,
         users: {
