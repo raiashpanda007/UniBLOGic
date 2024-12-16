@@ -14,9 +14,9 @@ router.route("/details").get(
     user_details
 )
 
-// TODO: 1. View profile
+// TODO: 
 // 2. Update Profile photo and user
-// 3. Delete Profile
+// 3. 
 // 4.Upload profile photo and background photo
 
 

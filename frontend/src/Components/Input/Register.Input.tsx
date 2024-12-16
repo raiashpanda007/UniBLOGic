@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Register_InputProps {
   forgotKey: boolean;
@@ -25,7 +26,17 @@ const Register_Input = forwardRef<HTMLInputElement, Register_InputProps>(
             </Link>
           )}
         </div>
-        <Input
+        {
+          type === "textarea" ? 
+          <Textarea
+            id={label}
+            placeholder={`Enter your  ${label} ... `}
+            className="placeholder:text-gray-500 placeholder:opacity-75"
+            ref={ref as React.Ref<HTMLTextAreaElement>}
+            {...props}
+          />
+          :
+          <Input
           id={label}
           type={type}
           placeholder={`Enter your  ${label} ... `}
@@ -33,6 +44,7 @@ const Register_Input = forwardRef<HTMLInputElement, Register_InputProps>(
           ref={ref}
           {...props}
         />
+        }
       </div>
     );
   }

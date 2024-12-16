@@ -8,13 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Edit as EditIcon } from "@/assets/Icons/Icons" 
 import { useSelector } from "react-redux"
 import type { RootState } from "@/Store/Store"
-function Edit() {
+import { Register_Input } from "../Components"
+interface EditProps {
+  type:string;
+}
+function Edit({type = "Community"} : EditProps) {
     const mode = useSelector((state:RootState) => state.theme.mode)
   return (
     <Dialog >
@@ -31,18 +32,9 @@ function Edit() {
           </DialogDescription>
         </DialogHeader>
         <div className={` grid gap-4 py-4 dark:text-white dark:bg-black`}>
-          <div className="grid grid-cols-4 items-center gap-4 ">
-            <Label htmlFor="name" className="text-right">
-              Community Name
-            </Label>
-            <Input id="name" value={"Commuity Name"} className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Username
-            </Label>
-            <Textarea id="description" value="@peduarte" className="col-span-3" />
-          </div>
+          
+          <Register_Input forgotKey={false} type="text" label="Community Title"/>
+          <Register_Input forgotKey={false} type="textarea" label="Community Description"/>
         </div>
         <DialogFooter>
           <Button type="submit">Save changes</Button>
