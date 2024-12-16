@@ -68,7 +68,7 @@ model Community {
   adminId     String
   description String
   communityLogo String?
-  name        String
+  name        String      @unique
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   users       User[]     @relation("UserCommunities") // Users in the community

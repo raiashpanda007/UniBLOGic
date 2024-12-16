@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Option_Logo } from "@/Components/Components";
+import { Option_Logo,Logo } from "@/Components/Components";
 import { useEffect, useState } from "react";
 import {
   Sidebar,
   CommunityPostCard,
   EditButton,
-  SearchResult
+  SearchResult,
 } from "@/Components/Components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import GroupPng from "@/assets/group.png";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,52 +27,59 @@ interface User {
   username: string;
   profilePicture: string;
 }
+interface CommunityPosts  {
+  id:string;
+  upvotesCount:number;
+  commentsCount:number;
+  title:string;
+  content:string;
+  createdAt:Date;
+}
 interface CommunityProps {
-  CommunityName: string;
-  CommunityDescription: string;
+  name: string;
+  description: string;
   isJoined: boolean;
   CommunityLogo: string | null;
   CommunityAdmin: User;
-  CommunityUsers: User[];
+  users: User[];
+  posts: CommunityPosts[] | null;
 }
 
-
-
 function Community() {
-  // creating a temp user 
-  const Props = {
-    Data: {
-      name: "John Doe",
-      username: "johndoe",
-      profilePicture: ""
-    },
-    type: "user"
-  }
+  const { community_id } = useParams();
+  const getCommunityDetails = async () => {
+    try {
+      const communityDetails = await axios.get(
+        "http://localhost:3000/api/community/details",
+        {
+          headers: {
+            communityid: community_id,
+          },
+          withCredentials: true,
+        }
+      );
+      if (!communityDetails.data.data) return null;
+      return communityDetails.data.data;
+    } catch (error) {
+      console.log("Error in fetching community details", error);
+    }
+  };
+  useEffect(() => {
+    const fetchCommunityDetails = async () => {
+      setLoading(true);
+      const result = await getCommunityDetails();
+      setData(result);
+      console.log(result);
+      setLoading(false);
+    };
+    fetchCommunityDetails();
+  }, [community_id]);
 
   const navigate = useNavigate();
   const mode = useSelector((state: RootState) => state.theme.mode);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<CommunityProps>();
-  const getDetails = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/v1/auth/me", {
-        withCredentials: true,
-      });
-      setData(res.data);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      getDetails();
-      setLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
   return (
     <div
       className={`${mode} h-screen w-screen dark:bg-black overflow-hidden z-0`}
@@ -136,35 +143,14 @@ function Community() {
                     <>
                       <div className="h-1/5  flex items-center  pl-2">
                         <Option_Logo
-                          label="Community Name"
+                          label={data?.name || "Community Name"}
                           className="text-4xl"
                         />
                         <EditButton />
                       </div>
                       <ScrollArea className="h-2/5  w-full overflow-y-auto border rounded-md dark:text-white dark:bg-slate-900 bg-gray-200">
                         <p className="text-sm m-1 font-poppins">
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit. Ab ipsam voluptates maxime recusandae quae
-                          consequatur in nisi quo dolores omnis vitae, commodi
-                          quibusdam, eaque, at quasi aperiam saepe perspiciatis
-                          aliquid cupiditate veritatis? Animi obcaecati culpa
-                          aliquid id dicta sunt labore unde a dolor
-                          reprehenderit amet, eveniet vel hic nisi consectetur
-                          repellendus consequuntur ipsam, distinctio magni!
-                          Saepe quos laudantium quod commodi veniam sint tempore
-                          repudiandae praesentium, quasi illo alias harum
-                          aperiam inventore aut maxime totam similique, vel
-                          quisquam! Ratione tempore maxime ullam neque officiis
-                          quidem magnam dolores modi id magni ipsum ab
-                          voluptatum expedita incidunt deserunt, iure numquam
-                          architecto quo culpa in dolorum suscipit sed!
-                          Accusamus dolor ex quod, nostrum veritatis ipsum sit
-                          mollitia voluptatibus perferendis modi delectus
-                          doloremque molestiae quis aperiam libero sequi porro
-                          accusantium autem nihil! Ex, quod! Corporis facilis
-                          omnis dolores officiis eos, dolore ipsum deserunt rem
-                          unde dicta! Labore laudantium quasi aperiam
-                          repudiandae suscipit est aut accusamus!
+                          {data?.description || "Community Description"}
                         </p>
                       </ScrollArea>
                     </>
@@ -173,12 +159,13 @@ function Community() {
                     {loading ? (
                       <>
                         <Skeleton className="h-full w-1/3 " />
+                        
                         <Skeleton className="h-full w-1/3 " />
                       </>
                     ) : (
                       <>
                         <div className="h-full w-1/2 flex justify-center border dark:border-white items-center text-green-600 font-montserrat font-bold">
-                          200 Members
+                          {data?.users.length || 1} Members
                         </div>
                         <div className="h-full w-1/2 flex justify-center items-center">
                           <p className="font-montserrat font-bold">ADMIN : </p>
@@ -207,7 +194,14 @@ function Community() {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="posts" className="h-5/6 w-full ">
-                  <ScrollArea className="h-full w-full  overflow-y-auto  ">
+                  {
+                    data && data.posts?.length === 0 ? (
+                      <div className="w-full  h-full flex justify-center items-center">
+                        <Logo label="NO POSTS "/> 
+                        <div className="text-[4em]"> 😔</div>
+                      </div>
+                    ):(
+                      <ScrollArea className="h-full w-full  overflow-y-auto  ">
                     <div className="w-full flex justify-center items-center">
                       <CommunityPostCard
                         Content="This is our community we will grow and become better day by day Lorem ipsum odor amet, consectetuer adipiscing elit. Libero sollicitudin placerat ligula elementum, facilisi mauris tristique. Metus facilisi lacinia habitant metus ridiculus dictumst montes a elit. Placerat porttitor euismod varius urna curae vel scelerisque. Ultricies tellus efficitur tempor dictum integer ullamcorper pretium dignissim sit. Sollicitudin facilisi ac natoque dignissim tortor fames egestas tincidunt? Phasellus enim ligula eleifend est, taciti consectetur efficitur class.
@@ -271,13 +265,23 @@ Euismod cras litora tortor ac varius malesuada condimentum dui. Facilisi eu maec
                       />
                     </div>
                   </ScrollArea>
+                    )
+                  }
                 </TabsContent>
                 <TabsContent value="users" className="h-5/6 w-full">
-                      <ScrollArea className="h-full w-full  overflow-y-auto my-1 flex flex-col items-center" > 
-                        <div className=" flex justify-center items-center border" >
-                          <SearchResult Data={Props.Data} type={Props.type} />
-                        </div>
-                      </ScrollArea>
+                  <ScrollArea className="h-full w-full   overflow-y-auto my-1 flex flex-col items-center">
+                    {data &&
+                      data.users.map((user) => (
+                        <>
+                          <div
+                            className="my-1 flex justify-center items-center "
+                            key={user.id}
+                          >
+                            <SearchResult Data={user} type={"user"} />
+                          </div>
+                        </>
+                      ))}
+                  </ScrollArea>
                 </TabsContent>
               </Tabs>
             </div>

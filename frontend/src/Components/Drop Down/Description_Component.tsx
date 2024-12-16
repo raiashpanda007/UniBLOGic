@@ -1,10 +1,11 @@
 interface Descriptions_ComponentProps {
   text: string;
   text_length?: number;
+  needShowmore: boolean
 }
 import { useState } from "react";
 
-function Descriptions_Component({ text, text_length = 120 }: Descriptions_ComponentProps) {
+function Descriptions_Component({ text, text_length = 120,needShowmore=true }: Descriptions_ComponentProps) {
   const [showFullText, setShowFullText] = useState(false);
 
   const toggleShowMore = () => {
@@ -17,7 +18,7 @@ function Descriptions_Component({ text, text_length = 120 }: Descriptions_Compon
   return (
     <div className={text?'w-full p-2  rounded font-medium font-sans dark:text-white':'hidden'}>
       <p>{displayedText}</p>
-      {shouldTruncate && (
+      {shouldTruncate && needShowmore && (
         <span onClick={toggleShowMore} className="text-blue-500 cursor-pointer">
           {showFullText ? "Show Less" : "Show More"}
         </span>

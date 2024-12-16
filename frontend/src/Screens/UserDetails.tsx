@@ -1,9 +1,9 @@
 import {
   Sidebar,
-  CommunityPostCard,
   EditButton,
   SearchResult,
 } from "@/Components/Components";
+import { useParams } from "react-router-dom";
 import {
   ResizablePanel,
   ResizablePanelGroup,
@@ -19,51 +19,55 @@ import { useState,useEffect } from "react";
 import GroupPng from "@/assets/group.png";
 import axios from "axios";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-interface User {
+
+
+interface CommunityProps {
   id: string;
   name: string;
-  username: string;
-  profilePicture: string;
-}
-interface CommunityProps {
-  CommunityName: string;
-  CommunityDescription: string;
-  isJoined: boolean;
-  CommunityLogo: string | null;
-  CommunityAdmin: User;
-  CommunityUsers: User[];
-}
+  description: string;
+  communityLogo: string;
+} 
+interface UserProps {
+  name:string;
+  username:string;
+  profilePicture:string;
+  batch:number;
+  branch:string;
+  communities:CommunityProps[];
 
+}
 function UserDetails() {
-  const [data, setData] = useState<CommunityProps>();
-  const Props = {
-    Data: {
-      name: "John Doe",
-      username: "johndoe",
-      profilePicture: "",
-    },
-    type: "community",
-  };
-  const getDetails = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/v1/auth/me", {
-        withCredentials: true,
-      });
-      setData(res.data);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const [loading, setLoading] = useState<boolean>(true);
-   useEffect(() => {
-      const timeoutId = setTimeout(() => {
-        getDetails();
-        setLoading(false);
-      }, 3000);
+  const {user_id} = useParams();
+  const getUserDetails = async () => {
+    const response = await axios.get("http://localhost:3000/api/user/details", {
+      headers: {
+        userid: user_id,
+      },
+      withCredentials: true,
+    });
+
+    if(!response.data.data) return null;
+    return response.data.data;
+
+    
+  }
+
+  const [data, setData] = useState<UserProps>();
   
-      return () => clearTimeout(timeoutId);
-    }, []);
+   
+  
+  const [loading, setLoading] = useState<boolean>(false);
+   useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        const result = await getUserDetails();
+        setData(result);
+        setLoading(false);
+      };
+      fetchData();
+    
+      
+    }, [user_id]);
   const mode = useSelector((state: RootState) => state.theme.mode);
   return (
     <div
@@ -77,6 +81,7 @@ function UserDetails() {
           >
             <Sidebar />
           </ResizablePanel>
+          <ResizableHandle withHandle />
           <ResizablePanel>
             <div
               className="w-full flex flex-col dark:text-white"
@@ -88,11 +93,12 @@ function UserDetails() {
                     <Skeleton className="h-40 w-40 rounded-full" />
                   ) : (
                     <div className="w-40 h-40 border rounded-full ">
-                      {data && data.CommunityLogo ? (
+                      {data && data.profilePicture ? (
                         <img
-                          src={data.CommunityLogo}
+                          src={data.profilePicture}
                           alt="Community Logo"
-                          className="w-full h-full object-cover"
+                          className="w-36 h-36 rounded-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
                         <img
@@ -115,7 +121,7 @@ function UserDetails() {
                     <>
                       <div className="h-1/5  flex items-center  pl-2">
                         <Option_Logo
-                          label="Ashwin Rai"
+                          label={data?.name || "Name"}
                           className="text-4xl"
                         />
                         <EditButton />
@@ -125,7 +131,7 @@ function UserDetails() {
                             Branch: 
                         </Button>
                         <div className="font-poppins text-lg pl-3">
-                            Computer Science
+                            {data?.branch}
                         </div>
                       </div>
                       <div className="h-2/5 flex items-center pl-2">
@@ -133,7 +139,7 @@ function UserDetails() {
                             Batch: 
                         </Button>
                         <div className="font-poppins text-lg pl-3">
-                            2023
+                            {data?.batch}
                         </div>
                       </div>
                       
@@ -151,7 +157,7 @@ function UserDetails() {
                         <div className="h-full w-1/2 flex justify-start items-center">
                           <p className="font-montserrat font-bold">USERNAME : </p>
                           <Button variant={"secondary"}>
-                            <Option_Logo label="@god" />
+                            <Option_Logo label={data?.username ||" "} />
                           </Button>
                         </div>
                       </>
@@ -166,11 +172,18 @@ function UserDetails() {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="communities" className="h-5/6 w-full">
-                  <ScrollArea className="h-full w-full overflow-y-auto my-1 flex flex-col items-center">
-                    <div key={Props.Data.username} className="flex justify-center items-center border">
-                      <SearchResult Data={Props.Data} type={Props.type} />
-                    </div>
+                  {
+                    data && data.communities.length > 0 ? <>
+                      <ScrollArea className="h-full w-full overflow-y-auto my-1 flex flex-col items-center">
+                        {data.communities.map((community)=>(
+                          
+                          <div key={community.id} className="flex justify-center items-center border">
+                            <SearchResult Data={{...community,username:null,profilePicture:null}} type={"communities"} />
+                        </div>
+                        ))}
                   </ScrollArea>
+                    </>:<></>
+                  }
                 </TabsContent>
               </Tabs>
             </div>
