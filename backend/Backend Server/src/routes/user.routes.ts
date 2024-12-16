@@ -9,7 +9,7 @@ router.route("/all_users").get(
 
 )
 
-router.route("/user_details").get(
+router.route("/details").get(
     verify,
     user_details
 )

@@ -24,9 +24,17 @@ const user_details = asyncHandler(async (req,res) => {
                 username:true,
                 name:true,
                 profilePicture:true,
-                communities:true,
+                communities:{
+                    select:{
+                        id:true,
+                        name:true,
+                        description:true,
+                        communityLogo:true,
+                    }
+                },
                 email:true,
                 batch:true,
+                branch:true,
             }
         });
         return res.status(200).json(new response(200," User Details : ",userDetails))

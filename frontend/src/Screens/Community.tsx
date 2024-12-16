@@ -159,6 +159,7 @@ function Community() {
                     {loading ? (
                       <>
                         <Skeleton className="h-full w-1/3 " />
+                        
                         <Skeleton className="h-full w-1/3 " />
                       </>
                     ) : (
