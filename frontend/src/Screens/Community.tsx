@@ -146,7 +146,7 @@ function Community() {
                           label={data?.name || "Community Name"}
                           className="text-4xl"
                         />
-                        <EditButton />
+                        <EditButton type="Community" defaultValues={{name:data?.name, description:data?.description }}/>
                       </div>
                       <ScrollArea className="h-2/5  w-full overflow-y-auto border rounded-md dark:text-white dark:bg-slate-900 bg-gray-200">
                         <p className="text-sm m-1 font-poppins">
@@ -277,7 +277,7 @@ Euismod cras litora tortor ac varius malesuada condimentum dui. Facilisi eu maec
                             className="my-1 flex justify-center items-center "
                             key={user.id}
                           >
-                            <SearchResult Data={user} type={"user"} />
+                            <SearchResult Data={{...user,communityLogo:null, description:null}} type={"user"} />
                           </div>
                         </>
                       ))}
