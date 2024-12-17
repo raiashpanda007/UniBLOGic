@@ -13,6 +13,7 @@ const headersSchema = zod.object({
     communityid:zod.string()
 });
 const updateCommunityDetails = asyncHandler(async (req,res) =>{
+    console.log("Update Community Details", req.body,req.headers);
     const parsedData = schema.safeParse(req.body);
     if(!parsedData.success){
         throw new error(400,"Invalid Data provided",parsedData.error.errors);

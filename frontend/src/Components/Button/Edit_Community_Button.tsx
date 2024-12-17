@@ -33,10 +33,12 @@ interface Register_Form {
 }
 
 function Edit({ type = "Community", defaultValues }: EditProps) {
-  const naviagte = useNavigate();
-  const {user_id} = useParams()
+  const navigate = useNavigate();
+  const {community_id,user_id} = useParams();
+
   const { register, handleSubmit } = useForm<Register_Form>();
   const onSubmitUser: SubmitHandler<Register_Form> = async (data) => {
+    
     const formData = new FormData();
     if (data.profilePicture && data.profilePicture.length > 0) {
       formData.append("profilePicture", data.profilePicture[0]);
@@ -53,7 +55,7 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
       });
 
       if(response.data.data) 
-      naviagte(0);
+      navigate(0);
       
     } catch (error) {
       console.log(error);
@@ -62,6 +64,32 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
     
 
   };
+
+
+  const onSubmitCommunity :SubmitHandler<Register_Form> = async (data) =>{
+    const formData = new FormData();
+    
+    if(data.communityLogo && data.communityLogo.length > 0){
+      formData.append("communityLogo",data.communityLogo[0]);
+    }
+    formData.append("name",data.name);
+    formData.append("description",data.description || "");
+
+    try {
+      const response = await axios.put("http://localhost:3000/api/community/update",formData,{
+        headers:{
+          "Content-Type":"multipart/form-data",
+          communityid:community_id
+        },
+        withCredentials:true
+      });
+      if(response.data.data)
+        navigate(0);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const mode = useSelector((state: RootState) => state.theme.mode);
   return (
     <Dialog>
@@ -87,7 +115,7 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
         </DialogHeader>
         <div className={` grid gap-4 py-4 dark:text-white dark:bg-black`}>
           {type === "Community" ? (
-            <form>
+            <form onSubmit={handleSubmit(onSubmitCommunity)}>
               <Register_Input
                 label="Community Name"
                 type="text"
@@ -134,7 +162,7 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
                 forgotKey={false}
                 {...register("profilePicture")}
               />
-              <DialogFooter>
+              <DialogFooter className="mt-2">
                 <Button type="submit">Save changes</Button>
               </DialogFooter>
             </form>
