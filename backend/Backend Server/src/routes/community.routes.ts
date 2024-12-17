@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verify from "../middleware/verify.middleware";
-import {createCommunity,community_details,updateCommunityDetails,removeUser, addUser, makeAdmin} from "../controllers/community/communnity.controller";
+import {createCommunity,community_details,updateCommunityDetails,removeUser, addUser, makeAdmin, allCommunities} from "../controllers/community/communnity.controller";
 import {upload} from '../middleware/multer.middleware'
 const router = Router();
 
@@ -37,6 +37,9 @@ router.route("/makeadmin").put(
     verify,
     makeAdmin
 )
-
+router.route("/all").get(
+    verify,
+    allCommunities
+)
 
 export default router;

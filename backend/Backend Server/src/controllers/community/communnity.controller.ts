@@ -4,4 +4,5 @@ import updateCommunityDetails from "./update.community";
 import removeUser from "./removeuser.community";
 import addUser from "./adduser.community";
 import makeAdmin from "./makeAdmin.community";
-export {createCommunity,community_details,updateCommunityDetails,removeUser,addUser,makeAdmin}
+import allCommunities from "./all.communities";
+export {createCommunity,community_details,updateCommunityDetails,removeUser,addUser,makeAdmin,allCommunities}

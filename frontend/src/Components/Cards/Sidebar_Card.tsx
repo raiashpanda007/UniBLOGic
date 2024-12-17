@@ -1,38 +1,22 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-
+import Descriptions_Component from "../Drop Down/Description_Component";
 interface Sidebar_CardProps {
-  title?: string;
+  name?: string;
   description?: string;
-  img?: string;
+  commuityLogo?: string;
   className?: string;
+  loading: boolean;
 }
 
 const Sidebar_Card = ({
-  title = "",
+  name = "",
   description = "",
-  img = "",
+  commuityLogo ,
   className = "",
+  loading,
 }: Sidebar_CardProps) => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    title,
-    description,
-    img,
-  });
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setData({
-        title: title,
-        description: description,
-        img: img,
-      });
-      setLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
+  
 
   return (
     <div
@@ -46,8 +30,8 @@ const Sidebar_Card = ({
           <Skeleton className="h-12 w-12 rounded-full" />
         ) : (
           <img
-            src={data.img}
-            alt="User"
+            src={commuityLogo}
+            alt=""
             className="h-12 w-12 rounded-full border dark:border-gray-600"
           />
         )}
@@ -59,8 +43,8 @@ const Sidebar_Card = ({
             </div>
           ) : (
             <div>
-              <h2 className="text-lg font-semibold font-poppins">{data.title}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-300">{data.description}</p>
+              <h2 className="text-lg font-semibold font-poppins">{name}</h2>
+              <Descriptions_Component text={description} text_length={10} needShowmore={false} />
             </div>
           )}
         </div>
