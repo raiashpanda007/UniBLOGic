@@ -62,7 +62,7 @@ export default function Join_Card() {
       dispatch(setUserStatus(true));
       const { email, username } = response.data.data;
       console.log("email:", email);
-      dispatch(setUser({ email, username }));
+      dispatch(setUser(response.data.data));
       console.log("User details:", userdetails);
       navigate("/home");
     } catch (error) {

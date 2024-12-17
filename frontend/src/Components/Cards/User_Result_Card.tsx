@@ -2,12 +2,14 @@ import More_Options_Search from "../Button/More info/More_Options_Search";
 import { useEffect, useState } from "react";
 import Descriptions_Component from "../Drop Down/Description_Component";
 import { PersonIcon } from "@radix-ui/react-icons";
+import { useParams } from "react-router-dom";
 interface Data {
   name: string;
   username: string | null;
   description: string | null;
   profilePicture: string | null;
   communityLogo: string | null;
+  id:string;
 
 }
 interface User_Result_CardProps {
@@ -16,6 +18,8 @@ interface User_Result_CardProps {
 }
 
 function User_Result_Card({ ...Props }: User_Result_CardProps) {
+  const {community_id} = useParams();
+  
   const [totalHeight, setTotalHeight] = useState("h-28");
 
   useEffect(()=>{
@@ -23,9 +27,6 @@ function User_Result_Card({ ...Props }: User_Result_CardProps) {
       setTotalHeight("h-36")
     }
   })
-
-
-
 
   return (
     <div
@@ -59,7 +60,7 @@ function User_Result_Card({ ...Props }: User_Result_CardProps) {
           }
         </div>
         {Props.type === "user" && <div className="flex ">
-          <More_Options_Search />
+          <More_Options_Search Data={Props.Data}/>
         </div>}
       </div>
     </div>
