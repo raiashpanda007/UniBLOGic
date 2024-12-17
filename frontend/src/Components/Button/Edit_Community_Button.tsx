@@ -8,11 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useNavigate,useParams } from "react-router-dom";
 import { Edit as EditIcon } from "@/assets/Icons/Icons";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/Store/Store";
 import { Register_Input } from "../Components";
-
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 interface defaultValues {
   name?: string;
@@ -32,8 +33,35 @@ interface Register_Form {
 }
 
 function Edit({ type = "Community", defaultValues }: EditProps) {
+  const naviagte = useNavigate();
+  const {user_id} = useParams()
   const { register, handleSubmit } = useForm<Register_Form>();
-  const onSubmit: SubmitHandler<Register_Form> = async (data) => {};
+  const onSubmitUser: SubmitHandler<Register_Form> = async (data) => {
+    const formData = new FormData();
+    if (data.profilePicture && data.profilePicture.length > 0) {
+      formData.append("profilePicture", data.profilePicture[0]);
+    }
+    formData.append("name", data.name);
+    formData.append("username", data?.username || "");
+    try {
+      const response = await axios.put("http://localhost:3000/api/user/update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          userid:user_id
+        },
+        withCredentials: true,
+      });
+
+      if(response.data.data) 
+      naviagte(0);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+
+  };
   const mode = useSelector((state: RootState) => state.theme.mode);
   return (
     <Dialog>
@@ -85,7 +113,7 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
               </DialogFooter>
             </form>
           ) : (
-            <form>
+            <form onSubmit={handleSubmit(onSubmitUser)}>
               <Register_Input
                 label="Name"
                 type="text"
@@ -98,7 +126,7 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
                 type="text"
                 forgotKey={false}
                 {...register("username")}
-                defaultValue={defaultValues?.name}
+                defaultValue={defaultValues?.username}
               />
               <Register_Input
                 label="Profile Photo"

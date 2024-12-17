@@ -9,7 +9,7 @@ const user_details_schema = zod.object({
 const user_details = asyncHandler(async (req,res) => {
     
     const parsedSchema = user_details_schema.safeParse(req.headers)
-    console.log(req.headers?.userid)
+    
     if(!parsedSchema.success) {
         throw new error(400,"UserId not found");
     }

@@ -7,42 +7,53 @@ const prisma = new PrismaClient();
 const updateUserDetailsSchema = zod.object({
     name: zod.string().min(3).max(255),
     username: zod.string().min(3).max(255),
+    
 
 })
+const headersUserSchema = zod.object({
+    userid: zod.string().min(3)
+})
 const updateUserDetails = asyncHandler(async (req, res) => {
+   
     const parsedData = updateUserDetailsSchema.safeParse(req.body);
-    console.log("Updated input", req.body);
-    if (!parsedData.success) {
-        return res.status(400).json(new error(400, "Type Validation Error", parsedData.error.errors));
+    const headerParsed = headersUserSchema.safeParse(req.headers)
+    if (!parsedData.success || !headerParsed.success) {
+        console.log("Type Validation errors : " ,  parsedData?.error?.errors || headerParsed?.error?.errors)
+        return res.status(400).json(new error(400, "Type Validation Error",parsedData?.error?.errors || headerParsed?.error?.errors));
     }
     const { name, username } = parsedData.data;
+    const {userid} = headerParsed.data;
     const userId = req.user?.id;
 
-    // find the user that is updating the data is the same user
-    const user = await prisma.user.findUnique({
-        where: {
-            id: userId
-        }, select: {
-            username: true,
-            name: true,
-            profilePicture: true
-        }
-    });
-    if (!user) {
-        return res.status(404).json(new error(404, "User not found"));
-    }
-    if (user.username !== username) {
-        throw new error(401, "You are not authorized to update this user");
-    }
 
-    const profilePicture = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['profilePicture']?.[0];
-    if (user.profilePicture && profilePicture) {
+
+    if(userid != userId) {
+
+        return res.status(401).json(new response(401,"You are unauthorized to change this user details " , {}));
+        
+    } 
+    // find the user that is updating the data is the same user
+   
+    const user = await prisma.user.findUnique({
+        where:{
+            id:userId
+        },
+        select:{
+            name:true,
+            username:true,
+            profilePicture:true
+        }
+    })
+    if(!user) return res.status(500).json(new response(500,"Can't find user",{}) );
+
+    const profilePicture = (req.files as { [fieldname: string]: Express.Multer.File[] })?.['profilePicture']?.[0].path;
+    if (user?.profilePicture && profilePicture) {
 
         const deleteFile = await deleteSingleFile(user.profilePicture);
         console.log("Deleted File:", deleteFile);
     }
 
-    const profilePictureUrl =  await uploadCloudinary(profilePicture.path) ;
+    const profilePictureUrl =  await uploadCloudinary(profilePicture) ;
         try {
             const updatedUser = await prisma.user.update({
                 where: {
@@ -52,6 +63,11 @@ const updateUserDetails = asyncHandler(async (req, res) => {
                     name,
                     username,
                     profilePicture: profilePictureUrl?.secure_url || user.profilePicture
+                },select:{
+                    id:true,
+                    name:true,
+                    username:true,
+                    profilePicture:true
                 }
             });
             if (!updatedUser) {

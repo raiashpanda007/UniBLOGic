@@ -114,7 +114,7 @@ function Community() {
                         <img
                           src={GroupPng}
                           alt="Default Group"
-                          className="w-full bg-white h-full rounded-full"
+                          className="w-full bg-white h-full rounded-full object-cover"
                         />
                       )}
                     </div>
