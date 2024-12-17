@@ -29,8 +29,8 @@ function More_Options_Search({Data,communityid}:MoreOptionProps) {
   const navigate = useNavigate();
   const MakeAdmin = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/community/makeAdmin`,{
+      const response = await axios.put(
+        `http://localhost:3000/api/community/makeadmin`,{
           communityid,
           userid:Data.id
         },{
@@ -38,7 +38,7 @@ function More_Options_Search({Data,communityid}:MoreOptionProps) {
         }
         
       )
-      if(response.data.status === 200) {
+      if(response.data) {
         navigate(0);
       }
       console.log(response.data);
@@ -49,15 +49,15 @@ function More_Options_Search({Data,communityid}:MoreOptionProps) {
 
   const removeMember = async () =>{
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/community/removeMember`, {
+      const response = await axios.put(
+        `http://localhost:3000/api/community/removeuser`, {
           communityid,
           userid: Data.id
         }, {
           withCredentials: true
         }
       )
-      if (response.data.status === 200) {
+      if (response) {
         navigate(0);
       }
       console.log(response.data);

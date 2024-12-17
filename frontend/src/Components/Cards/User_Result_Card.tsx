@@ -60,7 +60,7 @@ function User_Result_Card({ ...Props }: User_Result_CardProps) {
           }
         </div>
         {Props.type === "user" && <div className="flex ">
-          <More_Options_Search Data={Props.Data}/>
+          <More_Options_Search Data={Props.Data} communityid={community_id} />
         </div>}
       </div>
     </div>

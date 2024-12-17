@@ -48,6 +48,7 @@ interface CommunityProps {
 
 function Community() {
   const navigate = useNavigate();
+  const currUser = useSelector((state: RootState) => state.loginStatus.user);
   const { community_id } = useParams();
 
   const getCommunityDetails = async () => {
@@ -70,9 +71,10 @@ function Community() {
 
   const leaveCommunity = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/community/leave",{
-          communityId: community_id,
+      const response = await axios.put(
+        "http://localhost:3000/api/community/removeuser",{
+          communityid: community_id,
+          userid: currUser.id,
         },{
           withCredentials: true,
         }
@@ -86,15 +88,19 @@ function Community() {
   const joinCommunity = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/community/join",
+        "http://localhost:3000/api/community/adduser",
+
         {
-          communityId: community_id,
+          communityid: community_id,
+          userid: currUser.id,
         },
         {
           withCredentials: true,
         }
       );
+
       if (response.data) {
+        console.log("user added to community" , response.data.data);
         navigate(0);
       }
     } catch (error) {}
@@ -161,11 +167,11 @@ function Community() {
                     {loading ? (
                       <Skeleton className="h-10 w-20" />
                     ) : data && data.isJoined ? (
-                      <Button variant={"secondary"}>
+                      <Button variant={"secondary"} onClick={leaveCommunity}>
                         <Option_Logo label="Leave" />
                       </Button>
                     ) : (
-                      <Button variant={"ghost"}>
+                      <Button variant={"ghost"} onClick={joinCommunity}>
                         <Option_Logo label="Join + " />
                       </Button>
                     )}
