@@ -87,6 +87,7 @@ const createPost = asyncHandler(async (req, res) => {
             return { post, postPhotos, postvideo };
 
         });
+        
 
         return res.status(201).json(new response(201, "Post created successfully", transaction));
 

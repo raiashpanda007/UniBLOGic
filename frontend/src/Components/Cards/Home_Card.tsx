@@ -20,10 +20,11 @@ interface Home_CardProps {
   Comments_Count: number;
   Comments: Comment[];
   Joined: boolean;
+  loading:boolean;
+  communityLogo?:string;
 }
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect } from "react";
 import { Ghost_Button,Upvote,Comment_Button,Share } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
 
@@ -35,18 +36,15 @@ function Home_Card({
   Image ="" ,
   Upvote_Counts = 0,
   Comments_Count = 0,
-  Comments = [],
   Joined = false,
   isUpvoted = false,
   Content = "",
+  loading=false,
+  communityLogo
 }: Home_CardProps) {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-    return () => clearTimeout(timeoutId);
-  });
+  console.log(communityLogo);
+  
+  
   return (
     <div className="w-2/3 border rounded p-2">
       <div className="w-full  flex justify-between items-center">
@@ -55,7 +53,7 @@ function Home_Card({
             <Skeleton className="h-12 w-12 rounded-full" />
           ) : (
             <img
-              src=""
+              src={communityLogo}
               className="h-12 w-12 rounded-full border "
             />
           )}
@@ -66,10 +64,10 @@ function Home_Card({
             </div>
           ) : (
             <div className="">
-              <h1 className="text-xl font-semibold font-poppins dark:text-white ">
+              <h1 className="text-xl font-semibold font-montserrat dark:text-white ">
                 {Communitiy_Name}
               </h1>
-              <p className="text-sm font-light text-gray-500">{Description}</p>
+              <p className="text-sm font-light font-poppins text-gray-500"><Descriptions_Component text={Description} needShowmore={false} text_length={60}/></p>
             </div>
           )}
         </div>
@@ -82,7 +80,7 @@ function Home_Card({
           <Skeleton className="min-h-12 rounded-md" />
         ) : (
           <div className="min-h-12  ">
-            <Descriptions_Component text={Content} />
+            <Descriptions_Component text={Content} text_length={50} needShowmore={true}/>
           </div>
         )}
 

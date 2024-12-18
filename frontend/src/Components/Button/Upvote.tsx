@@ -23,7 +23,7 @@ function Upvote({ Upvoted, UpvoteCount }: UpvoteProps) {
     : (mode === 'light' ?'#000000':"#ffffff"); // Default color when not upvoted
 
   return (
-    <div className="h-full w-16 flex items-center justify-around">
+    <div className="h-full w-16 flex items-center justify-around font-poppins">
       <Button
         variant="outline"
         style={{
@@ -47,7 +47,7 @@ function Upvote({ Upvoted, UpvoteCount }: UpvoteProps) {
         upvoteCount > 0?(
           <Option_Logo label={upvoteCount.toString()} />
         ):(
-          <span className="space-x-2 text-xs ">{upvoteCount}</span>
+          <span className="space-x-2 text-xs font-poppins">{upvoteCount}</span>
         )
       }
     </div>

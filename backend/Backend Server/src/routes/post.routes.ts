@@ -12,7 +12,7 @@ router.route("/create").post(
     ]),
     createPost
 )
-router.route("/fetch_all_posts").get(
+router.route("/allposts").get(
     verify,
     fetchAllPosts
 )

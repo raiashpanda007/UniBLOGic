@@ -16,7 +16,7 @@ function Descriptions_Component({ text, text_length = 120,needShowmore=true }: D
   const displayedText = shouldTruncate && !showFullText ? text.slice(0, text_length) + '...' : text;
 
   return (
-    <div className={text?'w-full p-2  rounded font-medium font-sans dark:text-white':'hidden'}>
+    <div className={text?'w-full p-2 rounded font-medium dark:text-white':'hidden font-poppins'}>
       <p>{displayedText}</p>
       {shouldTruncate && needShowmore && (
         <span onClick={toggleShowMore} className="text-blue-500 cursor-pointer">
