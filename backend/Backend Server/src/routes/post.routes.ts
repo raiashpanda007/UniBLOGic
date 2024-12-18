@@ -4,7 +4,7 @@ import verify from '../middleware/verify.middleware';
 import {upload} from "../middleware/multer.middleware";
 const router = Router();
 
-router.route("/create_post").post(
+router.route("/create").post(
     verify,
     upload.fields([
         {name: 'postimages', maxCount: 5},

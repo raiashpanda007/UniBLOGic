@@ -31,6 +31,7 @@ const createPost = asyncHandler(async (req, res) => {
 
     const postImages = files['postimages'] || [];
     const video = files['video']?.[0] || null;
+    console.log("{Post Images :: }",postImages,"{Video ::}", video)
 
     let postImagesUrls: string[] = [];
     let videoUrl: string | null = null;

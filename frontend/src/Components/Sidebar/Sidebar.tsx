@@ -52,14 +52,18 @@ function Sidebar() {
               <div className="relative h-full">
                 <ScrollArea className="h-full w-full overflow-y-auto pb-10">
                 {
-                  communities.map((community) => (
+                  communities ? communities.map((community) => (
                     <SideBar_Component
                       name={community.name}
                       description={community.description}
                       commuityLogo={community.communityLogo}
                       loading={loading}
                     />
-                  ))
+                  )):(
+                    <div className='text-center text-gray-500 dark:text-white font-poppins font-semibold'>
+                      NO COMMUNITIES JOINED 😞
+                    </div>
+                  )
                 }
                   
                   
