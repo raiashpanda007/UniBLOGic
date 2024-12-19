@@ -1,15 +1,4 @@
-interface Comment {
-  id: string;
-  user: {
-    id: string;
-    username: string;
-    profile: {
-      avatar: string;
-    };
-  };
-  content: string;
-  created_at: string;
-}
+
 interface Home_CardProps {
   Communitiy_Name: string;
   Description: string;
@@ -18,7 +7,7 @@ interface Home_CardProps {
   Upvote_Counts: number;
   isUpvoted: boolean;
   Comments_Count: number;
-  Comments: Comment[];
+
   Joined: boolean;
   loading:boolean;
   communityLogo?:string;

@@ -6,7 +6,8 @@ interface LoginStatusState {
     username: string;
     email: string;
     role: string;
-    id:string
+    id: string;
+    profilePicture?: string;
   };
 }
 
@@ -24,7 +25,7 @@ const saveToLocalStorage = (state: LoginStatusState) => {
 const loadFromLocalStorage = (): LoginStatusState => {
   try {
     const serializedState = localStorage.getItem("loginStatus");
-    
+
     if (serializedState === null) {
       return {
         userStatus: false,
@@ -32,7 +33,8 @@ const loadFromLocalStorage = (): LoginStatusState => {
           username: "",
           email: "",
           role: "",
-          id:""
+          id: "",
+          profilePicture: "",
         },
       };
     }
@@ -45,7 +47,8 @@ const loadFromLocalStorage = (): LoginStatusState => {
         username: "",
         email: "",
         role: "",
-        id:""
+        id: "", 
+        profilePicture: "",
 
       },
     };

@@ -1,14 +1,68 @@
+interface Comment {
+  postId: string;
+  content: string;
+  createdAt: Date;
+  user: {
+      name: string;
+      profilePicture: string;
+      username: string;
+  }
+}
+interface PostData {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  authorId: string;
+  postImages?: string[];
+  postVideo?: string;
+  upvotes: number;
+  comments: Comment[];
+  commentsCount: number;
+  communityName: string;
+  communityDescription: string;
+  isJoined: boolean;
+  isUpvoted: boolean;
+  communityLogo?: string;
+  communityid: string;
+}
+import axios from "axios";
 import {
   Home_Card as Card,
   Comment_Input as Inp,
+  Comment as CommentBox,
 } from "@/Components/Components";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useSelector } from "react-redux";
-import {Comment} from "@/Components/Components";
-import type { RootState } from "@/Store/Store";
 
+import type { RootState } from "@/Store/Store";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { set } from "react-hook-form";
 function Post() {
+const {post_id} = useParams<{post_id:string}>();
   const mode = useSelector((state: RootState) => state.theme.mode);
+  const [data, setData] = useState<PostData | null >(null);
+  const [loading, setLoading] = useState(true);
+  const fetchDetails = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/post/singlepost",{
+        headers: {
+          postid: post_id
+        },
+        withCredentials: true
+      },)
+      return response.data.data
+    } catch (error) {
+      return null
+    }
+  }
+
+  useEffect(() => {
+    fetchDetails().then((data) => {
+      setData(data)
+    }).then(()=> setLoading(false))
+  },[post_id])
 
   return (
     <div
@@ -21,23 +75,32 @@ function Post() {
         <ScrollArea className="h-full w-full max-h-[84vh] overflow-auto flex flex-col items-center">
           <div className="w-2/3 flex flex-col items-center">
             <Card
-              Communitiy_Name="PyC"
-              Comments={[]}
-              Comments_Count={20}
-              Content="Hello welcome to the community,we are thrilled to announce,that Ashwin rai got placed in Goldman Sachs.
-                  He is an alumni of our community.He has been many of his juniors and is a great asset to our community.
-                  We are proud of him and wish him all the best for his future endeavours."
+              Communitiy_Name={data?.communityName || "Community Name"}
+              communityLogo={data?.communityLogo || ""}
+              Comments_Count={data?.commentsCount || 0}
+              Content={data?.content || "Content"}
               Upvote_Counts={300}
-              isUpvoted={true}
-              Image="https://imgs.search.brave.com/cgzcDwIoya9c4h8L4ye2eP1A-zYMn6MEolxoFSfUcdc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQw/MTQwMTM1NS9waG90/by93ZWItMy0wLWNv/bmNlcHQtb2YtZGVj/ZW50cmFsaXplZC1p/bnRlcm5ldC0zZC1y/ZW5kZXIuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPXI4LVJS/OEhlVnZNcFVublph/NEQ5bnJwXy1WcVJw/dUEtMG9OdndRT2Zx/TTg9"
-              Joined={false}
-              Description="Description"
+              isUpvoted={data?.isUpvoted || false}
+              Image={data?.postImages?.[0] || ""}
+              Joined={data?.isJoined || false}
+              Description={data?.communityDescription || "Description"}
+              postid={data?.id || ""}
+              communityid={data?.communityid || ""}
+              loading={loading}
+
             />
           </div>
           <div className="w-2/3 flex flex-col items-center space-y-2">
             <Inp />
             
-            <Comment upvotes={32} isUpvoted={true} comment=" great news" date={Date.now().toString()} user="ashwin rai" />
+            {data?.comments.map((comment) => (
+              <CommentBox 
+                postId={comment.postId}
+                content={comment.content}
+                createdAt={comment.createdAt}
+                user={comment.user}
+              />
+            ))}
           </div>
         
         </ScrollArea>

@@ -4,7 +4,7 @@ import { z as zod } from 'zod';
 import isJoined from '../community/isJoined.community';
 const prisma = new PrismaClient();
 const fetchSinglePostSchema = zod.object({
-    postId: zod.string()
+    postid: zod.string()
 })
 interface Comment {
     postId: string;
@@ -35,14 +35,14 @@ interface PostData {
     communityid: string;
 }
 const fetchSingle = asyncHandler(async (req, res) => {
-    const parsedData = fetchSinglePostSchema.safeParse(req.body);
+    const parsedData = fetchSinglePostSchema.safeParse(req.headers);
     if (!parsedData.success) {
         return res.status(400).json(new error(400, "Invalid input data"));
     }
-    const { postId } = parsedData.data;
+    const { postid } = parsedData.data;
     const post = await prisma.post.findUnique({
         where: {
-            id: postId
+            id: postid
         }, select: {
             id: true,
             title: true,
@@ -61,14 +61,14 @@ const fetchSingle = asyncHandler(async (req, res) => {
     });
     const upvoteCounts = await prisma.upvotes.findMany({
         where: {
-            postId
+            postId: postid
         },
     })
-    const isUpvoted = async (postId: string) => {
+    const isUpvoted = async (postid: string) => {
         const answer = await prisma.upvotes.findFirst({
             where: {
                 userId: req.user?.id,
-                postId: postId
+                postId: postid
             }
         });
         if (answer) return true;
@@ -79,7 +79,7 @@ const fetchSingle = asyncHandler(async (req, res) => {
     }
     const comments = await prisma.comments.findMany({
         where: {
-            postId
+            postId:postid
         }, select: { postId: true, content: true, createdAt: true, user:{
             select:{
                 name:true,
@@ -97,12 +97,12 @@ const fetchSingle = asyncHandler(async (req, res) => {
         if (!commuity) return res.status(404).json(new error(404, "Community not found"));
         const postImages = await prisma.postPhotos.findMany({
             where: {
-                postId
+                postId:postid
             }, select: { photo: true }
         });
         const postVideos = await prisma.postVideos.findMany({
             where: {
-                postId
+                postId:postid
             }, select: { videoUrl: true }
         });
         const postData: PostData = {
@@ -126,7 +126,8 @@ const fetchSingle = asyncHandler(async (req, res) => {
             communityDescription: commuity?.description,
             isJoined: await isJoined(commuity?.id || "", req.user?.id || ""),
             isUpvoted: await isUpvoted(post.id),
-            communityid: commuity?.id
+            communityid: commuity?.id,
+            communityLogo: commuity?.communityLogo || ""   
         }
         return res.status(200).json(new response(200, "Post found", postData));
     }

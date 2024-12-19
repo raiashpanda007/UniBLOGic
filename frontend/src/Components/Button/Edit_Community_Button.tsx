@@ -8,10 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Edit as EditIcon } from "@/assets/Icons/Icons";
 import { useSelector } from "react-redux";
-import type { RootState } from "@/Store/Store";
+import type { RootState, AppDispatch } from "@/Store/Store";
 import { Register_Input } from "../Components";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -31,14 +31,17 @@ interface Register_Form {
   profilePicture?: FileList;
   communityLogo?: FileList;
 }
+import { useDispatch } from "react-redux";
+
+import { setUser } from "@/Store/loginStatus";
 
 function Edit({ type = "Community", defaultValues }: EditProps) {
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const {community_id,user_id} = useParams();
+  const { community_id, user_id } = useParams();
 
   const { register, handleSubmit } = useForm<Register_Form>();
   const onSubmitUser: SubmitHandler<Register_Form> = async (data) => {
-    
     const formData = new FormData();
     if (data.profilePicture && data.profilePicture.length > 0) {
       formData.append("profilePicture", data.profilePicture[0]);
@@ -46,50 +49,53 @@ function Edit({ type = "Community", defaultValues }: EditProps) {
     formData.append("name", data.name);
     formData.append("username", data?.username || "");
     try {
-      const response = await axios.put("http://localhost:3000/api/user/update", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          userid:user_id
-        },
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        "http://localhost:3000/api/user/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            userid: user_id,
+          },
+          withCredentials: true,
+        }
+      );
 
-      if(response.data.data) 
-      navigate(0);
-      
+      if (response.data.data) {
+        dispatch(setUser(response.data.data));
+        navigate(0);
+      }
     } catch (error) {
       console.log(error);
-      
     }
-    
-
   };
 
-
-  const onSubmitCommunity :SubmitHandler<Register_Form> = async (data) =>{
+  const onSubmitCommunity: SubmitHandler<Register_Form> = async (data) => {
     const formData = new FormData();
-    
-    if(data.communityLogo && data.communityLogo.length > 0){
-      formData.append("communityLogo",data.communityLogo[0]);
+
+    if (data.communityLogo && data.communityLogo.length > 0) {
+      formData.append("communityLogo", data.communityLogo[0]);
     }
-    formData.append("name",data.name);
-    formData.append("description",data.description || "");
+    formData.append("name", data.name);
+    formData.append("description", data.description || "");
 
     try {
-      const response = await axios.put("http://localhost:3000/api/community/update",formData,{
-        headers:{
-          "Content-Type":"multipart/form-data",
-          communityid:community_id
-        },
-        withCredentials:true
-      });
-      if(response.data.data)
-        navigate(0);
-
+      const response = await axios.put(
+        "http://localhost:3000/api/community/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            communityid: community_id,
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.data.data) navigate(0);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   const mode = useSelector((state: RootState) => state.theme.mode);
   return (
     <Dialog>

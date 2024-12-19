@@ -67,7 +67,9 @@ const updateUserDetails = asyncHandler(async (req, res) => {
                     id:true,
                     name:true,
                     username:true,
-                    profilePicture:true
+                    profilePicture:true,
+                    batch:true,
+                    branch:true,
                 }
             });
             if (!updatedUser) {

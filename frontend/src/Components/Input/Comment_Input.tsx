@@ -3,12 +3,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Option_Logo } from "../Components";
 import { useState, useEffect } from "react";
-
+import { useSelector } from "react-redux";
+import type { RootState } from "@/Store/Store";
 interface CommentData {
   comment: string;
 }
 
 function InputWithButton() {
+  const userLogo = useSelector((state: RootState) => state.loginStatus.user.profilePicture);
   const { register, handleSubmit, formState: { errors } } = useForm<CommentData>();
   const onSubmit: SubmitHandler<CommentData> = data => console.log(data);
 
@@ -24,7 +26,13 @@ function InputWithButton() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-16 w-2/3 items-center justify-between">
       <div className="w-12 h-12 rounded-full border">
-        {/* Add any profile image or icon here */}
+        {loading ? (
+          <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />
+        ) : (
+          <img src={userLogo}
+            className="w-12 h-12 rounded-full"
+          />
+        )}
       </div>
       <Textarea
         {...register("comment", { required: "Comment is required" })}
