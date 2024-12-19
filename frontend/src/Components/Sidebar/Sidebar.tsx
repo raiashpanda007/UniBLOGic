@@ -2,12 +2,16 @@ import { CreateCommunity, Sidebar_Card as SideBar_Component } from '../Component
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { set } from 'react-hook-form';
 interface SidebarProps {
   name:string;
   description:string;
   communityLogo?:string;
+  id:string
 }
+import { useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '@/Store/Store';
+import { setCommunities } from '@/Store/communitiesList';
+import { useDispatch } from 'react-redux';
 const getUserCommunities = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/community/all",{
@@ -21,18 +25,31 @@ const getUserCommunities = async () => {
   }
 }
 function Sidebar() {
+  const dispatch:AppDispatch = useDispatch();
+  const communitiesList = useSelector((state: RootState) => state.communitiesList.communities);
   const [loading , setLoading] = useState(true)
-  const [communities, setCommunities] = useState<SidebarProps[]>([])
+  const [communities, setcommunities] = useState<SidebarProps[]>([])
+  useEffect(()=>{
+    const fetchCommunities = async () =>{
+      const response = await getUserCommunities();
+      if(response && response.length > 0){
+        dispatch(setCommunities(response))
+      }
+      
+    }
+    fetchCommunities();
+  },[])
+  
   useEffect(()=>{
     const fetchCommunities = async () => {
       const communities = await getUserCommunities()
       console.log("Communities",communities)
-      setCommunities(communities);
+      setcommunities(communities);
       setLoading(false)
 
     }
-    fetchCommunities()
-  },[])
+    fetchCommunities();
+  },[communitiesList])
   
   
 

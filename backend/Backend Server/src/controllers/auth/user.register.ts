@@ -9,7 +9,7 @@ import loginUser from "./login"
 const prisma = new PrismaClient();
 
 const register = asyncHandler(async (req: Request, res: Response) => {
-    console.log("Registering user:", req.body);
+    
     const userschema = zod.object({
         name: zod.string().min(3, "Please provide your name").max(255),
         email: zod.string().email("Invalid email").max(255),
@@ -22,7 +22,6 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 
 
     try {
-        console.log("Registering user:", req.body);
         if (req.body.email.endsWith("@iiitbh.ac.in")) {
             const { branch, batch } = req.body;
             if (!branch || !batch) {

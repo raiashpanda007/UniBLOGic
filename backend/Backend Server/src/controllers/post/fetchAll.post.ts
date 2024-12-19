@@ -16,6 +16,7 @@ interface PostData {
     isJoined: boolean;
     isUpvoted: boolean;
     communityLogo?:string;
+    communityid:string;
 }
 
 const prisma = new PrismaClient();
@@ -108,7 +109,8 @@ const fetchAllPosts = asyncHandler(async (req, res) => {
             communityDescription: Community.find(community => community.id === post.authorId)?.description || "",
             isJoined: await isJoined(Community.find(community => community.id === post.authorId)?.id || "", req.user?.id || ""),
             isUpvoted: await isUpvoted(post.id),
-            communityLogo:Community.find(community => community.id === post.authorId)?.communityLogo || ""
+            communityLogo:Community.find(community => community.id === post.authorId)?.communityLogo || "",
+            communityid:Community.find(community => community.id === post.authorId)?.id || ""
             
             }
         }));

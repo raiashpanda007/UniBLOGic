@@ -22,6 +22,8 @@ interface Home_CardProps {
   Joined: boolean;
   loading:boolean;
   communityLogo?:string;
+  postid:string
+  communityid:string
 }
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,9 +42,10 @@ function Home_Card({
   isUpvoted = false,
   Content = "",
   loading=false,
-  communityLogo
+  communityLogo,
+  postid,
+  communityid,
 }: Home_CardProps) {
-  console.log(communityLogo);
   
   
   return (
@@ -72,7 +75,7 @@ function Home_Card({
           )}
         </div>
         <div className="w-1/3 flex justify-end items-center">
-          <Ghost_Button Joined={Joined} />
+          <Ghost_Button Joined={Joined} communityid={communityid}/>
         </div>
       </div>
       <div className="space-y-3">
@@ -94,7 +97,7 @@ function Home_Card({
       </div>
       <div className="h-10 ">
         <div className="h-full w-1/2 flex items-center">
-          <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} />
+          <Upvote UpvoteCount={Upvote_Counts} Upvoted={isUpvoted} postId ={postid} />
           <Comment_Button CommentCount={Comments_Count} />
           <Share/>
         </div>

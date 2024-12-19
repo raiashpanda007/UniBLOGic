@@ -43,10 +43,15 @@ const removeUser = asyncHandler(async (req, res) => {
                         id: userid
                     }
                 }
+            },select:{
+                id:true,
+                name:true,
+                description:true,
+                communityLogo:true
             }
         });
         if (updatedCommunity) {
-            return res.status(200).json(new response(200, "User removed", null));
+            return res.status(200).json(new response(200, "User removed", updatedCommunity));
         }
 
     } catch (error) {

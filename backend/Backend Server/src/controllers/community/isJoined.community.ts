@@ -5,11 +5,13 @@ const isJoinedCommunity = async(communityid:string,userId:string) =>{
     const community = await prisma.community.findUnique({
         where:{
             id:communityid,
-            users:{
-                some:{
-                    id:userId
+            OR:[{
+                users:{
+                    some:{
+                        id:userId
+                    }
                 }
-            }
+            }]
         }
     })
     if(community) 

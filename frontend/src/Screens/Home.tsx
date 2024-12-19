@@ -38,6 +38,7 @@ interface PostData {
   isJoined: boolean;
   isUpvoted: boolean;
   communityLogo?: string;
+  communityid: string;
 }
 function Home() {
   const currUser = useSelector((state: RootState) => state.loginStatus.user);
@@ -49,11 +50,12 @@ function Home() {
     const fetchPosts = async () => {
       setloading(false);
       const postsFetched = await getAllPosts();
+      
       setData(postsFetched);
       
     };
     fetchPosts();
-  }),[currUser];
+  }),[];
 
   return (
     <div
@@ -71,8 +73,10 @@ function Home() {
           <ResizablePanel>
             <div className="w-full " style={{ height: "calc(100% - 90px)" }}>
               <ScrollArea className="h-full w-full overflow-y-auto   ">
-                {data.map((post) => (
+                {
+                data? data.map((post) => (
                   <div className="w-full flex items-center justify-center my-3">
+                    
                     <Card
                       Communitiy_Name={post.communityName}
                       Image={post.postImages ? post.postImages[0] : ""}
@@ -85,9 +89,15 @@ function Home() {
                       Description={post.communityDescription}
                       loading={loading}
                       communityLogo={post.communityLogo}
+                      postid={post.id}
+                      communityid={post.communityid}
                     />
                   </div>
-                ))}
+                )):
+                <div className="font-montserrat text-center text-4xl font-semibold dark:text-white">
+                  NO POSTS 😞
+                </div>
+              }
               </ScrollArea>
             </div>
           </ResizablePanel>

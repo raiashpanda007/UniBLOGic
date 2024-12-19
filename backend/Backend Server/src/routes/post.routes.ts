@@ -16,7 +16,7 @@ router.route("/allposts").get(
     verify,
     fetchAllPosts
 )
-router.route("/upvote_post").post(
+router.route("/upvote").post(
     verify,
     upvotePost
     // upvotePost

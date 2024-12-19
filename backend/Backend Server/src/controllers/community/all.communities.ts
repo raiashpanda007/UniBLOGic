@@ -3,13 +3,20 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const allCommunities = asyncHandler(async (req, res) => {
+    
     const communities = await prisma.community.findMany({
         where:{
-            users:{
-                some:{
-                    id:req.user?.id
+            OR:[
+                {
+                    users:{
+                        some:{
+                            id:req.user?.id
+                        }
+                    }
+                },{
+                    adminId:req.user?.id
                 }
-            }
+            ]
 
         },
         select: {

@@ -10,7 +10,7 @@ const postSchema = zod.object({
 
 })
 const createPost = asyncHandler(async (req, res) => {
-    console.log(req.body)
+    
     const parsedData = postSchema.safeParse(req.body)
     if (!parsedData.success) {
         return res.status(400).json(new response(400, "Invalid data", parsedData.error))

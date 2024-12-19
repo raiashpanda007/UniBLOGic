@@ -20,7 +20,6 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
   if (typeof req.body.users === "string") {
     req.body.users = JSON.parse(req.body.users);
   }
-  console.log("Received data:", req.body);
   const parsed = communitySchema.safeParse(req.body);
   if (!parsed.success) {
     console.log("Invalid data received:", parsed.error.errors);

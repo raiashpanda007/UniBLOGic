@@ -7,7 +7,7 @@ const makeAdminSchema = zod.object({
     userid: zod.string(),
 })
 const makeAdmin = asyncHandler(async (req,res)=>{
-    console.log("Make user admin",req.body);
+    
     const parsedData = makeAdminSchema.safeParse(req.body);
     if(!parsedData.success){
         return res.status(400).json(new response(400,"Invalid data",parsedData.error));

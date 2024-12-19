@@ -7,6 +7,7 @@ const addUserSchema = zod.object({
     userid: zod.string(),
 })
 const addUser = asyncHandler(async (req, res) => {
+    console.log("Requesting user to join : ",req.body);
     const parsedData = addUserSchema.safeParse(req.body);
     if (!parsedData.success) {
         return res.status(400).json(new response(400, "Invalid data", parsedData.error));

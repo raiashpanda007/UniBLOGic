@@ -4,7 +4,7 @@ import { z as zod } from 'zod';
 import loginUser from './login';
 
 const userLogin = asyncHandler(async (req: Request, res: Response) => {
-    console.log("Request body: ", req.body);
+    
     // Validate request body
     const loginSchema = zod.object({
         username: zod.string().min(3).max(255),
