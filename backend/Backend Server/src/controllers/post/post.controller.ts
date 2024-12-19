@@ -1,4 +1,6 @@
 import createPost from "./create.post";
 import fetchAllPosts from "./fetchAll.post";
 import upvotePost from "./upvote.post";
-export { createPost, fetchAllPosts, upvotePost };
+import comment from "./comment.post";
+import getcomments from "./getAllComments.post";
+export { createPost, fetchAllPosts, upvotePost , comment,getcomments};

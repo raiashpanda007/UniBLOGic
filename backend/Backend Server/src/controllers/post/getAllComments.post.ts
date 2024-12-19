@@ -16,3 +16,5 @@ const getAllComments = asyncHandler(async (req,res) =>{
     });
     return res.status(200).json(new response(200,"Comments fetched successfully",comments));
 })
+
+export default getAllComments;
