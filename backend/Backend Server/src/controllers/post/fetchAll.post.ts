@@ -8,7 +8,7 @@ interface PostData {
     createdAt: Date;
     authorId: string;
     postImages?: string[];
-    postVideo?: string;
+    postVideo: string[];
     upvotes: number;
     comments: number;
     communityName: string;
@@ -89,12 +89,12 @@ const fetchAllPosts = asyncHandler(async (req, res) => {
             where:{
                 postId:{
                     in:posts.map(post=>post.id)
-                }
-            }
+                },
+            },select:{videoUrl:true,postId:true}
         });
         const postData: PostData[] = await Promise.all(posts.map(async (post) => {
             const images = postImages.filter(image => image.postId === post.id).map(image => image.photo);
-            const video = postVideos.find(video => video.postId === post.id)?.videoUrl ;
+            const video = postVideos.filter(video => video.postId === post.id).map(video => video.videoUrl);
             return {
             id: post.id,
             title: post.title,

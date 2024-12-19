@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {createPost,fetchAllPosts,upvotePost,comment,getcomments, singlePost} from '../controllers/post/post.controller';
+import {createPost,fetchAllPosts,upvotePost,comment, singlePost} from '../controllers/post/post.controller';
 import verify from '../middleware/verify.middleware';
 import {upload} from "../middleware/multer.middleware";
 const router = Router();
@@ -25,10 +25,7 @@ router.route("/comment").post(
     verify,
     comment
 )
-router.route("/comments").get(
-    verify,
-    getcomments
-)
+
 router.route("/singlepost").get(
     verify,
     singlePost
