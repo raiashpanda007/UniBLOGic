@@ -30,7 +30,7 @@ interface PostData {
   createdAt: Date;
   authorId: string;
   postImages?: string[];
-  postVideo?: string;
+  postVideo?: string[];
   upvotes: number;
   comments: number;
   communityName: string;
@@ -79,8 +79,8 @@ function Home() {
                     
                     <Card
                       Communitiy_Name={post.communityName}
-                      Image={post.postImages ? post.postImages[0] : ""}
-                      Comments={[]}
+                      Image={post.postImages ? post.postImages : [""]}
+                      video={post.postVideo}
                       Comments_Count={post.comments}
                       Content={post.content}
                       Upvote_Counts={post.upvotes}

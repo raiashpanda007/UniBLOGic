@@ -23,7 +23,7 @@ interface PostData {
     createdAt: Date;
     authorId: string;
     postImages?: string[];
-    postVideo?: string;
+    postVideo?: string[];
     upvotes: number;
     comments: Comment[];
     commentsCount: number;
@@ -112,7 +112,7 @@ const fetchSingle = asyncHandler(async (req, res) => {
             createdAt: post.createdAt,
             authorId: post.authorId,
             postImages: postImages.map(image => image.photo),
-            postVideo: postVideos[0].videoUrl || "",
+            postVideo: postVideos.map(video=>video.videoUrl),
             upvotes: upvoteCounts.length || 0,
             comments: comments.map(comment => ({
                 ...comment,
