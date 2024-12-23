@@ -14,13 +14,12 @@ const createCommunity = asyncHandler(async (req: Request, res: Response) => {
 
   const communitySchema = zod.object({
     name: zod.string().min(3, "Please provide a name").max(255),
-    description: zod.string().min(3, "Please provide a description").max(255),
-    users: zod.array(zod.string()),
+    description: zod.string().min(3, "Please provide a description"),
+    users: zod.array(zod.string()).nonempty("Please provide correct user IDs"),
   });
   if (typeof req.body.users === "string") {
     req.body.users = JSON.parse(req.body.users);
   }
-
   const parsed = communitySchema.safeParse(req.body);
   if (!parsed.success) {
     console.log("Invalid data received:", parsed.error.errors);

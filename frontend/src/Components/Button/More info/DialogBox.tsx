@@ -11,10 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Option_Logo } from "@/Components/Components";
 import { useSelector } from "react-redux";
 interface DialogBoxProps {
-    operationCode:number,
     content:string
+    onClick?:()=>void
 }
-const DialogBox = ({content,operationCode} : DialogBoxProps) => {
+const DialogBox = ({content,onClick} : DialogBoxProps) => {
     const mode = useSelector((state: RootState) => state.theme.mode);
     
 
@@ -30,7 +30,7 @@ const DialogBox = ({content,operationCode} : DialogBoxProps) => {
         and remove your data from our servers.
       </DialogDescription>
     </DialogHeader>
-    <Button variant={"ghost"}>
+    <Button variant={"ghost"} onClick={onClick} >
         <Option_Logo label="Confirm" />
     </Button>
   </DialogContent>

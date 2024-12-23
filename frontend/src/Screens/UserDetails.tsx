@@ -97,7 +97,7 @@ function UserDetails() {
                         <img
                           src={data.profilePicture}
                           alt="Community Logo"
-                          className="w-36 h-36 rounded-full object-cover"
+                          className="w-40 h-40 rounded-full object-cover"
                           loading="lazy"
                         />
                       ) : (
@@ -124,7 +124,7 @@ function UserDetails() {
                           label={data?.name || "Name"}
                           className="text-4xl"
                         />
-                        <EditButton />
+                        <EditButton type="Users" defaultValues={{name:data?.name,username:data?.username}} />
                       </div>
                       <div className="h-2/5 flex items-center pl-2">
                         <Button variant={"outline"} className="font-montserrat text-2xl font-bold">

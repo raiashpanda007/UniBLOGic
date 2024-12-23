@@ -12,33 +12,26 @@ const unUpvote = async ({existingUpvote}:UpvotePostRequest ) =>{
         }
     })
     return downvote;
+    // Define validation schema
 }
 
 const upvotePost = asyncHandler(async (req, res) => {
-  // Define validation schema
-  const upvotePostSchema = zod.object({
-    postID: zod.string().min(1, "Post ID must be at least 1 character long"),
-    userID: zod.string().min(1, "User ID must be at least 1 character long"),
-  });
-
+  
+  console.log(req.headers)
   // Extract input
-  const postID = req.headers.postid as string; 
+  const postID = Array.isArray(req.headers.postid) ? req.headers.postid[0] : req.headers.postid;
   const userID = req.user?.id; 
+  if(!postID){
+    return res.status(400).json(new error(400,"Post ID is missing"));
+  }
 
-  // Ensure `userID` is a string
   if (!userID) {
     return res
       .status(401)
       .json(new error(401, "User is not authenticated or user ID is missing"));
   }
 
-  // Validate input
-  const safeParsed = upvotePostSchema.safeParse({ postID, userID });
-  if (!safeParsed.success) {
-    return res.status(400).json(
-      new error(400, "Invalid input", safeParsed.error.errors)
-    );
-  }
+
 
   // Check if user exists
   const user = await prisma.user.findUnique({

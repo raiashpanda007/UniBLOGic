@@ -68,7 +68,7 @@ function Create_Community() {
     console.log(data);
     console.log(userDetails)
     const formdata = new FormData();
-    formdata.append("title", data.title);
+    formdata.append("name", data.title);
     formdata.append("description", data.description);
     if(data.img && data.img.length == 1){
       formdata.append("communityLogo", data.img[0]);
@@ -83,8 +83,9 @@ function Create_Community() {
       });
       if(response){
         console.log(response.data.data)
-        navigate(`/home`)
+        
       }
+      navigate(`/community/${response.data.data.id} `);
     } catch (error) {
       console.log(error);
     }

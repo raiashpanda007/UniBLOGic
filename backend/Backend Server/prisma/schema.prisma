@@ -31,7 +31,8 @@ model Post {
   id          String     @id @default(cuid())
   title       String
   content     String
-  multimedia  String?
+  postPhoto  PostPhotos[]
+  postVideo  PostVideos[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   comments    Comments[]
@@ -84,7 +85,19 @@ model Otp {
   isUsed      Boolean   @default(false)
 }
 
-
+model PostPhotos {
+  id          String     @id @default(cuid())
+  post        Post       @relation(fields: [postId], references: [id])
+  postId      String
+  photo       String
+}
+model PostVideos {
+  id          String     @id @default(cuid())
+  post        Post       @relation(fields: [postId], references: [id])
+  postId      String
+  videoUrl    String
+  quality     VideoQuality
+}
 enum Role {
   USER
   ADMIN
@@ -97,4 +110,10 @@ enum Branch {
   MNC
   None
 
+}
+enum VideoQuality {
+  HD
+  SD
+  FHD
+  UNDEFINED 
 }

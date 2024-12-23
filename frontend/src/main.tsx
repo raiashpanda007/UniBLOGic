@@ -19,7 +19,7 @@ const routes = createBrowserRouter(
     <Route path="home" element={<Home />} />
     <Route path="post/:post_id" element={<Post />} />
     <Route path="user/:user_id" element = {<UserDetails />}/>
-    <Route path="chatroom/:chat_id" element={<Chatroom />} />
+    <Route path="chatroom/:communityid" element={<Chatroom />} />
     <Route path="verify_otp" element={<Verify_OTP />} />
     <Route path="test" element={<Demo />} />
     <Route path="forgotpassword" element={<ForgotPassword />} />

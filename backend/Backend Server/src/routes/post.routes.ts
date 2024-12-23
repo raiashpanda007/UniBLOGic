@@ -1,20 +1,34 @@
 import { Router } from "express";
-import {createPost,fetchAllPosts,upvotePost} from '../controllers/post/post.controller';
+import {createPost,fetchAllPosts,upvotePost,comment, singlePost} from '../controllers/post/post.controller';
 import verify from '../middleware/verify.middleware';
+import {upload} from "../middleware/multer.middleware";
 const router = Router();
 
-router.route("/create_post").post(
+router.route("/create").post(
     verify,
+    upload.fields([
+        {name: 'postimages', maxCount: 5},
+        {name: 'video', maxCount: 1}
+    ]),
     createPost
 )
-router.route("/fetch_all_posts").get(
+router.route("/allposts").get(
     verify,
     fetchAllPosts
 )
-router.route("/upvote_post").post(
+router.route("/upvote").post(
     verify,
     upvotePost
     // upvotePost
+)
+router.route("/comment").post(
+    verify,
+    comment
+)
+
+router.route("/singlepost").get(
+    verify,
+    singlePost
 )
 
 // TODO:

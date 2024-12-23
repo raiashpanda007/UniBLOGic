@@ -1,36 +1,100 @@
-import {asyncHandler,error,response} from '../../utilities/utilities';
+import { asyncHandler, error, response, uploadCloudinary } from '../../utilities/utilities';
 import { PrismaClient } from '@prisma/client';
-import {z as zod} from 'zod';
+
+import { z as zod } from 'zod';
 const prisma = new PrismaClient();
 const postSchema = zod.object({
-    title: zod.string().min(1,"Title must be at least 1 character long"),
-    description: zod.string().min(1,"Description must be at least 1 character long"),
-    multimedia: zod.string().optional()
+    title: zod.string().min(1, "Title must be at least 1 character long"),
+    description: zod.string().min(1, "Description must be at least 1 character long"),
+    communityid: zod.string()
+
 })
-const  createPost = asyncHandler(async(req,res) =>{
-    const parsedData = postSchema.safeParse(req.body);
-    if(!parsedData.success){
-        return res.status(400).json(new error(400,parsedData.error.message));
+const createPost = asyncHandler(async (req, res) => {
+    
+    const parsedData = postSchema.safeParse(req.body)
+    if (!parsedData.success) {
+        return res.status(400).json(new response(400, "Invalid data", parsedData.error))
     }
-    const communityID = req.headers.communityid as string;
-    if(!communityID) {
-        return res.status(400).json(new error(400,"Community ID is required"));
-    }
-    const {title,description,multimedia} = parsedData.data;
-    const postCreated = await prisma.post.create({
-        data:{
-            title,
-            content:description,
-            multimedia,
-            authorId:communityID
+    const { title, description, communityid } = parsedData.data
+    const community = await prisma.community.findUnique({
+        where: {
+            id: communityid,
+            adminId: req.user?.id
         }
     })
-
-    if(!postCreated){
-        return res.status(500).json(new error(500,"Post not created"));
+    if (!community) {
+        throw new error(400, "Community not found or you are not a authroized person to create post in this community")
     }
-    return res.status(201).json(new response(201,"Post created successfully",postCreated));
+    const files = req.files as {
+        [fieldname: string]: Express.Multer.File[];
+    };
 
-})
+    const postImages = files['postimages'] || [];
+    const video = files['video']?.[0] || null;
+    console.log("{Post Images :: }",postImages,"{Video ::}", video)
 
-export default createPost
+    let postImagesUrls: string[] = [];
+    let videoUrl: string | null = null;
+
+    try {
+        // Upload images to Cloudinary
+        for (let i = 0; i < postImages.length; i++) {
+            const result = await uploadCloudinary(postImages[i].path);
+            if (!result || !result.secure_url) {
+                return res.status(500).json(new response(500, "Failed to upload image", result));
+            }
+            postImagesUrls.push(result.secure_url);
+        }
+
+        // Upload video to Cloudinary
+        if (video) {
+            const result = await uploadCloudinary(video.path);
+            if (!result || !result.secure_url) {
+                return res.status(500).json(new response(500, "Failed to upload video", result));
+            }
+            videoUrl = result.secure_url;
+        }
+
+        // Use Prisma transaction to create the post and associated data
+        const transaction = await prisma.$transaction(async (tx) => {
+            const post = await tx.post.create({
+                data: {
+                    title,
+                    content: description,
+                    authorId: communityid,
+                },
+            });
+
+
+            const postPhotos = postImagesUrls ? await tx.postPhotos.createMany({
+                data: postImagesUrls.map((url) => ({
+                    photo: url,
+                    postId: post.id,
+                })),
+            }) : null;
+
+
+
+            const postvideo = videoUrl ? await tx.postVideos.create({
+                data: {
+                    videoUrl,
+                    quality: 'HD', // Or dynamically determine the quality
+                    postId: post.id,
+                },
+            }) : null;
+            
+
+            return { post, postPhotos, postvideo };
+
+        });
+        
+
+        return res.status(201).json(new response(201, "Post created successfully", transaction));
+
+    } catch (err) {
+        console.error("Error creating post:", err);
+        return res.status(500).json(new response(500, "Failed to create post", {}));
+    }
+});
+
+export default createPost;

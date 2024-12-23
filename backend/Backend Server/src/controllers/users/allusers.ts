@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const showAllUsers = asyncHandler(async (req, res) => {
     const users = await prisma.user.findMany({
         where:{
-            role:"USER"
+            OR:[{role:"USER"},{role:"ADMIN"}]
         },
         select: {
             id: true,

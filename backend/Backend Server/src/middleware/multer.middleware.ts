@@ -1,6 +1,7 @@
 import multer from 'multer';
-import { Response,Request,NextFunction } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import path from 'path'; // Required to get the file extension
+import { v4 as uuidv4 } from 'uuid'; // Import UUID for unique identifiers
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -8,8 +9,8 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const extension = path.extname(file.originalname); // Extract original file extension
-        // Simply use the field name as the file name, such as profilePicture or coverImage
-        cb(null, file.fieldname + extension); // e.g., profilePicture.jpg, coverImage.png
+        // Generate a unique filename using UUID and timestamp
+        cb(null, `${file.fieldname}-${Date.now()}-${uuidv4()}${extension}`);
     }
 });
 
