@@ -29,8 +29,13 @@ function Create_Post_Button() {
   const [uploads, setUploads] = useState<{ type: "video" | "image"; url: string }[]>([]);
 
   const onSubmitForm: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
+
+    
+    const video = data.files.filter((file)=> file.type.startsWith("video/"));
     const formData = new FormData();
+    if(video.length > 0) {
+      formData.append('video', video[0].name)
+    }
   
     // Append title and description
     formData.append("title", data.title);
@@ -49,12 +54,9 @@ function Create_Post_Button() {
       // Append files to respective field names
       if (file.type === "image") {
       formData.append("postimages", new File([blob], fileName, { type: blob.type }));
-      } else if (file.type === "video") {
-      formData.append("video", new File([blob], fileName, { type: blob.type }));
       }
     }
 
-    console.log(formData);
   
     try {
       const response = await axios.post("http://localhost:3000/api/post/create", formData, {

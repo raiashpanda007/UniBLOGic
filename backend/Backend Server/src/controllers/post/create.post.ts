@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 const postSchema = zod.object({
     title: zod.string().min(1, "Title must be at least 1 character long"),
     description: zod.string().min(1, "Description must be at least 1 character long"),
-    communityid: zod.string()
+    communityid: zod.string() ,
+    videoname: zod.string().optional()
 
 })
 const createPost = asyncHandler(async (req, res) => {
@@ -15,7 +16,7 @@ const createPost = asyncHandler(async (req, res) => {
     if (!parsedData.success) {
         return res.status(400).json(new response(400, "Invalid data", parsedData.error))
     }
-    const { title, description, communityid } = parsedData.data
+    const { title, description, communityid,videoname } = parsedData.data
     const community = await prisma.community.findUnique({
         where: {
             id: communityid,
@@ -30,8 +31,8 @@ const createPost = asyncHandler(async (req, res) => {
     };
 
     const postImages = files['postimages'] || [];
-    const video = files['video']?.[0] || null;
-    console.log("{Post Images :: }",postImages,"{Video ::}", video)
+    const video = videoname ;
+
 
     let postImagesUrls: string[] = [];
     let videoUrl: string | null = null;
@@ -47,14 +48,7 @@ const createPost = asyncHandler(async (req, res) => {
         }
 
         // Upload video to Cloudinary
-        if (video) {
-            const result = await uploadCloudinary(video.path);
-            if (!result || !result.secure_url) {
-                return res.status(500).json(new response(500, "Failed to upload video", result));
-            }
-            videoUrl = result.secure_url;
-        }
-
+        
         // Use Prisma transaction to create the post and associated data
         const transaction = await prisma.$transaction(async (tx) => {
             const post = await tx.post.create({
