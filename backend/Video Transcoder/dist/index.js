@@ -17,8 +17,8 @@ const client_ecs_1 = require("@aws-sdk/client-ecs");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ""
+    accessKeyId: "AKIA42PHHPISVV2U76FH",
+    secretAccessKey: "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"
 };
 const client = new client_sqs_1.SQSClient({ region: "ap-south-1", credentials });
 const ecsClient = new client_ecs_1.ECSClient({ region: "ap-south-1", credentials });

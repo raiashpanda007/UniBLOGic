@@ -3,10 +3,9 @@ import type {S3Event} from 'aws-lambda'
 import {ECSClient,RunTaskCommand} from '@aws-sdk/client-ecs'
 import dotenv from "dotenv"
 dotenv.config()
-
 const credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "" ,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "" 
+    accessKeyId: "AKIA42PHHPISVV2U76FH" ,
+    secretAccessKey: "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" 
 }
 const client = new SQSClient({ region: "ap-south-1",credentials });
 const ecsClient = new ECSClient({region: "ap-south-1",credentials});

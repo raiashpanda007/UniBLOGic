@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {createPost,fetchAllPosts,upvotePost,comment, singlePost} from '../controllers/post/post.controller';
+import {createPost,fetchAllPosts,upvotePost,comment, singlePost, uploadVideo} from '../controllers/post/post.controller';
 import verify from '../middleware/verify.middleware';
 import {upload} from "../middleware/multer.middleware";
 const router = Router();
@@ -7,8 +7,7 @@ const router = Router();
 router.route("/create").post(
     verify,
     upload.fields([
-        {name: 'postimages', maxCount: 5},
-        {name: 'video', maxCount: 1}
+        {name: 'postimages', maxCount: 5}
     ]),
     createPost
 )
@@ -25,7 +24,10 @@ router.route("/comment").post(
     verify,
     comment
 )
-
+router.route("/uploadvideo").post(
+    verify,
+    uploadVideo
+)
 router.route("/singlepost").get(
     verify,
     singlePost
