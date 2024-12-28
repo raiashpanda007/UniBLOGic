@@ -16,9 +16,7 @@ const unUpvote = async ({existingUpvote}:UpvotePostRequest ) =>{
 }
 
 const upvotePost = asyncHandler(async (req, res) => {
-  
   console.log(req.headers)
-  // Extract input
   const postID = Array.isArray(req.headers.postid) ? req.headers.postid[0] : req.headers.postid;
   const userID = req.user?.id; 
   if(!postID){

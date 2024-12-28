@@ -1,6 +1,6 @@
 import { asyncHandler, error, response, uploadCloudinary } from '../../utilities/utilities';
 import { PrismaClient } from '@prisma/client';
-
+import videoList from './videoList';
 import { z as zod } from 'zod';
 const prisma = new PrismaClient();
 const postSchema = zod.object({
@@ -22,7 +22,7 @@ const createPost = asyncHandler(async (req, res) => {
             id: communityid,
             adminId: req.user?.id
         }
-    })
+    });
     if (!community) {
         throw new error(400, "Community not found or you are not a authroized person to create post in this community")
     }
@@ -31,11 +31,11 @@ const createPost = asyncHandler(async (req, res) => {
     };
 
     const postImages = files['postimages'] || [];
-    const video = videoname ;
+    const video =  await videoList(videoname||'');
 
 
     let postImagesUrls: string[] = [];
-    let videoUrl: string | null = null;
+    
 
     try {
         // Upload images to Cloudinary
@@ -69,14 +69,26 @@ const createPost = asyncHandler(async (req, res) => {
 
 
 
-            const postvideo = videoUrl ? await tx.postVideos.create({
-                data: {
-                    videoUrl,
-                    quality: 'HD', // Or dynamically determine the quality
-                    postId: post.id,
-                },
+            const postvideo = video ? await tx.postVideos.createMany({
+                data:[
+                    {
+                        postId:post.id,
+                        quality:'SD',
+                        videoUrl:video['SD']
+                    },
+                    {
+                        postId:post.id,
+                        quality:'HD',
+                        videoUrl:video['HD']
+                    },
+                    {
+                        postId:post.id,
+                        quality:'FHD',
+                        videoUrl:video['FHD']
+                    },
+                    
+                ],
             }) : null;
-            
 
             return { post, postPhotos, postvideo };
 
