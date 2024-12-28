@@ -40,7 +40,6 @@ function Home_Card({
   postid,
   communityid,
 }: Home_CardProps) {
-  const totalLength =  Image.length + video.length;
   let mulitmedia = [];
   for (let i = 0; i < Image.length; i++) {
     mulitmedia.push({type:'Image',url:Image[i]})

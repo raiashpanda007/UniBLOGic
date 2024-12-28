@@ -55,7 +55,7 @@ function Home() {
       
     };
     fetchPosts();
-  }),[];
+  },[]);
 
   return (
     <div

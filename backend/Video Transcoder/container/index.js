@@ -1,10 +1,7 @@
-import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-
 import fs from "fs";
 import path from "path";
 import ffmpeg from "fluent-ffmpeg";
-
-
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const RESOLUTIONS = [
   { name: "FHD", width: 1920, height: 1080 },
@@ -16,66 +13,72 @@ const RESOLUTIONS = [
 const s3Client = new S3Client({
   region: "ap-south-1",
   credentials: {
-    accessKeyId: "AKIA42PHHPIS72PSVJJI",
-    secretAccessKey: "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",
+    accessKeyId: 'AKIA42PHHPISVV2U76FH',
+    secretAccessKey: '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',
   },
 });
 
-const bucket_name = process.env.BUCKET_NAME;
-const key = process.env.KEY;
+const init = async () => {
+  const bucketName = process.env.BUCKET_NAME;
+  const key = process.env.KEY;
 
-const init = async function () {
+  if (!bucketName || !key) {
+    throw new Error("BUCKET_NAME and KEY must be set.");
+  }
+
+  const tempDir = path.resolve("/tmp");
+  const originalFilename = path.basename(key);
+  const originalPath = path.join(tempDir, originalFilename);
+
   try {
-    // Step 1: Download the video file from S3
-    const command = new GetObjectCommand({
-      Bucket: bucket_name,
-      Key: key,
-    });
-
+    // Download file
+    console.log("Fetching file from S3:", bucketName, key);
+    const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
     const result = await s3Client.send(command);
-    const originalFilename = path.basename(key); // Extract the original filename
-    const originalPath = path.resolve(originalFilename);
 
-    // Save the video file locally
+    // Save locally
     await fs.promises.writeFile(originalPath, await result.Body.transformToByteArray());
+    console.log("File downloaded to:", originalPath);
 
-    // Step 2: Transcode the video to multiple resolutions and upload to S3
-    const promises = RESOLUTIONS.map((resolution) => {
-      const outputFilename = `${originalFilename}.${resolution.name}.mp4`;
-
-      return new Promise((resolve, reject) => {
-        ffmpeg(originalPath)
-          .output(outputFilename)
-          .withVideoCodec("libx264")
-          .withAudioCodec("aac")
-          .withSize(`${resolution.width}x${resolution.height}`)
-          .on("end", async () => {
-            try {
-              // Upload the transcoded video file to S3
+    // Transcode
+    await Promise.all(
+      RESOLUTIONS.map((resolution) => {
+        const outputFilename = path.join(tempDir, `${originalFilename}.${resolution.name}.mp4`);
+        return new Promise((resolve, reject) => {
+          ffmpeg(originalPath)
+            .output(outputFilename)
+            .withVideoCodec("libx264")
+            .withAudioCodec("aac")
+            .withSize(`${resolution.width}x${resolution.height}`)
+            .on("end", async () => {
+              console.log("Uploading transcoded file to S3:", outputFilename);
               const putCommand = new PutObjectCommand({
                 Bucket: "transcoded-videos-uniblogic",
-                Key: outputFilename,
-                Body: fs.createReadStream(path.resolve(outputFilename)),
+                Key: `${key}.${resolution.name}.mp4`,
+                Body: fs.createReadStream(outputFilename),
               });
-
               await s3Client.send(putCommand);
               resolve();
-            } catch (error) {
-              reject(error);
-            }
-          })
-          .format("mp4")
-          .run();
-      });
-    });
+            })
+            .on("error", reject)
+            .format("mp4")
+            .run();
+        });
+      })
+    );
 
-    // Wait for all transcoding and uploads to complete
-    await Promise.all(promises);
-    
     console.log("Transcoding and uploading completed.");
   } catch (error) {
-    console.error("Error in the process:", error);
+    console.error("Error in process:", error);
+  } finally {
+    // Clean up
+    console.log("Cleaning up temporary files.");
+    await fs.promises.unlink(originalPath).catch(() => {});
+    RESOLUTIONS.forEach(async (resolution) => {
+      const outputFile = path.join(tempDir, `${originalFilename}.${resolution.name}.mp4`);
+      await fs.promises.unlink(outputFile).catch(() => {});
+    });
   }
 };
 
-init().finally(()=> process.exit(0));
+init().finally(() => process.exit(0));

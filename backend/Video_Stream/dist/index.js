@@ -17,8 +17,8 @@ const client_ecs_1 = require("@aws-sdk/client-ecs");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const credentials = {
-    accessKeyId: "AKIA42PHHPISVV2U76FH",
-    secretAccessKey: "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"
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
 };
 const client = new client_sqs_1.SQSClient({ region: "ap-south-1", credentials });
 const ecsClient = new client_ecs_1.ECSClient({ region: "ap-south-1", credentials });
@@ -26,56 +26,71 @@ const command = new client_sqs_1.ReceiveMessageCommand({
     QueueUrl: process.env.AWS_SQS_URL_VIDEO_UPLOADING || "",
     MaxNumberOfMessages: 1,
     VisibilityTimeout: 10,
-    WaitTimeSeconds: 20
+    WaitTimeSeconds: 20, // Long polling
 });
 function receiveMessage() {
     return __awaiter(this, void 0, void 0, function* () {
         while (true) {
-            const { Messages } = yield client.send(command);
-            if (!Messages) {
-                console.log("No message is received");
-                continue;
-            }
             try {
+                const { Messages } = yield client.send(command);
+                if (!Messages || Messages.length === 0) {
+                    console.log("No message received, waiting...");
+                    continue; // Wait for next poll
+                }
                 for (const message of Messages) {
-                    const { Body, MessageId } = message;
-                    if (!Body)
+                    const { Body, MessageId, ReceiptHandle } = message;
+                    if (!Body || !ReceiptHandle)
                         continue;
-                    const event = JSON.parse(Body);
-                    if ("Service" in event && "Event" in event) {
-                        if (event.Service === "s3:TestEvent")
-                            continue;
-                    }
-                    for (const record of event.Records) {
-                        const { s3 } = record;
-                        const { bucket, object } = s3;
-                        const runTaskCommand = new client_ecs_1.RunTaskCommand({
-                            taskDefinition: "arn:aws:ecs:ap-south-1:881490098725:task-definition/video-streaming",
-                            cluster: "arn:aws:ecs:ap-south-1:881490098725:cluster/video-streaming",
-                            launchType: "FARGATE",
-                            networkConfiguration: {
-                                awsvpcConfiguration: {
-                                    subnets: ["subnet-0e60bd81d60c2f11b", "subnet-005ceaf386d3ca296", "subnet-0160a1d5f655e2212"],
-                                    securityGroups: ['sg-0ea5c898b2a293a4d'],
-                                    assignPublicIp: "ENABLED"
-                                }
-                            },
-                            overrides: {
-                                containerOverrides: [{
-                                        name: "video-streaming",
-                                        environment: [
-                                            { name: "BUCKET_NAME", value: bucket.name },
-                                            { name: "KEY", value: object.key }
-                                        ]
-                                    }]
-                            }
+                    try {
+                        const event = JSON.parse(Body);
+                        if ("Service" in event && "Event" in event) {
+                            if (event.Service === "s3:TestEvent")
+                                continue;
+                        }
+                        for (const record of event.Records) {
+                            const { s3 } = record;
+                            const { bucket, object } = s3;
+                            console.log(`Processing video: ${bucket.name}/${object.key}`);
+                            const runTaskCommand = new client_ecs_1.RunTaskCommand({
+                                taskDefinition: "arn:aws:ecs:ap-south-1:881490098725:task-definition/video-streaming",
+                                cluster: "arn:aws:ecs:ap-south-1:881490098725:cluster/video-streaming",
+                                launchType: "FARGATE",
+                                networkConfiguration: {
+                                    awsvpcConfiguration: {
+                                        subnets: ["subnet-0e60bd81d60c2f11b", "subnet-005ceaf386d3ca296", "subnet-0160a1d5f655e2212"],
+                                        securityGroups: ['sg-0ea5c898b2a293a4d'],
+                                        assignPublicIp: "ENABLED"
+                                    }
+                                },
+                                overrides: {
+                                    containerOverrides: [{
+                                            name: "video-streaming",
+                                            environment: [
+                                                { name: "BUCKET_NAME", value: bucket.name },
+                                                { name: "KEY", value: object.key },
+                                            ],
+                                        }],
+                                },
+                            });
+                            // Start the container task
+                            yield ecsClient.send(runTaskCommand);
+                            console.log(`Task started for video: ${bucket.name}/${object.key}`);
+                        }
+                        // Delete the processed message
+                        const deleteCommand = new client_sqs_1.DeleteMessageCommand({
+                            QueueUrl: process.env.AWS_SQS_URL_VIDEO_UPLOADING || "",
+                            ReceiptHandle,
                         });
-                        yield ecsClient.send(runTaskCommand);
+                        yield client.send(deleteCommand);
+                        console.log(`Deleted message: ${MessageId}`);
+                    }
+                    catch (error) {
+                        console.error("Error processing message:", error);
                     }
                 }
             }
             catch (error) {
-                console.log("Error", error);
+                console.error("Error receiving message:", error);
             }
         }
     });

@@ -21,6 +21,41 @@ interface FormData {
 }
 import axios from "axios";
 import { useParams } from "react-router-dom";
+const generateURLAndUpload = async (video: File) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/post/uploadvideo",
+      {
+        key: video.name,
+        type: video.type, // Use the correct MIME type (e.g., video/mp4)
+      },
+      { withCredentials: true }
+    );
+
+    if (response && response.data.data) {
+      const { url, key } = response.data.data;
+      if (!url || !key) {
+        alert("Failed to upload video");
+        return;
+      }
+
+      // Upload the file directly without wrapping it in FormData
+      await axios.put(url, video, {
+        headers: {
+          "Content-Type": video.type, // Ensure this is the video's MIME type
+          "Content-Length": video.size,
+        },
+      });
+
+      return key;
+    } else {
+      alert("Failed to upload video");
+    }
+  } catch (error) {
+    console.error("Error uploading video:", error);
+  }
+};
+
 
 function Create_Post_Button() {
   const navigate = useNavigate();
@@ -29,12 +64,13 @@ function Create_Post_Button() {
   const [uploads, setUploads] = useState<{ type: "video" | "image"; url: string }[]>([]);
 
   const onSubmitForm: SubmitHandler<FormData> = async (data) => {
-
-    
     const video = data.files.filter((file)=> file.type.startsWith("video/"));
     const formData = new FormData();
+    console.log("Video files :: ", video);
     if(video.length > 0) {
-      formData.append('video', video[0].name)
+      const key = await generateURLAndUpload(video[0]);
+      console.log(key);
+      formData.append("video", key);
     }
   
     // Append title and description

@@ -9,7 +9,7 @@ function App() {
 
   return (
     <ToastProvider> {/* Wrap with Shadcn's ToastProvider */}
-      <div className={mode === 'light' ? `relative` : `dark relative`}>
+      <div className={mode === 'light' ? `relative bg-white overflow-hidden` : `dark relative overflow-hidden bg-black`}>
         <Header />
         <Outlet />
       </div>

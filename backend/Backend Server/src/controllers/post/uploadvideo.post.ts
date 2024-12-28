@@ -16,7 +16,7 @@ const uploadVideo = asyncHandler(async(req,res) =>{
         const client = new S3Client({ region: process.env.AWS_REGION,credentials});
         const command  = new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${newkey}.mp4`,
+            Key: `${newkey}`,
             ContentType: 'video/mp4',
         })
         

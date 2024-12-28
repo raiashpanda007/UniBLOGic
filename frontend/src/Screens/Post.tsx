@@ -38,7 +38,6 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/Store/Store";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { set } from "react-hook-form";
 function Post() {
 const {post_id} = useParams<{post_id:string}>();
   const mode = useSelector((state: RootState) => state.theme.mode);
@@ -81,7 +80,7 @@ const {post_id} = useParams<{post_id:string}>();
               Content={data?.content || "Content"}
               Upvote_Counts={300}
               isUpvoted={data?.isUpvoted || false}
-              Image={data?.postImages?.[0] || ""}
+              Image={data?.postImages || ['']}
               Joined={data?.isJoined || false}
               Description={data?.communityDescription || "Description"}
               postid={data?.id || ""}
