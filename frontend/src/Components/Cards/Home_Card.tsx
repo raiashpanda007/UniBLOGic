@@ -102,7 +102,7 @@ function Home_Card({
 
         {loading ? (
           <Skeleton className="h-96 rounded-sm" />
-        ) : (
+        ) : (mulitmedia.length >= 1 ? (
           <div className="h-96 w-full flex items-center justify-center">
             <Carousel className="h-96 w-full">
               <CarouselContent className="h-full w-full">
@@ -122,12 +122,40 @@ function Home_Card({
                       </Card>
                     </div>
                   </CarouselItem>
-                ))}
+                ))}<div className="h-96 w-full flex items-center justify-center">
+                <Carousel className="h-96 w-full">
+                  <CarouselContent className="h-full w-full">
+                    {mulitmedia.map((content) => (
+                      <CarouselItem key={content.url} className="h-full w-full">
+                        <div className=" h-full w-full">
+                          <Card className="h-96 w-full">
+                            <CardContent className="flex h-full w-full items-center justify-center ">
+                              <span className="text-4xl h-full w-full">
+                                { content.type === "Image" ? (
+                                  <img src={content.url} alt="" />  ):(
+                                  <video src={content.url} controls className="h-full w-full  rounded" />
+                                  )
+                                }
+                              </span>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="dark:text-white" />
+                  <CarouselNext className="dark:text-white"/>
+                </Carousel>
+              </div>
               </CarouselContent>
               <CarouselPrevious className="dark:text-white" />
               <CarouselNext className="dark:text-white"/>
             </Carousel>
-          </div>
+          </div>):(
+            <div>
+
+            </div>
+          )
         )}
       </div>
       <div className="h-10 ">

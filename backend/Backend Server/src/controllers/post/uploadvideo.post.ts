@@ -21,8 +21,8 @@ const uploadVideo = asyncHandler(async(req,res) =>{
         })
         
         const url = await getSignedUrl(client,command,{expiresIn: 60*2});
-        console.log(url);
-        return res.status(200).json(new response(200,"Url generated successfully",{url:url, key:key}));
+        
+        return res.status(200).json(new response(200,"Url generated successfully",{url:url, key:newkey}));
     } catch (e) {
         throw new error(500,"Error generating url");
     }

@@ -19,9 +19,11 @@ interface FormData {
   description: string;
   files: File[];
 }
+
 import axios from "axios";
 import { useParams } from "react-router-dom";
 const generateURLAndUpload = async (video: File) => {
+  if (!video) return null;
   try {
     const response = await axios.post(
       "http://localhost:3000/api/post/uploadvideo",
@@ -56,23 +58,33 @@ const generateURLAndUpload = async (video: File) => {
   }
 };
 
-
 function Create_Post_Button() {
   const navigate = useNavigate();
-  const {communityid} = useParams();
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
-  const [uploads, setUploads] = useState<{ type: "video" | "image"; url: string }[]>([]);
+  const { communityid } = useParams();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>();
+  const [uploads, setUploads] = useState<
+    { type: "video" | "image"; url: string }[]
+  >([]);
 
   const onSubmitForm: SubmitHandler<FormData> = async (data) => {
-    const video = data.files.filter((file)=> file.type.startsWith("video/"));
+    let video = null
+    if (data.files) {
+      video = data?.files.filter((file) => file.type.startsWith("video/"));
+    }
+    
     const formData = new FormData();
     console.log("Video files :: ", video);
-    if(video.length > 0) {
+    if (video && video.length > 0) {
       const key = await generateURLAndUpload(video[0]);
       console.log(key);
-      formData.append("video", key);
+      formData.append("videoname", key);
     }
-  
+
     // Append title and description
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -80,32 +92,37 @@ function Create_Post_Button() {
     if (communityid) {
       formData.append("communityid", communityid);
     }
-  
+
     // Split files into 'postimages' and 'video' fields
     for (const file of uploads) {
       const response = await fetch(file.url);
       const blob = await response.blob();
       const fileName = file.url.split("/").pop() || "uploaded_file";
-      
+
       // Append files to respective field names
       if (file.type === "image") {
-      formData.append("postimages", new File([blob], fileName, { type: blob.type }));
+        formData.append(
+          "postimages",
+          new File([blob], fileName, { type: blob.type })
+        );
       }
     }
 
-  
     try {
-      const response = await axios.post("http://localhost:3000/api/post/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },withCredentials: true
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/post/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
-  
       if (response) {
         alert("Post created successfully!");
         navigate(`/home`);
-        
       } else {
         alert("Failed to create the post.");
       }
@@ -113,13 +130,13 @@ function Create_Post_Button() {
       console.error("Error:", error);
     }
   };
-  
-
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newFiles: { type: "video" | "image"; url: string }[] = Array.from(files).map((file) => {
+      const newFiles: { type: "video" | "image"; url: string }[] = Array.from(
+        files
+      ).map((file) => {
         const url = URL.createObjectURL(file);
         const isVideo = file.type.startsWith("video/");
         return { type: isVideo ? "video" : "image", url };
@@ -142,9 +159,6 @@ function Create_Post_Button() {
     });
   };
 
- 
-
-
   return (
     <div className="w-full h-5 flex justify-end">
       <Dialog>
@@ -157,7 +171,10 @@ function Create_Post_Button() {
           <DialogHeader>
             <DialogTitle>Create a Community Post</DialogTitle>
             <DialogDescription>
-              <form className="flex flex-col w-full" onSubmit={handleSubmit(onSubmitForm)}>
+              <form
+                className="flex flex-col w-full"
+                onSubmit={handleSubmit(onSubmitForm)}
+              >
                 {/* Title input */}
                 <Input
                   type="text"
@@ -165,7 +182,9 @@ function Create_Post_Button() {
                   {...register("title", { required: true })}
                   className="h-12 border rounded-sm p-2"
                 />
-                {errors.title && <p className="text-red-500">Title is required</p>}
+                {errors.title && (
+                  <p className="text-red-500">Title is required</p>
+                )}
 
                 {/* Description input */}
                 <Textarea
@@ -173,7 +192,9 @@ function Create_Post_Button() {
                   {...register("description", { required: true })}
                   className="h-32 border rounded-sm p-2 mt-2"
                 />
-                {errors.description && <p className="text-red-500">Description is required</p>}
+                {errors.description && (
+                  <p className="text-red-500">Description is required</p>
+                )}
 
                 {/* File upload input */}
                 <Input
@@ -182,7 +203,6 @@ function Create_Post_Button() {
                   accept="image/*,video/*"
                   onChange={handleFileChange}
                   className="h-12 border rounded-sm p-2 mt-2"
-                  
                 />
 
                 {/* Display uploaded files */}
@@ -217,7 +237,11 @@ function Create_Post_Button() {
                 </div>
 
                 {/* Submit button */}
-                <Button type="submit" variant={"ghost"} className="w-24 self-end mt-2">
+                <Button
+                  type="submit"
+                  variant={"ghost"}
+                  className="w-24 self-end mt-2"
+                >
                   <Option_Logo label="Post" />
                 </Button>
               </form>

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {createPost,fetchAllPosts,upvotePost,comment, singlePost, uploadVideo} from '../controllers/post/post.controller';
 import verify from '../middleware/verify.middleware';
+import video_status from "../controllers/videostatus/video-status";
 import {upload} from "../middleware/multer.middleware";
 const router = Router();
 
@@ -32,10 +33,10 @@ router.route("/singlepost").get(
     verify,
     singlePost
 )
+router.route("/videostatus").post(
+    verify,
+    video_status
+)
 
-// TODO:
-// 1.Add an upvote route
-// 2.add a comment route
-// 3.ad remove upvote route
-// 4.Check whether the user has already upvoted
+
 export default router;

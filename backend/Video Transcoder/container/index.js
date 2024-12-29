@@ -6,28 +6,16 @@ import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3
 const RESOLUTIONS = [
   { name: "FHD", width: 1920, height: 1080 },
   { name: "HD", width: 1280, height: 720 },
-  { name: "SD", width: 854, height: 480 },
+  { name: "SD", width: 854, height: 480 }
 ];
 
 const s3Client = new S3Client({
   region: "ap-south-1",
   credentials: {
-    accessKeyId: "AKIA42PHHPISVV2U76FH",
-    secretAccessKey: "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",
+    accessKeyId: 'AKIA42PHHPISVV2U76FH',
+    secretAccessKey: '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',
   },
 });
-
-const getOriginalResolution = (filePath) => {
-  return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(filePath, (err, metadata) => {
-      if (err) {
-        return reject(err);
-      }
-      const { width, height } = metadata.streams.find((stream) => stream.codec_type === "video");
-      resolve({ width, height });
-    });
-  });
-};
 
 const init = async () => {
   const bucketName = process.env.BUCKET_NAME;
@@ -51,17 +39,9 @@ const init = async () => {
     await fs.promises.writeFile(originalPath, await result.Body.transformToByteArray());
     console.log("File downloaded to:", originalPath);
 
-    // Get original video resolution
-    const originalResolution = await getOriginalResolution(originalPath);
-    console.log("Original resolution:", originalResolution);
-
-    // Transcode only for resolutions less than or equal to the original
+    // Transcode
     await Promise.all(
-      RESOLUTIONS.filter(
-        (resolution) =>
-          resolution.width <= originalResolution.width &&
-          resolution.height <= originalResolution.height
-      ).map((resolution) => {
+      RESOLUTIONS.map((resolution) => {
         const outputFilename = path.join(tempDir, `${originalFilename}.${resolution.name}.mp4`);
         return new Promise((resolve, reject) => {
           ffmpeg(originalPath)
