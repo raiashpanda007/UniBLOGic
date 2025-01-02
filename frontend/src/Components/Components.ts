@@ -19,4 +19,6 @@ import Sidebar from "./Sidebar/Sidebar";
 import Community_Post_Card from "./Cards/Community_Post_Card";
 import Edit from "./Button/Edit_Community_Button";
 import User_Result_Card from "./Cards/User_Result_Card";
-export  {header,Logo,Sidebar_Card,Home_Card,ButtonGhost as Ghost_Button,Option_Logo,Upvote ,Comment_Button,Share_Button as Share,Comment_Input,Comment,Message_Input,Message,Create_Post_Button as CreatePost, Create_Community as CreateCommunity , Drop_Down_Search as DropDownSearch,Register_Input, Sidebar , Community_Post_Card as CommunityPostCard, Edit as EditButton , User_Result_Card as SearchResult} ;  ;
+import Loader from "./Loader/Loader";
+import AnimatedText from "./Loader/StringLoader";
+export  {header,Logo,Sidebar_Card,Home_Card,ButtonGhost as Ghost_Button,Option_Logo,Upvote ,Comment_Button,Share_Button as Share,Comment_Input,Comment,Message_Input,Message,Create_Post_Button as CreatePost, Create_Community as CreateCommunity , Drop_Down_Search as DropDownSearch,Register_Input, Sidebar , Community_Post_Card as CommunityPostCard, Edit as EditButton , User_Result_Card as SearchResult,Loader,AnimatedText}

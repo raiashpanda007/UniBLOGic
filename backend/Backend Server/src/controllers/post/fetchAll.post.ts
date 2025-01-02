@@ -1,6 +1,10 @@
 import { asyncHandler, error, response } from '../../utilities/utilities';
 import { PrismaClient } from '@prisma/client';
 import  isJoined from '../community/isJoined.community';
+interface VideoData {
+    quality: string;
+    videoUrl: string;
+}
 interface PostData {
     id: string;
     title: string;
@@ -8,7 +12,7 @@ interface PostData {
     createdAt: Date;
     authorId: string;
     postImages?: string[];
-    postVideo: string[];
+    postVideo: VideoData[];
     upvotes: number;
     comments: number;
     communityName: string;
@@ -90,11 +94,11 @@ const fetchAllPosts = asyncHandler(async (req, res) => {
                 postId:{
                     in:posts.map(post=>post.id)
                 },
-            },select:{videoUrl:true,postId:true}
+            },select:{videoUrl:true,quality:true,postId:true}
         });
         const postData: PostData[] = await Promise.all(posts.map(async (post) => {
             const images = postImages.filter(image => image.postId === post.id).map(image => image.photo);
-            const video = postVideos.filter(video => video.postId === post.id).map(video => video.videoUrl);
+            const video = postVideos.filter(video => video.postId === post.id).map(video => ({ videoUrl: video.videoUrl, quality: video.quality }));
             return {
             id: post.id,
             title: post.title,

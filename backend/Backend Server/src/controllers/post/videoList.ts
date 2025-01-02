@@ -20,17 +20,15 @@ const videoList = async (key:string) =>{
         const qualitiesList = result.CommonPrefixes?.map((item)=>item.Prefix);
         console.log(qualitiesList);
         qualitiesList?.forEach((item)=>{
-            if(item?.includes('360p')){
-                video['360p'] = `https://video-hls-uniblogic.s3.ap-south-1.amazonaws.com/${item}index.m3u8`;
+            if(item?.includes('FHD')){
+                video['FHD'] = `https://video-hls-uniblogic.s3.ap-south-1.amazonaws.com/${item}index.m3u8`;
             } else if(item?.includes('SD')){
                 video['SD'] = `https://video-hls-uniblogic.s3.ap-south-1.amazonaws.com/${item}index.m3u8`;
             }
             else if(item?.includes('HD')){
                 video['HD'] = `https://video-hls-uniblogic.s3.ap-south-1.amazonaws.com/${item}index.m3u8`;
             }
-            else if(item?.includes('FHD')){
-                video['FHD'] = `https://video-hls-uniblogic.s3.ap-south-1.amazonaws.com/${item}index.m3u8`;
-            }
+            
         })
         
     } catch (error) {

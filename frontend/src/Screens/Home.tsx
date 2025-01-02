@@ -23,6 +23,10 @@ const getAllPosts = async () => {
     console.log(error);
   }
 };
+interface VideoDetails {
+  quality: string;
+  videoUrl: string;
+}
 interface PostData {
   id: string;
   title: string;
@@ -30,7 +34,7 @@ interface PostData {
   createdAt: Date;
   authorId: string;
   postImages?: string[];
-  postVideo?: string[];
+  postVideo?: VideoDetails[];
   upvotes: number;
   comments: number;
   communityName: string;
@@ -80,7 +84,7 @@ function Home() {
                     <Card
                       Communitiy_Name={post.communityName}
                       Image={post.postImages ? post.postImages : [""]}
-                      video={post.postVideo}
+                      video={post.postVideo }
                       Comments_Count={post.comments}
                       Content={post.content}
                       Upvote_Counts={post.upvotes}

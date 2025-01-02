@@ -1,3 +1,7 @@
+interface VideoDetails {
+  quality:string;
+  videoUrl:string;
+}
 interface Home_CardProps {
   Communitiy_Name: string;
   Description: string;
@@ -6,13 +10,14 @@ interface Home_CardProps {
   Upvote_Counts: number;
   isUpvoted: boolean;
   Comments_Count: number;
-  video?:string[]
+  video?:VideoDetails[]
   Joined: boolean;
   loading: boolean;
   communityLogo?: string;
   postid: string;
   communityid: string;
 }
+import VideoPlayer from "../Videoplayer/Videoplayer";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -25,11 +30,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Ghost_Button, Upvote, Comment_Button, Share } from "../Components";
 import Descriptions_Component from "../Drop Down/Description_Component";
 
+
 function Home_Card({
   Communitiy_Name = "Community",
   Description = "Description",
   Image = [""],
-  video=[''],
+  video,
   Upvote_Counts = 0,
   Comments_Count = 0,
   Joined = false,
@@ -46,11 +52,20 @@ function Home_Card({
 
     
   }
-  for (let i = 0; i < video.length; i++) {
-    mulitmedia.push({type:'video',url:video[i]})
+  
+  if(video){
+    mulitmedia.push({type:'Video',url:''});
+  } 
+  const PlayingVideo = {
+    SD:"",
+    HD:"",
+    FHD:"",
   }
-  
-  
+  if(video){
+    video.map((video)=>{
+      PlayingVideo[video.quality as keyof typeof PlayingVideo] = video.videoUrl;
+    })
+  }
   return (
     <div className="w-2/3 border rounded p-2">
       <div className="w-full  flex justify-between items-center">
@@ -114,7 +129,7 @@ function Home_Card({
                           <span className="text-4xl h-full w-full">
                             { content.type === "Image" ? (
                               <img src={content.url} alt="" />  ):(
-                              <video src={content.url} controls className="h-full w-full  rounded" />
+                              <VideoPlayer urls={PlayingVideo} />
                               )
                             }
                           </span>
@@ -122,31 +137,8 @@ function Home_Card({
                       </Card>
                     </div>
                   </CarouselItem>
-                ))}<div className="h-96 w-full flex items-center justify-center">
-                <Carousel className="h-96 w-full">
-                  <CarouselContent className="h-full w-full">
-                    {mulitmedia.map((content) => (
-                      <CarouselItem key={content.url} className="h-full w-full">
-                        <div className=" h-full w-full">
-                          <Card className="h-96 w-full">
-                            <CardContent className="flex h-full w-full items-center justify-center ">
-                              <span className="text-4xl h-full w-full">
-                                { content.type === "Image" ? (
-                                  <img src={content.url} alt="" />  ):(
-                                  <video src={content.url} controls className="h-full w-full  rounded" />
-                                  )
-                                }
-                              </span>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="dark:text-white" />
-                  <CarouselNext className="dark:text-white"/>
-                </Carousel>
-              </div>
+                ))}
+                
               </CarouselContent>
               <CarouselPrevious className="dark:text-white" />
               <CarouselNext className="dark:text-white"/>

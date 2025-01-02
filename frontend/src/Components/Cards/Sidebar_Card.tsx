@@ -23,7 +23,7 @@ const Sidebar_Card = ({
       className={`h-20 w-[calc(100%-10px)] my-2 rounded-md p-1 cursor-pointer transition duration-300 ease-in-out ${className}
       bg-white dark:bg-black text-black dark:text-white
       hover:shadow-md hover:shadow-gray-400/50 dark:hover:shadow-2xl dark:hover:shadow-gray-900/80
-      hover:scale-105 overflow-x-hidden`}
+      hover:scale-105 overflow-x-hidden overflow-hidden`}
     >
       <div className="flex justify-evenly items-center space-x-4">
         {loading ? (
@@ -35,15 +35,15 @@ const Sidebar_Card = ({
             className="h-12 w-12 rounded-full border dark:border-gray-600"
           />
         )}
-        <div className="space-y-2">
+        <div className="space-y-2 w-1/2">
           {loading ? (
             <div className="space-y-2">
               <Skeleton className="h-4 w-[250px]" />
               <Skeleton className="h-4 w-[200px]" />
             </div>
           ) : (
-            <div>
-              <h2 className="text-lg font-semibold font-poppins">{name}</h2>
+            <div className="overflow-hidden">
+              <h2 className="text-lg font-semibold font-poppins"> {name}</h2>
               <Descriptions_Component text={description} text_length={10} needShowmore={false} />
             </div>
           )}

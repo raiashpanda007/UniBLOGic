@@ -3,12 +3,14 @@ import theme from './themeMode'
 import loginStatus from './loginStatus'
 import forgotPassword from './forgotPassword'
 import communitiesList from './communitiesList'
+import loading from './loading'
 export const store = configureStore({
   reducer: {
     theme,
     loginStatus,
     forgotPassword,
-    communitiesList
+    communitiesList,
+    loading
   },
 })
 

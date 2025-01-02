@@ -16,6 +16,10 @@ interface Comment {
         username: string;
     }
 }
+interface VideoData {
+    quality: string;
+    videoUrl: string;
+}
 interface PostData {
     id: string;
     title: string;
@@ -23,7 +27,7 @@ interface PostData {
     createdAt: Date;
     authorId: string;
     postImages?: string[];
-    postVideo?: string[];
+    postVideo?: VideoData[];
     upvotes: number;
     comments: Comment[];
     commentsCount: number;
@@ -79,14 +83,16 @@ const fetchSingle = asyncHandler(async (req, res) => {
     }
     const comments = await prisma.comments.findMany({
         where: {
-            postId:postid
-        }, select: { postId: true, content: true, createdAt: true, user:{
-            select:{
-                name:true,
-                profilePicture:true,
-                username:true
+            postId: postid
+        }, select: {
+            postId: true, content: true, createdAt: true, user: {
+                select: {
+                    name: true,
+                    profilePicture: true,
+                    username: true
+                }
             }
-        } }
+        }
     })
     if (post) {
         const commuity = await prisma.community.findUnique({
@@ -97,13 +103,13 @@ const fetchSingle = asyncHandler(async (req, res) => {
         if (!commuity) return res.status(404).json(new error(404, "Community not found"));
         const postImages = await prisma.postPhotos.findMany({
             where: {
-                postId:postid
+                postId: postid
             }, select: { photo: true }
         });
         const postVideos = await prisma.postVideos.findMany({
             where: {
-                postId:postid
-            }, select: { videoUrl: true }
+                postId: postid
+            }, select: { videoUrl: true, quality: true }
         });
         const postData: PostData = {
             id: post.id,
@@ -112,7 +118,7 @@ const fetchSingle = asyncHandler(async (req, res) => {
             createdAt: post.createdAt,
             authorId: post.authorId,
             postImages: postImages.map(image => image.photo),
-            postVideo: postVideos.map(video=>video.videoUrl),
+            postVideo: postVideos,
             upvotes: upvoteCounts.length || 0,
             comments: comments.map(comment => ({
                 ...comment,
@@ -127,14 +133,14 @@ const fetchSingle = asyncHandler(async (req, res) => {
             isJoined: await isJoined(commuity?.id || "", req.user?.id || ""),
             isUpvoted: await isUpvoted(post.id),
             communityid: commuity?.id,
-            communityLogo: commuity?.communityLogo || ""   
+            communityLogo: commuity?.communityLogo || ""
         }
         return res.status(200).json(new response(200, "Post found", postData));
     }
-    
+
     if (!post) {
         return res.status(404).json(new error(404, "Post not found"));
     }
-    
+
 })
 export default fetchSingle;
