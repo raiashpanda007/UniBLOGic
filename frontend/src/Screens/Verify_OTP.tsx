@@ -103,7 +103,7 @@ useEffect(() => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative top-40 flex flex-col items-center space-y-6"
+        className="relative top-40 h-screen flex flex-col items-center space-y-6 text-white"
       >
         <Logo label="Verify OTP" />
         <FormField

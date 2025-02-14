@@ -1,0 +1,13 @@
+{
+  "name": "uniblogic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "cd frontend && npm run dev & cd backend/Backend Server && npm run dev cd backend/Video Transcoder node dist/index.js   "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
