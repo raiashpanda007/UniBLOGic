@@ -17,7 +17,9 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));  
-
+app.get('/health',(req,res) =>{
+  res.send("System is healthy")
+})
 
 import authRoute from './routes/auth.routes'
 app.use('/api/auth', authRoute)
